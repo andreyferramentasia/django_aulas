@@ -70,7 +70,24 @@
         </ol>
       </details>
 
-      <!-- Próximas partes (Models, Views, Forms...) serão adicionadas aqui -->
+      <!-- Parte IV -->
+      <details class="toc__section" open>
+        <summary class="toc__part"><span>IV</span> Criando um App</summary>
+        <ol class="toc__list">
+          <li><a href="#passo-16">Criar o seu app</a></li>
+        </ol>
+      </details>
+
+      <!-- Parte V -->
+      <details class="toc__section" open>
+        <summary class="toc__part"><span>V</span> Models</summary>
+        <ol class="toc__list">
+          <li><a href="#passo-17">Criar os models</a></li>
+          <li><a href="#passo-18">Enviar os models para o banco</a></li>
+        </ol>
+      </details>
+
+      <!-- Próximas partes (Views, Forms...) serão adicionadas aqui -->
     </aside>
 
     <!-- ===== Conteúdo ===== -->
@@ -988,6 +1005,270 @@ Initialized empty Git repository in <span class="input">C:/.../meu_projeto/.git/
           <aside class="note">
             <p class="note__title">Atenção</p>
             <p>A <code>.venv</code> não vai junto. Refaça os passos <a href="#passo-2">2</a>, <a href="#passo-3">3</a> e <a href="#passo-4">4</a> no novo computador.</p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- ===== Parte IV ===== -->
+      <header class="part" id="parte-4">
+        <p class="part__label">Parte IV</p>
+        <h2 class="part__title">Criando um App</h2>
+      </header>
+
+      <!-- Passo 16 -->
+      <details class="step" id="passo-16">
+        <summary class="step__header">
+          <span class="step__number">16</span>
+          <div>
+            <p class="step__label">Passo 16</p>
+            <h2 class="step__title">Criar o seu app</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <p>Um <strong>app</strong> é uma parte do projeto com uma função específica (cursos, usuários, pagamentos...). Um projeto pode ter vários apps.</p>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Terminal</p>
+            </div>
+            <pre><code><span class="prompt">&gt;</span> python manage.py startapp <span class="input">nome_do_seu_app</span></code></pre>
+          </div>
+
+          <aside class="note note--tip">
+            <p class="note__title">Dica</p>
+            <p>Minúsculas, sem espaços ou acentos, de preferência no plural: <code>courses</code>, <code>students</code>.</p>
+          </aside>
+
+          <h3 class="substep"><span>✓</span> Estrutura gerada</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Pasta do projeto</p>
+            </div>
+            <pre><code>meu_projeto/
+├── app/
+├── <span class="input">nome_do_seu_app</span>/
+│   ├── migrations/
+│   │   └── __init__.py
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── tests.py
+│   └── views.py
+└── manage.py</code></pre>
+          </div>
+
+          <h3 class="substep"><span>?</span> O que é cada arquivo</h3>
+
+          <dl class="files">
+            <dt><code>models.py</code></dt>
+            <dd>Tabelas do banco de dados, escritas como classes Python.</dd>
+
+            <dt><code>views.py</code></dt>
+            <dd>Lógica das páginas, recebe a requisição e devolve a resposta.</dd>
+
+            <dt><code>admin.py</code></dt>
+            <dd>Registra os models para aparecerem no painel <code>/admin</code>.</dd>
+
+            <dt><code>apps.py</code></dt>
+            <dd>Configuração do app (nome, rótulo).</dd>
+
+            <dt><code>tests.py</code></dt>
+            <dd>Testes automatizados do app.</dd>
+
+            <dt><code>migrations/</code></dt>
+            <dd>Histórico das alterações no banco, gerado pelo <code>makemigrations</code>.</dd>
+
+            <dt><code>__init__.py</code></dt>
+            <dd>Indica ao Python que a pasta é um pacote. Fica vazio.</dd>
+          </dl>
+
+          <aside class="note">
+            <p class="note__title">Atenção</p>
+            <p>O <code>startapp</code> não cria <code>urls.py</code> nem a pasta <code>templates/</code>, eles são criados manualmente quando necessário.</p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- ===== Parte V ===== -->
+      <header class="part" id="parte-5">
+        <p class="part__label">Parte V</p>
+        <h2 class="part__title">Models</h2>
+      </header>
+
+      <!-- Passo 17 -->
+      <details class="step" id="passo-17">
+        <summary class="step__header">
+          <span class="step__number">17</span>
+          <div>
+            <p class="step__label">Passo 17</p>
+            <h2 class="step__title">Criar os models</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <p>Cada <strong>model</strong> é uma classe Python que vira uma <strong>tabela</strong> no banco. Cada atributo vira uma <strong>coluna</strong>.</p>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>nome_do_seu_app/models.py</p>
+            </div>
+            <pre><code><span class="kw">from</span> django.db <span class="kw">import</span> models
+
+
+<span class="kw">class</span> <span class="cls">Person</span>(models.Model):
+    first_name = models.CharField(verbose_name=<span class="str">"Nome"</span>, max_length=<span class="num">30</span>)
+    last_name = models.CharField(verbose_name=<span class="str">"Sobrenome"</span>, max_length=<span class="num">30</span>)
+
+    <span class="kw">class</span> <span class="cls">Meta</span>:
+        verbose_name = <span class="str">"Pessoa"</span>
+        verbose_name_plural = <span class="str">"Pessoas"</span>
+        ordering = [<span class="str">"first_name"</span>]
+
+    <span class="kw">def</span> __str__(self):
+        <span class="kw">return</span> <span class="str">f"{self.first_name} {self.last_name}"</span>
+
+
+<span class="kw">class</span> <span class="cls">Course</span>(models.Model):
+    name = models.CharField(verbose_name=<span class="str">"Nome do curso"</span>, max_length=<span class="num">100</span>)
+    description = models.TextField(verbose_name=<span class="str">"Descrição"</span>, blank=<span class="kw">True</span>)
+    workload = models.PositiveIntegerField(verbose_name=<span class="str">"Carga horária (h)"</span>, default=<span class="num">0</span>)
+<span class="hl">    teacher = models.ForeignKey(</span>
+<span class="hl">        Person,</span>
+<span class="hl">        on_delete=models.CASCADE,</span>
+<span class="hl">        verbose_name=<span class="str">"Professor"</span>,</span>
+<span class="hl">    )</span>
+
+    <span class="kw">class</span> <span class="cls">Meta</span>:
+        verbose_name = <span class="str">"Curso"</span>
+        verbose_name_plural = <span class="str">"Cursos"</span>
+        ordering = [<span class="str">"name"</span>]
+
+    <span class="kw">def</span> __str__(self):
+        <span class="kw">return</span> self.name</code></pre>
+          </div>
+
+          <h3 class="substep"><span>?</span> Entendendo o código</h3>
+
+          <dl class="files">
+            <dt><code>Person</code></dt>
+            <dd>Exemplo da documentação oficial do Django.</dd>
+
+            <dt><code>CharField</code></dt>
+            <dd>Texto curto, exige <code>max_length</code>.</dd>
+
+            <dt><code>TextField</code></dt>
+            <dd>Texto longo. <code>blank=True</code> deixa o campo opcional.</dd>
+
+            <dt><code>PositiveIntegerField</code></dt>
+            <dd>Número inteiro, sem negativos. <code>default=0</code> define o valor inicial. Outros: <code>IntegerField</code>, <code>DecimalField</code> (valores com casas decimais, ex.: preço).</dd>
+
+            <dt><code>ForeignKey</code></dt>
+            <dd>Chave estrangeira, liga cada curso a uma pessoa (o professor).</dd>
+
+            <dt><code>on_delete</code></dt>
+            <dd><code>CASCADE</code> apaga os cursos se a pessoa for apagada.</dd>
+
+            <dt><code>verbose_name</code> (no campo)</dt>
+            <dd>Rótulo do campo exibido no admin e nos formulários, ex.: <code>verbose_name="Nome"</code>.</dd>
+
+            <dt><code>class Meta</code></dt>
+            <dd>Configurações do model, não viram coluna.</dd>
+
+            <dt><code>verbose_name</code></dt>
+            <dd>Nome do model no singular, exibido no admin.</dd>
+
+            <dt><code>verbose_name_plural</code></dt>
+            <dd>Nome no plural. Sem ele o Django só adiciona "s", o que erra em palavras como "Professor" (viraria "Professors").</dd>
+
+            <dt><code>ordering</code></dt>
+            <dd>Ordem padrão das listagens. Use <code>"-name"</code> para ordem decrescente.</dd>
+
+            <dt><code>__str__</code></dt>
+            <dd>Texto exibido no admin no lugar de <code>Person object (1)</code>.</dd>
+          </dl>
+
+          <aside class="note note--tip">
+            <p class="note__title">Relação</p>
+            <p>Uma pessoa pode ter <strong>vários</strong> cursos, cada curso tem <strong>um</strong> professor.</p>
+          </aside>
+
+          <aside class="note">
+            <p class="note__title">Documentação</p>
+            <p><a href="https://docs.djangoproject.com/pt-br/stable/topics/db/models/" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/topics/db/models</a></p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- Passo 18 -->
+      <details class="step" id="passo-18">
+        <summary class="step__header">
+          <span class="step__number">18</span>
+          <div>
+            <p class="step__label">Passo 18</p>
+            <h2 class="step__title">Enviar os models para o banco</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <h3 class="substep"><span>1</span> Registrar o app</h3>
+          <p>Se ainda não fez, adicione o app no final do <code>INSTALLED_APPS</code>:</p>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>app/settings.py</p>
+            </div>
+            <pre><code>INSTALLED_APPS = [
+    <span class="str">'jazzmin'</span>,
+    <span class="str">'django.contrib.admin'</span>,
+    ...
+    <span class="str">'django.contrib.staticfiles'</span>,
+<span class="hl">    <span class="str">'nome_do_seu_app'</span>,</span>
+]</code></pre>
+          </div>
+
+          <h3 class="substep"><span>2</span> Gerar a migração</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Terminal</p>
+            </div>
+            <pre><code><span class="prompt">&gt;</span> python manage.py makemigrations
+Migrations for '<span class="input">nome_do_seu_app</span>':
+  <span class="input">nome_do_seu_app</span>\migrations\0001_initial.py
+    + Create model Person
+    + Create model Course</code></pre>
+          </div>
+
+          <h3 class="substep"><span>3</span> Aplicar no banco</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Terminal</p>
+            </div>
+            <pre><code><span class="prompt">&gt;</span> python manage.py migrate
+Applying <span class="input">nome_do_seu_app</span>.0001_initial... OK</code></pre>
+          </div>
+
+          <dl class="files">
+            <dt><code>makemigrations</code></dt>
+            <dd>Lê o <code>models.py</code> e gera o arquivo de migração.</dd>
+
+            <dt><code>migrate</code></dt>
+            <dd>Executa a migração e cria as tabelas no <code>db.sqlite3</code>.</dd>
+          </dl>
+
+          <aside class="note note--tip">
+            <p class="note__title">Sempre que alterar o models.py</p>
+            <p>Rode <code>makemigrations</code> e depois <code>migrate</code> novamente.</p>
           </aside>
         </div>
       </details>

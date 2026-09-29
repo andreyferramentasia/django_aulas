@@ -141,7 +141,7 @@ body {
   margin: 0 auto;
   padding: 3rem 1.5rem 4rem;
   display: grid;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 260px 1fr;
   gap: 3rem;
   align-items: start;
 }
@@ -583,6 +583,10 @@ code {
 
 .terminal .cm { color: #7d8f85; font-style: italic; }
 
+.terminal .cls { color: #7cc4f0; }
+
+.terminal .num { color: #d7a6f0; }
+
 /* Blocos de código longos com rolagem */
 .terminal--tall pre {
   max-height: 480px;
@@ -680,6 +684,26 @@ code {
 .step__body a {
   color: var(--django);
   font-weight: 600;
+}
+
+/* ---------- Lista de arquivos (o que é cada um) ---------- */
+.files {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: .55rem 1.25rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.files dt { margin: 0; }
+
+.files dd {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 560px) {
+  .files { grid-template-columns: 1fr; gap: .15rem; }
+  .files dd { margin-bottom: .7rem; }
 }
 
 /* ---------- Notas ---------- */
