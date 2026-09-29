@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial Django, Iniciando um Projeto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===== Cabeçalho ===== -->
+  <header class="hero">
+    <div class="hero__inner">
+      <a class="hero__docs" href="https://docs.djangoproject.com/pt-br/" target="_blank" rel="noopener">
+        Documentação Django <span aria-hidden="true">↗</span>
+      </a>
+      <p class="hero__kicker">Guia Prático · Python</p>
+      <p class="hero__author">Prof. Dr. Andrey Gaspar Sorrilha Rodrigues</p>
+      <h1 class="hero__title">Iniciando um Projeto <em>Django</em></h1>
+      <div class="hero__meta">
+        <span>Windows</span>
+        <span>Iniciante</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <!-- ===== Sumário ===== -->
+    <aside class="toc">
+      <h2 class="toc__title">Sumário</h2>
+
+      <!-- Parte I -->
+      <details class="toc__section" open>
+        <summary class="toc__part"><span>I</span> Preparação do Ambiente</summary>
+        <ol class="toc__list">
+          <li><a href="#passo-1">Criar a pasta do projeto</a></li>
+          <li><a href="#passo-2">Criar o ambiente virtual</a></li>
+          <li><a href="#passo-3">Ativar o ambiente virtual</a></li>
+          <li><a href="#passo-4">Instalar as bibliotecas</a></li>
+        </ol>
+      </details>
+
+      <!-- Parte II -->
+      <details class="toc__section" open>
+        <summary class="toc__part"><span>II</span> Criação do Projeto</summary>
+        <ol class="toc__list">
+          <li><a href="#passo-5">Iniciar o projeto</a></li>
+          <li><a href="#passo-6">Rodar o servidor</a></li>
+          <li><a href="#passo-7">Primeira migração</a></li>
+          <li><a href="#passo-8">Criar o superusuário</a></li>
+          <li class="toc__extra"><a href="#extra-jazzmin">Ajustando o Jazzmin</a></li>
+        </ol>
+      </details>
+
+      <!-- Parte III -->
+      <details class="toc__section" open>
+        <summary class="toc__part"><span>III</span> Versionamento com Git</summary>
+        <ol class="toc__list">
+          <li><a href="#passo-9">Instalar o Git</a></li>
+          <li><a href="#passo-10">Criar o repositório no GitHub</a></li>
+          <li><a href="#passo-11">Criar o .gitignore</a></li>
+          <li><a href="#passo-12">Iniciar o Git no projeto</a></li>
+        </ol>
+      </details>
+
+      <!-- Próximas partes (Models, Views, Forms...) serão adicionadas aqui -->
+    </aside>
+
+    <!-- ===== Conteúdo ===== -->
+    <main class="content">
+
+      <!-- ===== Parte I ===== -->
+      <header class="part" id="parte-1">
+        <p class="part__label">Parte I</p>
+        <h2 class="part__title">Preparação do Ambiente</h2>
+      </header>
+
+      <!-- Passo 1 -->
+      <details class="step" id="passo-1">
+        <summary class="step__header">
+          <span class="step__number">1</span>
+          <div>
+            <p class="step__label">Passo 1</p>
+            <h2 class="step__title">Criar a pasta do projeto</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <ol class="instructions">
+            <li>Abra o Explorador de Arquivos (<kbd>Win</kbd> + <kbd>E</kbd>).</li>
+            <li>Crie uma nova pasta.</li>
+            <li>Dê um nome e pressione <kbd>Enter</kbd>.</li>
+          </ol>
+
+          <figure class="shortcut">
+            <div class="shortcut__keys">
+              <kbd class="kbd--lg">Ctrl</kbd>
+              <span class="plus">+</span>
+              <kbd class="kbd--lg">Shift</kbd>
+              <span class="plus">+</span>
+              <kbd class="kbd--lg">N</kbd>
+            </div>
+            <figcaption>Nova pasta</figcaption>
+          </figure>
+
+          <aside class="note note--tip">
+            <p class="note__title">Dica</p>
+            <p>Sem espaços ou acentos: <code>meu_projeto</code></p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- Passo 2 -->
+      <details class="step" id="passo-2">
+        <summary class="step__header">
+          <span class="step__number">2</span>
+          <div>
+            <p class="step__label">Passo 2</p>
+            <h2 class="step__title">Criar o ambiente virtual</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <ol class="instructions">
+            <li>Abra o terminal dentro da pasta do projeto.</li>
+            <li>Execute o comando:</li>
+          </ol>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Terminal</p>
+            </div>
+            <pre><code><span class="prompt">&gt;</span> python -m venv .venv</code></pre>
+          </div>
+
+          <aside class="note note--tip">
+            <p class="note__title">Dica</p>
+            <p>A pasta <code>.venv</code> guarda as bibliotecas só deste projeto.</p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- Passo 3 -->
+      <details class="step" id="passo-3">
+        <summary class="step__header">
+          <span class="step__number">3</span>
+          <div>
+            <p class="step__label">Passo 3</p>
+            <h2 class="step__title">Ativar o ambiente virtual</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <h3 class="substep"><span>A</span> Automático, VS Code</h3>
+          <p>A extensão <strong>Python</strong> ativa a <code>.venv</code> sozinha ao abrir um novo terminal.</p>
+
+          <h3 class="substep"><span>B</span> Manual</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>PowerShell</p>
+            </div>
+            <pre><code><span class="prompt">&gt;</span> .venv\Scripts\Activate.ps1</code></pre>
+          </div>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>CMD</p>
+            </div>
+            <pre><code><span class="prompt">&gt;</span> .venv\Scripts\activate</code></pre>
+          </div>
+
+          <h3 class="substep substep--warn"><span>!</span> Erro de permissão no PowerShell?</h3>
+          <p>Ajuste a política de execução do Windows:</p>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>PowerShell · só este terminal</p>
+            </div>
+            <pre><code><span class="prompt">&gt;</span> Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned</code></pre>
+          </div>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>PowerShell · permanente para o usuário</p>
+            </div>
+            <pre><code><span class="prompt">&gt;</span> Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned</code></pre>
+          </div>
+
+          <aside class="note">
+            <p class="note__title">Ainda com problema?</p>
+            <p>Use o <strong>CMD</strong> em vez do PowerShell.</p>
+          </aside>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>CMD</p>
+            </div>
+            <pre><code><span class="prompt">&gt;</span> .venv\Scripts\activate.bat</code></pre>
+          </div>
+
+          <aside class="note note--tip">
+            <p class="note__title">Funcionou?</p>
+            <p>O terminal passa a mostrar <code>(.venv)</code> no início da linha.</p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- Passo 4 -->
+      <details class="step" id="passo-4">
+        <summary class="step__header">
+          <span class="step__number">4</span>
+          <div>
+            <p class="step__label">Passo 4</p>
+            <h2 class="step__title">Instalar as bibliotecas</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <p>Com a <code>(.venv)</code> ativa, execute:</p>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Terminal</p>
+            </div>
+            <pre><code><span class="prompt">&gt;</span> python.exe -m pip install --upgrade pip
+<span class="prompt">&gt;</span> pip install django
+<span class="prompt">&gt;</span> pip install django-jazzmin==3.0.1</code></pre>
+          </div>
+
+          <aside class="note">
+            <p class="note__title">Atenção</p>
+            <p>Use a versão <code>3.0.1</code> do Jazzmin, versões mais novas estão com problemas.</p>
+          </aside>
+
+          <h3 class="substep"><span>✓</span> Verificar a instalação</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Terminal</p>
+            </div>
+            <pre><code><span class="comment"># Versão do Python</span>
+<span class="prompt">&gt;</span> python --version
+
+<span class="comment"># Versão do Django</span>
+<span class="prompt">&gt;</span> django-admin --version
+
+<span class="comment"># Versão do Jazzmin</span>
+<span class="prompt">&gt;</span> pip show django-jazzmin
+
+<span class="comment"># Todas as bibliotecas instaladas</span>
+<span class="prompt">&gt;</span> pip list</code></pre>
+          </div>
+        </div>
+      </details>
+
+      <!-- ===== Parte II ===== -->
+      <header class="part" id="parte-2">
+        <p class="part__label">Parte II</p>
+        <h2 class="part__title">Criação do Projeto</h2>
+      </header>
+
+      <!-- Passo 5 -->
+      <details class="step" id="passo-5">
+        <summary class="step__header">
+          <span class="step__number">5</span>
+          <div>
+            <p class="step__label">Passo 5</p>
+            <h2 class="step__title">Iniciar o projeto</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Terminal</p>
+            </div>
+            <pre><code><span class="prompt">&gt;</span> django-admin startproject app .</code></pre>
+          </div>
+
+          <aside class="note">
+            <p class="note__title">Atenção ao ponto</p>
+            <p>O <code>.</code> cria o projeto na pasta atual, sem gerar uma pasta extra.</p>
+          </aside>
+
+          <h3 class="substep"><span>✓</span> Estrutura gerada</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Pasta do projeto</p>
+            </div>
+            <pre><code>meu_projeto/
+├── .venv/
+├── app/
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+└── manage.py</code></pre>
+          </div>
+        </div>
+      </details>
+
+      <!-- Passo 6 -->
+      <details class="step" id="passo-6">
+        <summary class="step__header">
+          <span class="step__number">6</span>
+          <div>
+            <p class="step__label">Passo 6</p>
+            <h2 class="step__title">Rodar o servidor</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <p>Com a <code>(.venv)</code> ativa, execute:</p>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Terminal</p>
+            </div>
+            <pre><code><span class="prompt">&gt;</span> python manage.py runserver</code></pre>
+          </div>
+
+          <ol class="instructions">
+            <li>Acesse <code>http://127.0.0.1:8000</code> no navegador.</li>
+            <li>Para parar o servidor: <kbd>Ctrl</kbd> + <kbd>C</kbd></li>
+          </ol>
+
+          <h3 class="substep"><span>✓</span> Resultado esperado</h3>
+
+          <figure class="screenshot">
+            <div class="screenshot__bar">
+              <span></span><span></span><span></span>
+              <p>127.0.0.1:8000</p>
+            </div>
+            <img src="imagens/foguete_django.png" alt="Página inicial do Django com o foguete: The install worked successfully!">
+            <figcaption>Página inicial, instalação funcionando</figcaption>
+          </figure>
+
+          <figure class="screenshot">
+            <div class="screenshot__bar">
+              <span></span><span></span><span></span>
+              <p>127.0.0.1:8000/admin</p>
+            </div>
+            <img src="imagens/django_incial_admin.png" alt="Tela de login do Django administration">
+            <figcaption>Painel administrativo em <code>/admin</code></figcaption>
+          </figure>
+
+          <aside class="note note--tip">
+            <p class="note__title">Banco de dados</p>
+            <p>Na primeira execução é criado o arquivo <code>db.sqlite3</code> na pasta do projeto.</p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- Passo 7 -->
+      <details class="step" id="passo-7">
+        <summary class="step__header">
+          <span class="step__number">7</span>
+          <div>
+            <p class="step__label">Passo 7</p>
+            <h2 class="step__title">Primeira migração</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <p>Ao rodar o servidor, o terminal exibe este aviso:</p>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Saída do runserver</p>
+            </div>
+            <pre><code><span class="warn">You have 18 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, sessions.
+Run 'python manage.py migrate' to apply them.</span>
+September 29, 2026 - 08:25:53
+Django version 6.1.1, using settings 'app.settings'
+Starting WSGI development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.</code></pre>
+          </div>
+
+          <ol class="instructions">
+            <li>Pare o servidor: <kbd>Ctrl</kbd> + <kbd>C</kbd></li>
+            <li>Aplique as migrações padrão do Django:</li>
+          </ol>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Terminal</p>
+            </div>
+            <pre><code><span class="prompt">&gt;</span> python manage.py migrate</code></pre>
+          </div>
+
+          <aside class="note note--tip">
+            <p class="note__title">O que acontece?</p>
+            <p>São criadas no <code>db.sqlite3</code> as tabelas de usuários, sessões e do admin.</p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- Passo 8 -->
+      <details class="step" id="passo-8">
+        <summary class="step__header">
+          <span class="step__number">8</span>
+          <div>
+            <p class="step__label">Passo 8</p>
+            <h2 class="step__title">Criar o superusuário</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Terminal</p>
+            </div>
+            <pre><code><span class="prompt">&gt;</span> python manage.py createsuperuser
+Username (leave blank to use 'andrey'): <span class="input">admin</span>
+Email address: <span class="input">admin@admin.br</span>
+Password: <span class="comment"># nada aparece ao digitar</span>
+Password (again): <span class="comment"># nada aparece ao digitar</span>
+<span class="warn">The password is too similar to the email address.</span>
+Bypass password validation and create user anyway? [y/N]: <span class="input">y</span>
+Superuser created successfully.</code></pre>
+          </div>
+
+          <ol class="instructions">
+            <li><strong>Username:</strong> nome de acesso.</li>
+            <li><strong>Email:</strong> precisa ter formato de e-mail, com <code>@</code> e terminando em <code>.com</code> ou <code>.br</code>.</li>
+            <li><strong>Password:</strong> senha e confirmação.</li>
+          </ol>
+
+          <aside class="note">
+            <p class="note__title">A senha não aparece</p>
+            <p>Ao digitar a senha, nada é exibido no terminal. É normal, digite e pressione <kbd>Enter</kbd>.</p>
+          </aside>
+
+          <aside class="note note--tip">
+            <p class="note__title">Senha fraca?</p>
+            <p>O Django avisa quando a senha é fraca, por exemplo:</p>
+            <ul class="bullets">
+              <li><code>The password is too similar to the email address.</code> (parecida com o e-mail)</li>
+              <li><code>This password is too short.</code> (curta demais)</li>
+              <li><code>This password is too common.</code> (comum demais)</li>
+            </ul>
+            <p>Em seguida pergunta <code>Bypass password validation and create user anyway? [y/N]</code>:</p>
+            <ul class="bullets">
+              <li><kbd>y</kbd> (yes): cria o usuário mesmo assim.</li>
+              <li><kbd>N</kbd> (no): cancela e pede a senha novamente. É o padrão ao apertar só <kbd>Enter</kbd>.</li>
+            </ul>
+            <p>Em desenvolvimento, pode usar <kbd>y</kbd>. Em produção, use uma senha forte.</p>
+          </aside>
+
+          <h3 class="substep"><span>✓</span> Primeiro login</h3>
+
+          <ol class="instructions">
+            <li>Rode o servidor: <code>python manage.py runserver</code></li>
+            <li>Acesse <code>http://127.0.0.1:8000/admin</code> e entre com o usuário criado.</li>
+          </ol>
+
+          <figure class="screenshot">
+            <div class="screenshot__bar">
+              <span></span><span></span><span></span>
+              <p>127.0.0.1:8000/admin</p>
+            </div>
+            <img src="imagens/primeiro_login.png" alt="Painel Django administration após o login, com Groups e Users">
+            <figcaption>Painel administrativo após o primeiro login</figcaption>
+          </figure>
+        </div>
+      </details>
+
+      <!-- Extra: Jazzmin -->
+      <details class="step step--extra" id="extra-jazzmin">
+        <summary class="step__header">
+          <span class="step__number">+</span>
+          <div>
+            <p class="step__label">Extra</p>
+            <h2 class="step__title">Ajustando o Jazzmin</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <h3 class="substep"><span>1</span> Registrar o app</h3>
+          <p>No arquivo <code>app/settings.py</code>, adicione <code>'jazzmin'</code> no <strong>topo</strong> do <code>INSTALLED_APPS</code>:</p>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>app/settings.py</p>
+            </div>
+            <pre><code>INSTALLED_APPS = [
+<span class="hl">    <span class="str">'jazzmin'</span>,</span>
+    <span class="str">'django.contrib.admin'</span>,
+    <span class="str">'django.contrib.auth'</span>,
+    <span class="str">'django.contrib.contenttypes'</span>,
+    <span class="str">'django.contrib.sessions'</span>,
+    <span class="str">'django.contrib.messages'</span>,
+    <span class="str">'django.contrib.staticfiles'</span>,
+]</code></pre>
+          </div>
+
+          <aside class="note">
+            <p class="note__title">Atenção</p>
+            <p>Não esqueça a <strong>vírgula</strong> depois de <code>'jazzmin'</code>. Ele precisa vir <strong>antes</strong> do <code>django.contrib.admin</code>.</p>
+          </aside>
+
+          <figure class="screenshot">
+            <div class="screenshot__bar">
+              <span></span><span></span><span></span>
+              <p>127.0.0.1:8000/admin</p>
+            </div>
+            <img src="imagens/jazzmin.png" alt="Painel administrativo do Django com o tema Jazzmin">
+            <figcaption>Admin com o Jazzmin ativo</figcaption>
+          </figure>
+
+          <h3 class="substep"><span>2</span> Configurações do Jazzmin</h3>
+          <p>No <strong>final</strong> do <code>app/settings.py</code>, adicione:</p>
+
+          <div class="terminal terminal--tall">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>app/settings.py · final do arquivo</p>
+            </div>
+            <pre><code>JAZZMIN_SETTINGS = {
+<span class="cm">    # title of the window (Will default to current_admin_site.site_title if absent or None)</span>
+    <span class="str">"site_title"</span>: <span class="str">"Library Admin"</span>,
+
+<span class="cm">    # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)</span>
+    <span class="str">"site_header"</span>: <span class="str">"Library"</span>,
+
+<span class="cm">    # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)</span>
+    <span class="str">"site_brand"</span>: <span class="str">"Library"</span>,
+
+<span class="cm">    # Logo to use for your site, must be present in static files, used for brand on top left</span>
+    <span class="str">"site_logo"</span>: <span class="str">"books/img/logo.png"</span>,
+
+<span class="cm">    # Logo to use for your site, must be present in static files, used for login form logo (defaults to site_logo)</span>
+    <span class="str">"login_logo"</span>: <span class="kw">None</span>,
+
+<span class="cm">    # Logo to use for login form in dark themes (defaults to login_logo)</span>
+    <span class="str">"login_logo_dark"</span>: <span class="kw">None</span>,
+
+<span class="cm">    # CSS classes that are applied to the logo above</span>
+    <span class="str">"site_logo_classes"</span>: <span class="str">"img-circle"</span>,
+
+<span class="cm">    # Relative path to a favicon for your site, will default to site_logo if absent (ideally 32x32 px)</span>
+    <span class="str">"site_icon"</span>: <span class="kw">None</span>,
+
+<span class="cm">    # Welcome text on the login screen</span>
+    <span class="str">"welcome_sign"</span>: <span class="str">"Welcome to the library"</span>,
+
+<span class="cm">    # Copyright on the footer</span>
+    <span class="str">"copyright"</span>: <span class="str">"Acme Library Ltd"</span>,
+
+<span class="cm">    # List of model admins to search from the search bar, search bar omitted if excluded</span>
+<span class="cm">    # If you want to use a single search field you dont need to use a list, you can use a simple string </span>
+    <span class="str">"search_model"</span>: [<span class="str">"auth.User"</span>, <span class="str">"auth.Group"</span>],
+
+<span class="cm">    # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user</span>
+    <span class="str">"user_avatar"</span>: <span class="kw">None</span>,
+
+<span class="cm">    ############</span>
+<span class="cm">    # Top Menu #</span>
+<span class="cm">    ############</span>
+
+<span class="cm">    # Links to put along the top menu</span>
+    <span class="str">"topmenu_links"</span>: [
+
+<span class="cm">        # Url that gets reversed (Permissions can be added)</span>
+        {<span class="str">"name"</span>: <span class="str">"Home"</span>,  <span class="str">"url"</span>: <span class="str">"admin:index"</span>, <span class="str">"permissions"</span>: [<span class="str">"auth.view_user"</span>]},
+
+<span class="cm">        # external url that opens in a new window (Permissions can be added)</span>
+        {<span class="str">"name"</span>: <span class="str">"Support"</span>, <span class="str">"url"</span>: <span class="str">"https://github.com/farridav/django-jazzmin/issues"</span>, <span class="str">"new_window"</span>: <span class="kw">True</span>},
+
+<span class="cm">        # model admin to link to (Permissions checked against model)</span>
+        {<span class="str">"model"</span>: <span class="str">"auth.User"</span>},
+
+<span class="cm">        # App with dropdown menu to all its models pages (Permissions checked against models)</span>
+        {<span class="str">"app"</span>: <span class="str">"books"</span>},
+    ],
+
+<span class="cm">    #############</span>
+<span class="cm">    # User Menu #</span>
+<span class="cm">    #############</span>
+
+<span class="cm">    # Additional links to include in the user menu on the top right (&quot;app&quot; url type is not allowed)</span>
+    <span class="str">"usermenu_links"</span>: [
+        {<span class="str">"name"</span>: <span class="str">"Support"</span>, <span class="str">"url"</span>: <span class="str">"https://github.com/farridav/django-jazzmin/issues"</span>, <span class="str">"new_window"</span>: <span class="kw">True</span>},
+        {<span class="str">"model"</span>: <span class="str">"auth.user"</span>}
+    ],
+
+<span class="cm">    #############</span>
+<span class="cm">    # Side Menu #</span>
+<span class="cm">    #############</span>
+
+<span class="cm">    # Whether to display the side menu</span>
+    <span class="str">"show_sidebar"</span>: <span class="kw">True</span>,
+
+<span class="cm">    # Whether to aut expand the menu</span>
+    <span class="str">"navigation_expanded"</span>: <span class="kw">True</span>,
+
+<span class="cm">    # Hide these apps when generating side menu e.g (auth)</span>
+    <span class="str">"hide_apps"</span>: [],
+
+<span class="cm">    # Hide these models when generating side menu (e.g auth.user)</span>
+    <span class="str">"hide_models"</span>: [],
+
+<span class="cm">    # List of apps (and/or models) to base side menu ordering off of (does not need to contain all apps/models)</span>
+    <span class="str">"order_with_respect_to"</span>: [<span class="str">"auth"</span>, <span class="str">"books"</span>, <span class="str">"books.author"</span>, <span class="str">"books.book"</span>],
+
+<span class="cm">    # Custom links to append to app groups, keyed on app name</span>
+    <span class="str">"custom_links"</span>: {
+        <span class="str">"books"</span>: [{
+            <span class="str">"name"</span>: <span class="str">"Make Messages"</span>, 
+            <span class="str">"url"</span>: <span class="str">"make_messages"</span>, 
+            <span class="str">"icon"</span>: <span class="str">"fas fa-comments"</span>,
+            <span class="str">"permissions"</span>: [<span class="str">"books.view_book"</span>]
+        }]
+    },
+
+<span class="cm">    # Custom icons for side menu apps/models See https://fontawesome.com/icons?d=gallery&amp;m=free&amp;v=5.0.0,5.0.1,5.0.10,5.0.11,5.0.12,5.0.13,5.0.2,5.0.3,5.0.4,5.0.5,5.0.6,5.0.7,5.0.8,5.0.9,5.1.0,5.1.1,5.2.0,5.3.0,5.3.1,5.4.0,5.4.1,5.4.2,5.13.0,5.12.0,5.11.2,5.11.1,5.10.0,5.9.0,5.8.2,5.8.1,5.7.2,5.7.1,5.7.0,5.6.3,5.5.0,5.4.2</span>
+<span class="cm">    # for the full list of 5.13.0 free icon classes</span>
+    <span class="str">"icons"</span>: {
+        <span class="str">"auth"</span>: <span class="str">"fas fa-users-cog"</span>,
+        <span class="str">"auth.user"</span>: <span class="str">"fas fa-user"</span>,
+        <span class="str">"auth.Group"</span>: <span class="str">"fas fa-users"</span>,
+    },
+<span class="cm">    # Icons that are used when one is not manually specified</span>
+    <span class="str">"default_icon_parents"</span>: <span class="str">"fas fa-chevron-circle-right"</span>,
+    <span class="str">"default_icon_children"</span>: <span class="str">"fas fa-circle"</span>,
+
+<span class="cm">    #################</span>
+<span class="cm">    # Related Modal #</span>
+<span class="cm">    #################</span>
+<span class="cm">    # Use modals instead of popups</span>
+    <span class="str">"related_modal_active"</span>: <span class="kw">False</span>,
+
+<span class="cm">    #############</span>
+<span class="cm">    # UI Tweaks #</span>
+<span class="cm">    #############</span>
+<span class="cm">    # Relative paths to custom CSS/JS scripts (must be present in static files)</span>
+    <span class="str">"custom_css"</span>: <span class="kw">None</span>,
+    <span class="str">"custom_js"</span>: <span class="kw">None</span>,
+<span class="cm">    # Whether to link font from fonts.googleapis.com (use custom_css to supply font otherwise)</span>
+    <span class="str">"use_google_fonts_cdn"</span>: <span class="kw">True</span>,
+<span class="cm">    # Whether to show the UI customizer on the sidebar</span>
+<span class="hl">    <span class="str">"show_ui_builder"</span>: <span class="kw">True</span>,</span>
+
+<span class="cm">    ###############</span>
+<span class="cm">    # Change view #</span>
+<span class="cm">    ###############</span>
+<span class="cm">    # Render out the change view as a single form, or in tabs, current options are</span>
+<span class="cm">    # - single</span>
+<span class="cm">    # - horizontal_tabs (default)</span>
+<span class="cm">    # - vertical_tabs</span>
+<span class="cm">    # - collapsible</span>
+<span class="cm">    # - carousel</span>
+    <span class="str">"changeform_format"</span>: <span class="str">"horizontal_tabs"</span>,
+<span class="cm">    # override change forms on a per modeladmin basis</span>
+    <span class="str">"changeform_format_overrides"</span>: {<span class="str">"auth.user"</span>: <span class="str">"collapsible"</span>, <span class="str">"auth.group"</span>: <span class="str">"vertical_tabs"</span>},
+<span class="cm">    # Add a language dropdown into the admin</span>
+<span class="hl">    <span class="str">"language_chooser"</span>: <span class="kw">False</span>,</span>
+}</code></pre>
+          </div>
+
+          <aside class="note">
+            <p class="note__title">Pontos de atenção</p>
+            <ul class="bullets">
+              <li><code>"language_chooser": False</code>, com <code>True</code> o admin quebra.</li>
+              <li><code>"show_ui_builder": True</code>, ativa o personalizador de tema no admin para configurar do seu jeito.</li>
+            </ul>
+          </aside>
+
+          <aside class="note note--tip">
+            <p class="note__title">Documentação</p>
+            <p>Todas as configurações disponíveis: <a href="https://django-jazzmin.readthedocs.io/configuration/" target="_blank" rel="noopener">django-jazzmin.readthedocs.io/configuration</a></p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- ===== Parte III ===== -->
+      <header class="part" id="parte-3">
+        <p class="part__label">Parte III</p>
+        <h2 class="part__title">Versionamento com Git</h2>
+      </header>
+
+      <!-- Passo 9 -->
+      <details class="step" id="passo-9">
+        <summary class="step__header">
+          <span class="step__number">9</span>
+          <div>
+            <p class="step__label">Passo 9</p>
+            <h2 class="step__title">Instalar o Git</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <ol class="instructions">
+            <li>Baixe o instalador em <a href="https://git-scm.com/install/windows" target="_blank" rel="noopener">git-scm.com/install/windows</a></li>
+            <li>Instale com as opções padrão.</li>
+          </ol>
+
+          <h3 class="substep"><span>✓</span> Verificar a instalação</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Terminal</p>
+            </div>
+            <pre><code><span class="prompt">&gt;</span> git --version</code></pre>
+          </div>
+
+          <aside class="note note--tip">
+            <p class="note__title">Dica</p>
+            <p>Feche e abra o terminal novamente após instalar.</p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- Passo 10 -->
+      <details class="step" id="passo-10">
+        <summary class="step__header">
+          <span class="step__number">10</span>
+          <div>
+            <p class="step__label">Passo 10</p>
+            <h2 class="step__title">Criar o repositório no GitHub</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <ol class="instructions">
+            <li>No GitHub, clique na sua foto (canto superior direito) e vá em <strong>Repositories</strong>.</li>
+          </ol>
+
+          <figure class="screenshot screenshot--small">
+            <img src="imagens/git01.png" alt="Menu do perfil no GitHub com a opção Repositories">
+            <figcaption>Menu do perfil, opção Repositories</figcaption>
+          </figure>
+
+          <ol class="instructions" start="2">
+            <li>Clique em <strong>New</strong>.</li>
+          </ol>
+
+          <figure class="screenshot">
+            <img src="imagens/git02.png" alt="Lista de repositórios do GitHub com o botão New em destaque">
+            <figcaption>Botão New</figcaption>
+          </figure>
+
+          <ol class="instructions" start="3">
+            <li>Preencha o <strong>Repository name</strong> <span class="required">*</span> (campo obrigatório).</li>
+          </ol>
+        </div>
+      </details>
+
+      <!-- Passo 11 -->
+      <details class="step" id="passo-11">
+        <summary class="step__header">
+          <span class="step__number">11</span>
+          <div>
+            <p class="step__label">Passo 11</p>
+            <h2 class="step__title">Criar o .gitignore</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <p>Lista os arquivos que o Git <strong>não</strong> deve enviar. Na pasta do projeto:</p>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>PowerShell</p>
+            </div>
+            <pre><code><span class="prompt">&gt;</span> ni .gitignore</code></pre>
+          </div>
+
+          <p>Abra o arquivo e cole:</p>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>.gitignore</p>
+            </div>
+            <pre><code><span class="cm"># Ambiente virtual</span>
+.venv/
+
+<span class="cm"># Cache do Python</span>
+__pycache__/
+*.pyc
+
+<span class="cm"># Banco de dados local</span>
+db.sqlite3
+db.sqlite3-journal
+
+<span class="cm"># Variáveis de ambiente (senhas, chaves)</span>
+.env
+
+<span class="cm"># Arquivos gerados pelo Django</span>
+media/
+staticfiles/
+
+<span class="cm"># Logs</span>
+*.log
+
+<span class="cm"># Editores</span>
+.vscode/
+.idea/</code></pre>
+          </div>
+
+          <aside class="note">
+            <p class="note__title">Atenção</p>
+            <p>Crie o <code>.gitignore</code> <strong>antes</strong> do <code>git init</code> e do primeiro commit, assim a <code>.venv</code> nunca é enviada.</p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- Passo 12 -->
+      <details class="step" id="passo-12">
+        <summary class="step__header">
+          <span class="step__number">12</span>
+          <div>
+            <p class="step__label">Passo 12</p>
+            <h2 class="step__title">Iniciar o Git no projeto</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <p>Na pasta do projeto, execute:</p>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Terminal</p>
+            </div>
+            <pre><code><span class="prompt">&gt;</span> git init
+Initialized empty Git repository in <span class="input">C:/.../meu_projeto/.git/</span></code></pre>
+          </div>
+
+          <aside class="note note--tip">
+            <p class="note__title">O que acontece?</p>
+            <p>É criada a pasta oculta <code>.git</code>, onde o Git guarda o histórico do projeto.</p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- Os próximos passos serão inseridos abaixo -->
+
+    </main>
+  </div>
+
+  <footer class="footer">
+    <p>Tutorial Django</p>
+  </footer>
+
+</body>
+</html>

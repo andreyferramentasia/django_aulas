@@ -1,0 +1,743 @@
+/* =========================================================
+   Tutorial Django, Folha de estilos
+   Estilo acadêmico: papel creme, tipografia serifada,
+   acentos no verde característico do Django.
+   ========================================================= */
+
+:root {
+  --paper:        #faf7f0;
+  --paper-dark:   #f1ece0;
+  --ink:          #1f2a24;
+  --ink-soft:     #4a564f;
+  --rule:         #d9d1bf;
+
+  --django:       #0c4b33;
+  --django-light: #44b78b;
+  --django-pale:  #e4f2eb;
+
+  --gold:         #b08d3c;
+  --gold-pale:    #f7eed8;
+
+  --serif: "EB Garamond", Georgia, "Times New Roman", serif;
+  --sans:  "Inter", "Segoe UI", system-ui, sans-serif;
+  --mono:  "JetBrains Mono", Consolas, monospace;
+
+  --radius: 6px;
+  --shadow: 0 1px 2px rgba(31, 42, 36, .06), 0 6px 20px rgba(31, 42, 36, .06);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Cabeçalho ---------- */
+.hero {
+  background:
+    radial-gradient(circle at 85% 20%, rgba(68, 183, 139, .25), transparent 45%),
+    var(--django);
+  color: #f4f1e8;
+  padding: 2.25rem 1.5rem 1.75rem;
+  border-bottom: 4px solid var(--gold);
+}
+
+.hero__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.hero__docs {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-family: var(--sans);
+  font-size: .85rem;
+  font-weight: 500;
+  color: #f4f1e8;
+  text-decoration: none;
+  padding: .45rem 1rem;
+  border: 1px solid rgba(244, 241, 232, .4);
+  border-radius: 999px;
+  transition: background .2s, color .2s, border-color .2s;
+}
+
+.hero__docs:hover {
+  background: var(--django-light);
+  border-color: var(--django-light);
+  color: var(--django);
+}
+
+@media (max-width: 640px) {
+  .hero__docs {
+    position: static;
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+}
+
+.hero__kicker {
+  font-family: var(--sans);
+  font-size: .8rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--django-light);
+  margin: 0 0 .75rem;
+}
+
+.hero__author {
+  font-size: 1.15rem;
+  font-style: italic;
+  margin: -.4rem 0 1rem;
+  opacity: .9;
+}
+
+.hero__title {
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0 0 1rem;
+}
+
+.hero__title em {
+  font-style: italic;
+  color: var(--django-light);
+}
+
+.hero__subtitle {
+  font-size: 1.3rem;
+  font-style: italic;
+  max-width: 620px;
+  margin: 0 0 1.75rem;
+  opacity: .9;
+}
+
+.hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  font-family: var(--sans);
+  font-size: .8rem;
+}
+
+.hero__meta span {
+  border: 1px solid rgba(244, 241, 232, .35);
+  border-radius: 999px;
+  padding: .3rem .9rem;
+}
+
+/* ---------- Layout ---------- */
+.layout {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+/* ---------- Sumário ---------- */
+.toc {
+  position: sticky;
+  top: 2rem;
+  border-left: 2px solid var(--rule);
+  padding-left: 1.25rem;
+}
+
+.toc__title {
+  font-family: var(--sans);
+  font-size: .75rem;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0 0 1rem;
+}
+
+.toc__section { margin-bottom: 1.5rem; }
+
+.toc__part {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--django);
+  margin-bottom: .6rem;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.toc__part::-webkit-details-marker { display: none; }
+
+/* Seta do sumário */
+.toc__part::after {
+  content: "";
+  margin-left: auto;
+  width: .45rem;
+  height: .45rem;
+  border-right: 2px solid var(--django);
+  border-bottom: 2px solid var(--django);
+  transform: rotate(-45deg);
+  transition: transform .25s;
+}
+
+.toc__section[open] > .toc__part::after { transform: rotate(45deg); }
+
+.toc__part span {
+  font-family: var(--serif);
+  font-size: .85rem;
+  color: var(--gold);
+  min-width: 1.2rem;
+}
+
+.toc__part:hover { color: var(--django-light); }
+
+.toc__list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 1.7rem;
+}
+
+/* Numeração contínua entre as partes */
+.toc { counter-reset: toc; }
+
+.toc__list li {
+  counter-increment: toc;
+  margin-bottom: .6rem;
+  font-size: 1.05rem;
+}
+
+.toc__list li::before {
+  content: counter(toc, decimal-leading-zero) " ";
+  font-family: var(--mono);
+  font-size: .8rem;
+  color: var(--gold);
+  margin-right: .35rem;
+}
+
+.toc__list a {
+  color: var(--ink);
+  text-decoration: none;
+  transition: color .2s;
+}
+
+.toc__list a:hover { color: var(--django); text-decoration: underline; }
+
+/* ---------- Conteúdo ---------- */
+.content { min-width: 0; }
+
+.lead {
+  font-size: 1.3rem;
+  color: var(--ink-soft);
+  margin: 0 0 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.lead::first-letter {
+  float: left;
+  font-size: 3.6rem;
+  line-height: .9;
+  padding: .3rem .5rem 0 0;
+  color: var(--django);
+  font-weight: 700;
+}
+
+/* ---------- Passo extra ---------- */
+.toc__list li.toc__extra { counter-increment: none; }
+
+.toc__list li.toc__extra::before {
+  content: "+ ";
+  font-weight: 600;
+}
+
+.toc__list li.toc__extra a { font-style: italic; }
+
+.step--extra .step__number {
+  background: var(--gold);
+  box-shadow: 0 0 0 4px var(--gold-pale);
+}
+
+.step--extra { border-style: dashed; }
+
+/* ---------- Parte (seção maior) ---------- */
+.part {
+  margin: 0 0 1.5rem;
+  padding-bottom: .75rem;
+  border-bottom: 2px solid var(--django);
+  scroll-margin-top: 1.5rem;
+}
+
+.part:not(:first-child) { margin-top: 3.5rem; }
+
+.part__label {
+  font-family: var(--sans);
+  font-size: .75rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0;
+}
+
+.part__title {
+  font-size: 2.1rem;
+  line-height: 1.2;
+  color: var(--django);
+  margin: .1rem 0 0;
+}
+
+/* ---------- Passo ---------- */
+.step {
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 1.25rem;
+  overflow: hidden;
+  scroll-margin-top: 1.5rem;
+}
+
+.step__header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.5rem 2rem;
+  background: var(--paper-dark);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  transition: background .2s;
+}
+
+.step__header::-webkit-details-marker { display: none; }
+
+.step__header:hover { background: #ebe4d3; }
+
+/* Seta indicadora */
+.step__header::after {
+  content: "";
+  margin-left: auto;
+  flex-shrink: 0;
+  width: .7rem;
+  height: .7rem;
+  border-right: 2px solid var(--django);
+  border-bottom: 2px solid var(--django);
+  transform: rotate(45deg);
+  transition: transform .25s;
+}
+
+.step[open] .step__header {
+  border-bottom: 1px solid var(--rule);
+}
+
+.step[open] .step__header::after {
+  transform: rotate(-135deg);
+}
+
+.step[open] .step__body {
+  animation: abrir .3s ease;
+}
+
+@keyframes abrir {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.step__number {
+  flex-shrink: 0;
+  width: 3.2rem;
+  height: 3.2rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--django);
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 700;
+  box-shadow: 0 0 0 4px var(--django-pale);
+}
+
+.step__label {
+  font-family: var(--sans);
+  font-size: .72rem;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0;
+}
+
+.step__title {
+  font-size: 1.75rem;
+  line-height: 1.2;
+  margin: .1rem 0 0;
+}
+
+.step__body {
+  padding: 1.75rem 2rem 2rem;
+}
+
+.step__body p { margin: 0 0 1.1rem; }
+
+/* ---------- Subtítulos dentro do passo ---------- */
+.substep {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  font-size: 1.25rem;
+  margin: 1.75rem 0 .6rem;
+}
+
+.substep:first-child { margin-top: 0; }
+
+.substep span {
+  display: grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 4px;
+  background: var(--django);
+  color: #fff;
+  font-family: var(--sans);
+  font-size: .8rem;
+  font-weight: 600;
+}
+
+.substep--warn span { background: var(--gold); }
+
+.step__body .terminal + .terminal { margin-top: -.5rem; }
+
+/* ---------- Lista de instruções ---------- */
+.instructions {
+  counter-reset: item;
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+
+.instructions li {
+  counter-increment: item;
+  position: relative;
+  padding: .2rem 0 .9rem 2.6rem;
+}
+
+.instructions li::before {
+  content: counter(item);
+  position: absolute;
+  left: 0;
+  top: .35rem;
+  width: 1.7rem;
+  height: 1.7rem;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid var(--django-light);
+  border-radius: 50%;
+  font-family: var(--sans);
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--django);
+}
+
+/* ---------- Teclas ---------- */
+kbd {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: .8em;
+  line-height: 1;
+  padding: .3em .55em;
+  background: linear-gradient(#fff, #f0ede6);
+  border: 1px solid #c9c2b2;
+  border-bottom-width: 3px;
+  border-radius: 5px;
+  color: var(--ink);
+  vertical-align: .1em;
+}
+
+.shortcut {
+  margin: 2rem 0;
+  padding: 2rem 1rem 1.25rem;
+  background: var(--paper);
+  border: 1px dashed var(--rule);
+  border-radius: var(--radius);
+  text-align: center;
+}
+
+.shortcut__keys {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .75rem;
+}
+
+.kbd--lg {
+  font-size: 1.3rem;
+  font-weight: 600;
+  padding: .6em 1em;
+  min-width: 3.2em;
+  border-bottom-width: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, .06);
+}
+
+.plus {
+  font-family: var(--sans);
+  font-size: 1.4rem;
+  color: var(--ink-soft);
+}
+
+.shortcut figcaption {
+  margin-top: 1.1rem;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--ink-soft);
+}
+
+/* ---------- Código inline ---------- */
+code {
+  font-family: var(--mono);
+  font-size: .82em;
+  background: var(--django-pale);
+  color: var(--django);
+  padding: .12em .4em;
+  border-radius: 4px;
+}
+
+/* ---------- Terminal ---------- */
+.terminal {
+  margin: 1.5rem 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #16211c;
+  box-shadow: var(--shadow);
+}
+
+.terminal__bar {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .6rem 1rem;
+  background: #0f1814;
+  border-bottom: 1px solid #25332c;
+}
+
+.terminal__bar span {
+  width: .7rem;
+  height: .7rem;
+  border-radius: 50%;
+  background: #3a4a42;
+}
+
+.terminal__bar span:nth-child(1) { background: #e0685c; }
+.terminal__bar span:nth-child(2) { background: #e3b341; }
+.terminal__bar span:nth-child(3) { background: var(--django-light); }
+
+.terminal__bar p {
+  margin: 0 0 0 .6rem !important;
+  font-family: var(--sans);
+  font-size: .75rem;
+  color: #8a9a91;
+}
+
+.terminal pre {
+  margin: 0;
+  padding: 1.2rem 1.4rem;
+  overflow-x: auto;
+}
+
+.terminal code {
+  background: none;
+  padding: 0;
+  font-size: 1rem;
+  color: #e8efe9;
+}
+
+.terminal .prompt {
+  color: var(--django-light);
+  margin-right: .4rem;
+  user-select: none;
+}
+
+.terminal .comment {
+  color: #7d8f85;
+  font-style: italic;
+  user-select: none;
+}
+
+.terminal .warn { color: #f08a7e; }
+
+.terminal .input { color: #e3b341; }
+
+.terminal .str { color: #9fd8b8; }
+
+.terminal .kw { color: #e3b341; }
+
+.terminal .cm { color: #7d8f85; font-style: italic; }
+
+/* Blocos de código longos com rolagem */
+.terminal--tall pre {
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.note a {
+  color: var(--django);
+  font-weight: 600;
+  word-break: break-word;
+}
+
+/* Linha destacada (código novo) */
+.terminal .hl {
+  display: inline-block;
+  width: calc(100% + 2.8rem);
+  margin: 0 -1.4rem;
+  padding: 0 1.4rem;
+  background: rgba(68, 183, 139, .18);
+  border-left: 3px solid var(--django-light);
+}
+
+.terminal pre code { white-space: pre-wrap; }
+
+/* ---------- Capturas de tela ---------- */
+.screenshot {
+  margin: 1.5rem 0;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--paper);
+  box-shadow: var(--shadow);
+}
+
+.screenshot__bar {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .55rem 1rem;
+  background: var(--paper-dark);
+  border-bottom: 1px solid var(--rule);
+}
+
+.screenshot__bar span {
+  width: .65rem;
+  height: .65rem;
+  border-radius: 50%;
+  background: var(--rule);
+}
+
+.screenshot__bar p {
+  flex: 1;
+  margin: 0 0 0 .6rem !important;
+  padding: .15rem .8rem;
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: .75rem;
+  color: var(--ink-soft);
+}
+
+.screenshot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #121212;
+}
+
+.screenshot figcaption {
+  padding: .6rem 1rem;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--ink-soft);
+  text-align: center;
+  border-top: 1px solid var(--rule);
+}
+
+.screenshot--small {
+  max-width: 260px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.screenshot--small figcaption { font-size: .9rem; }
+
+/* Listas numeradas continuadas (start="2", "3"...) */
+.instructions[start="2"] { counter-reset: item 1; }
+.instructions[start="3"] { counter-reset: item 2; }
+.instructions[start="4"] { counter-reset: item 3; }
+.instructions[start="5"] { counter-reset: item 4; }
+
+.required { color: #c0392b; font-weight: 700; }
+
+.step__body a {
+  color: var(--django);
+  font-weight: 600;
+}
+
+/* ---------- Notas ---------- */
+.note {
+  margin: 1.75rem 0 0;
+  padding: 1.1rem 1.4rem;
+  border-left: 4px solid var(--gold);
+  background: var(--gold-pale);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.note p:last-child { margin-bottom: 0; }
+
+.note .bullets {
+  margin: -.4rem 0 1rem;
+  padding-left: 1.3rem;
+}
+
+.note .bullets li { margin-bottom: .3rem; }
+
+.note .bullets code { white-space: normal; }
+
+.note__title {
+  font-family: var(--sans);
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 .4rem !important;
+}
+
+.note--tip {
+  border-left-color: var(--django-light);
+  background: var(--django-pale);
+}
+
+.note--tip .note__title { color: var(--django); }
+
+/* ---------- Rodapé ---------- */
+.footer {
+  border-top: 1px solid var(--rule);
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--sans);
+  font-size: .85rem;
+  color: var(--ink-soft);
+}
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 820px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .toc { position: static; }
+
+  .step__header,
+  .step__body { padding-left: 1.25rem; padding-right: 1.25rem; }
+}
