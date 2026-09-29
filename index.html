@@ -18,7 +18,10 @@
         Documentação Django <span aria-hidden="true">↗</span>
       </a>
       <p class="hero__kicker">Guia Prático · Python</p>
-      <p class="hero__author">Prof. Dr. Andrey Gaspar Sorrilha Rodrigues</p>
+      <p class="hero__author">
+        Prof. Dr. Andrey Gaspar Sorrilha Rodrigues
+        <a class="hero__lattes" href="https://lattes.cnpq.br/1223901273379236" target="_blank" rel="noopener">Lattes ↗</a>
+      </p>
       <h1 class="hero__title">Iniciando um Projeto <em>Django</em></h1>
       <div class="hero__meta">
         <span>Windows</span>
@@ -84,6 +87,14 @@
         <ol class="toc__list">
           <li><a href="#passo-17">Criar os models</a></li>
           <li><a href="#passo-18">Enviar os models para o banco</a></li>
+        </ol>
+      </details>
+
+      <!-- Parte VI -->
+      <details class="toc__section" open>
+        <summary class="toc__part"><span>VI</span> Painel Admin</summary>
+        <ol class="toc__list">
+          <li><a href="#passo-19">Registrar os models no admin</a></li>
         </ol>
       </details>
 
@@ -1135,9 +1146,21 @@ Initialized empty Git repository in <span class="input">C:/.../meu_projeto/.git/
 
 
 <span class="kw">class</span> <span class="cls">Course</span>(models.Model):
+<span class="hl">    PERIOD_CHOICES = [</span>
+<span class="hl">        (<span class="str">"M"</span>, <span class="str">"Matutino"</span>),</span>
+<span class="hl">        (<span class="str">"V"</span>, <span class="str">"Vespertino"</span>),</span>
+<span class="hl">        (<span class="str">"N"</span>, <span class="str">"Noturno"</span>),</span>
+<span class="hl">    ]</span>
+
     name = models.CharField(verbose_name=<span class="str">"Nome do curso"</span>, max_length=<span class="num">100</span>)
     description = models.TextField(verbose_name=<span class="str">"Descrição"</span>, blank=<span class="kw">True</span>)
     workload = models.PositiveIntegerField(verbose_name=<span class="str">"Carga horária (h)"</span>, default=<span class="num">0</span>)
+<span class="hl">    period = models.CharField(</span>
+<span class="hl">        verbose_name=<span class="str">"Período"</span>,</span>
+<span class="hl">        max_length=<span class="num">1</span>,</span>
+<span class="hl">        choices=PERIOD_CHOICES,</span>
+<span class="hl">        default=<span class="str">"M"</span>,</span>
+<span class="hl">    )</span>
 <span class="hl">    teacher = models.ForeignKey(</span>
 <span class="hl">        Person,</span>
 <span class="hl">        on_delete=models.CASCADE,</span>
@@ -1168,6 +1191,9 @@ Initialized empty Git repository in <span class="input">C:/.../meu_projeto/.git/
             <dt><code>PositiveIntegerField</code></dt>
             <dd>Número inteiro, sem negativos. <code>default=0</code> define o valor inicial. Outros: <code>IntegerField</code>, <code>DecimalField</code> (valores com casas decimais, ex.: preço).</dd>
 
+            <dt><code>choices</code></dt>
+            <dd>Limita o campo a uma lista de opções. No admin vira um menu de seleção.</dd>
+
             <dt><code>ForeignKey</code></dt>
             <dd>Chave estrangeira, liga cada curso a uma pessoa (o professor).</dd>
 
@@ -1192,6 +1218,33 @@ Initialized empty Git repository in <span class="input">C:/.../meu_projeto/.git/
             <dt><code>__str__</code></dt>
             <dd>Texto exibido no admin no lugar de <code>Person object (1)</code>.</dd>
           </dl>
+
+          <h3 class="substep"><span>≡</span> Como funciona o choices</h3>
+          <p class="center">Cada opção é um par <code>(valor no banco, texto na tela)</code>:</p>
+
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr><th>Grava no banco</th><th>Aparece na tela</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>M</code></td><td>Matutino</td></tr>
+                <tr><td><code>V</code></td><td>Vespertino</td></tr>
+                <tr><td><code>N</code></td><td>Noturno</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>Para mostrar o texto em vez da letra, o Django cria o método <code>get_period_display()</code>:</p>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Exemplo</p>
+            </div>
+            <pre><code>course.period                <span class="cm"># "M"</span>
+course.get_period_display()  <span class="cm"># "Matutino"</span></code></pre>
+          </div>
 
           <aside class="note note--tip">
             <p class="note__title">Relação</p>
@@ -1233,7 +1286,18 @@ Initialized empty Git repository in <span class="input">C:/.../meu_projeto/.git/
 ]</code></pre>
           </div>
 
-          <h3 class="substep"><span>2</span> Gerar a migração</h3>
+          <h3 class="substep"><span>2</span> Verificar o projeto</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Terminal</p>
+            </div>
+            <pre><code><span class="prompt">&gt;</span> python manage.py check
+System check identified no issues (0 silenced).</code></pre>
+          </div>
+
+          <h3 class="substep"><span>3</span> Gerar a migração</h3>
 
           <div class="terminal">
             <div class="terminal__bar">
@@ -1247,7 +1311,7 @@ Migrations for '<span class="input">nome_do_seu_app</span>':
     + Create model Course</code></pre>
           </div>
 
-          <h3 class="substep"><span>3</span> Aplicar no banco</h3>
+          <h3 class="substep"><span>4</span> Aplicar no banco</h3>
 
           <div class="terminal">
             <div class="terminal__bar">
@@ -1259,6 +1323,9 @@ Applying <span class="input">nome_do_seu_app</span>.0001_initial... OK</code></p
           </div>
 
           <dl class="files">
+            <dt><code>check</code></dt>
+            <dd>Procura erros no projeto (models, settings) sem alterar nada.</dd>
+
             <dt><code>makemigrations</code></dt>
             <dd>Lê o <code>models.py</code> e gera o arquivo de migração.</dd>
 
@@ -1268,7 +1335,81 @@ Applying <span class="input">nome_do_seu_app</span>.0001_initial... OK</code></p
 
           <aside class="note note--tip">
             <p class="note__title">Sempre que alterar o models.py</p>
-            <p>Rode <code>makemigrations</code> e depois <code>migrate</code> novamente.</p>
+            <p>Rode <code>check</code>, <code>makemigrations</code> e <code>migrate</code> novamente.</p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- ===== Parte VI ===== -->
+      <header class="part" id="parte-6">
+        <p class="part__label">Parte VI</p>
+        <h2 class="part__title">Painel Admin</h2>
+      </header>
+
+      <!-- Passo 19 -->
+      <details class="step" id="passo-19">
+        <summary class="step__header">
+          <span class="step__number">19</span>
+          <div>
+            <p class="step__label">Passo 19</p>
+            <h2 class="step__title">Registrar os models no admin</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <p>Para os models aparecerem no <code>/admin</code>, registre-os no <code>admin.py</code> do app:</p>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>nome_do_seu_app/admin.py</p>
+            </div>
+            <pre><code><span class="kw">from</span> django.contrib <span class="kw">import</span> admin
+<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.models <span class="kw">import</span> Person, Course
+
+
+<span class="kw">class</span> <span class="cls">PersonAdmin</span>(admin.ModelAdmin):
+    list_display = (<span class="str">"first_name"</span>, <span class="str">"last_name"</span>)
+    search_fields = (<span class="str">"first_name"</span>, <span class="str">"last_name"</span>)
+
+
+<span class="kw">class</span> <span class="cls">CourseAdmin</span>(admin.ModelAdmin):
+    list_display = (<span class="str">"name"</span>, <span class="str">"teacher"</span>, <span class="str">"workload"</span>, <span class="str">"period"</span>)
+    search_fields = (<span class="str">"name"</span>,)
+    list_filter = (<span class="str">"teacher"</span>, <span class="str">"period"</span>)
+
+
+<span class="hl">admin.site.register(Person, PersonAdmin)</span>
+<span class="hl">admin.site.register(Course, CourseAdmin)</span></code></pre>
+          </div>
+
+          <h3 class="substep"><span>?</span> Entendendo o código</h3>
+
+          <dl class="files">
+            <dt><code>ModelAdmin</code></dt>
+            <dd>Classe que configura como o model aparece no admin.</dd>
+
+            <dt><code>list_display</code></dt>
+            <dd>Colunas exibidas na listagem.</dd>
+
+            <dt><code>search_fields</code></dt>
+            <dd>Campos usados na barra de busca.</dd>
+
+            <dt><code>list_filter</code></dt>
+            <dd>Filtros na lateral da listagem.</dd>
+
+            <dt><code>admin.site.register</code></dt>
+            <dd>Liga o model à sua configuração no admin.</dd>
+          </dl>
+
+          <aside class="note">
+            <p class="note__title">Atenção</p>
+            <p>Tuplas com um item precisam de vírgula: <code>("name",)</code>. Sem ela, o Django dá erro.</p>
+          </aside>
+
+          <aside class="note note--tip">
+            <p class="note__title">Import absoluto</p>
+            <p>Use o nome do app, o mesmo do <code>name</code> em <code>apps.py</code>: <code>from nome_do_seu_app.models import ...</code>. Fica claro de onde vem cada classe.</p>
           </aside>
         </div>
       </details>
@@ -1279,7 +1420,8 @@ Applying <span class="input">nome_do_seu_app</span>.0001_initial... OK</code></p
   </div>
 
   <footer class="footer">
-    <p>Tutorial Django</p>
+    <p>Tutorial Django · Prof. Dr. Andrey Gaspar Sorrilha Rodrigues</p>
+    <p><a href="https://lattes.cnpq.br/1223901273379236" target="_blank" rel="noopener">Currículo Lattes ↗</a></p>
   </footer>
 
 </body>
