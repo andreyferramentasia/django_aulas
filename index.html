@@ -64,6 +64,9 @@
           <li><a href="#passo-10">Criar o repositório no GitHub</a></li>
           <li><a href="#passo-11">Criar o .gitignore</a></li>
           <li><a href="#passo-12">Iniciar o Git no projeto</a></li>
+          <li><a href="#passo-13">Primeiro commit e envio</a></li>
+          <li><a href="#passo-14">Salvar alterações no dia a dia</a></li>
+          <li><a href="#passo-15">Clonar em outro computador</a></li>
         </ol>
       </details>
 
@@ -855,6 +858,136 @@ Initialized empty Git repository in <span class="input">C:/.../meu_projeto/.git/
           <aside class="note note--tip">
             <p class="note__title">O que acontece?</p>
             <p>É criada a pasta oculta <code>.git</code>, onde o Git guarda o histórico do projeto.</p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- Passo 13 -->
+      <details class="step" id="passo-13">
+        <summary class="step__header">
+          <span class="step__number">13</span>
+          <div>
+            <p class="step__label">Passo 13</p>
+            <h2 class="step__title">Primeiro commit e envio</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Terminal</p>
+            </div>
+            <pre><code><span class="comment"># Adiciona todos os arquivos</span>
+<span class="prompt">&gt;</span> git add .
+
+<span class="comment"># Cria e adiciona o README</span>
+<span class="prompt">&gt;</span> ni README.md
+<span class="prompt">&gt;</span> git add README.md
+
+<span class="comment"># Salva a versão</span>
+<span class="prompt">&gt;</span> git commit -m "first commit"
+
+<span class="comment"># Renomeia a branch para main</span>
+<span class="prompt">&gt;</span> git branch -M main
+
+<span class="comment"># Conecta ao repositório do GitHub</span>
+<span class="prompt">&gt;</span> git remote add origin <span class="input">https://github.com/seurepositorio</span>
+
+<span class="comment"># Envia para o GitHub</span>
+<span class="prompt">&gt;</span> git push -u origin main</code></pre>
+          </div>
+
+          <aside class="note">
+            <p class="note__title">Atenção</p>
+            <p>Troque <code>https://github.com/seurepositorio</code> pelo endereço do repositório criado no Passo 10.</p>
+          </aside>
+
+          <aside class="note note--tip">
+            <p class="note__title">Primeiro commit pediu nome e e-mail?</p>
+            <p>Configure uma única vez:</p>
+            <ul class="bullets">
+              <li><code>git config --global user.name "Seu Nome"</code></li>
+              <li><code>git config --global user.email "seu@email.com"</code></li>
+            </ul>
+          </aside>
+        </div>
+      </details>
+
+      <!-- Passo 14 -->
+      <details class="step" id="passo-14">
+        <summary class="step__header">
+          <span class="step__number">14</span>
+          <div>
+            <p class="step__label">Passo 14</p>
+            <h2 class="step__title">Salvar alterações no dia a dia</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <p>Sempre que alterar o projeto:</p>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Terminal</p>
+            </div>
+            <pre><code><span class="comment"># Confere em qual branch está (marcada com *)</span>
+<span class="prompt">&gt;</span> git branch
+
+<span class="comment"># Salva e envia</span>
+<span class="prompt">&gt;</span> git add .
+<span class="prompt">&gt;</span> git commit -m "<span class="input">descreva a alteração</span>"
+<span class="prompt">&gt;</span> git push</code></pre>
+          </div>
+        </div>
+      </details>
+
+      <!-- Passo 15 -->
+      <details class="step" id="passo-15">
+        <summary class="step__header">
+          <span class="step__number">15</span>
+          <div>
+            <p class="step__label">Passo 15</p>
+            <h2 class="step__title">Clonar em outro computador</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Terminal</p>
+            </div>
+            <pre><code><span class="comment"># Baixa o projeto</span>
+<span class="prompt">&gt;</span> git clone <span class="input">https://github.com/seurepositorio</span>
+<span class="prompt">&gt;</span> cd <span class="input">seurepositorio</span>
+
+<span class="comment"># Busca as branches do GitHub</span>
+<span class="prompt">&gt;</span> git fetch origin
+
+<span class="comment"># Lista as branches</span>
+<span class="prompt">&gt;</span> git branch -a
+
+<span class="comment"># Muda para uma branch</span>
+<span class="prompt">&gt;</span> git switch <span class="input">nome-da-branch</span>
+
+<span class="comment"># Atualiza com a última versão</span>
+<span class="prompt">&gt;</span> git pull</code></pre>
+          </div>
+
+          <aside class="note note--tip">
+            <p class="note__title">Como usar as branches do repositório</p>
+            <p>O <code>git branch -a</code> mostra as branches do GitHub como <code>remotes/origin/nome</code>. Para usar, digite só o nome, sem o <code>origin/</code>:</p>
+            <ul class="bullets">
+              <li><code>git switch nome-da-branch</code>, cria a branch local ligada à <code>origin/nome-da-branch</code>.</li>
+              <li>Depois disso, <code>git pull</code> e <code>git push</code> funcionam direto nela.</li>
+            </ul>
+          </aside>
+
+          <aside class="note">
+            <p class="note__title">Atenção</p>
+            <p>A <code>.venv</code> não vai junto. Refaça os passos <a href="#passo-2">2</a>, <a href="#passo-3">3</a> e <a href="#passo-4">4</a> no novo computador.</p>
           </aside>
         </div>
       </details>
