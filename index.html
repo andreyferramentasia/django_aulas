@@ -98,7 +98,17 @@
         </ol>
       </details>
 
-      <!-- Próximas partes (Views, Forms...) serão adicionadas aqui -->
+      <!-- Parte VII -->
+      <details class="toc__section" open>
+        <summary class="toc__part"><span>VII</span> Views e Templates</summary>
+        <ol class="toc__list">
+          <li><a href="#passo-20">Criar as pastas templates e static</a></li>
+          <li><a href="#passo-21">Criar a ListView</a></li>
+          <li><a href="#passo-22">Criar o template da lista</a></li>
+        </ol>
+      </details>
+
+      <!-- Próximas partes (Forms...) serão adicionadas aqui -->
     </aside>
 
     <!-- ===== Conteúdo ===== -->
@@ -797,6 +807,19 @@ Superuser created successfully.</code></pre>
           <ol class="instructions" start="3">
             <li>Preencha o <strong>Repository name</strong> <span class="required">*</span> (campo obrigatório).</li>
           </ol>
+
+          <h3 class="substep"><span>+</span> Adicionar colaboradores (opcional)</h3>
+          <p>Para outra pessoa enviar alterações (<code>git push</code>) ao repositório, ela precisa ser colaboradora. No repositório, vá em <strong>Settings</strong> → <strong>Collaborators</strong> e clique em <strong>Add people</strong>.</p>
+
+          <figure class="screenshot">
+            <img src="imagens/colaborador.png" alt="Tela Collaborators and teams do GitHub com o botão Add people">
+            <figcaption>Settings, Collaborators, botão Add people</figcaption>
+          </figure>
+
+          <aside class="note note--tip">
+            <p class="note__title">Dica</p>
+            <p>Busque pelo usuário ou e-mail do GitHub. A pessoa recebe um convite por e-mail e só tem acesso depois de aceitar.</p>
+          </aside>
         </div>
       </details>
 
@@ -1410,6 +1433,300 @@ Applying <span class="input">nome_do_seu_app</span>.0001_initial... OK</code></p
           <aside class="note note--tip">
             <p class="note__title">Import absoluto</p>
             <p>Use o nome do app, o mesmo do <code>name</code> em <code>apps.py</code>: <code>from nome_do_seu_app.models import ...</code>. Fica claro de onde vem cada classe.</p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- ===== Parte VII ===== -->
+      <header class="part" id="parte-7">
+        <p class="part__label">Parte VII</p>
+        <h2 class="part__title">Views e Templates</h2>
+      </header>
+
+      <!-- Passo 20 -->
+      <details class="step" id="passo-20">
+        <summary class="step__header">
+          <span class="step__number">20</span>
+          <div>
+            <p class="step__label">Passo 20</p>
+            <h2 class="step__title">Criar as pastas templates e static</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <p>O <strong>template</strong> é o HTML da página. Os arquivos <strong>static</strong> são CSS, JavaScript e imagens. Crie as pastas assim:</p>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Pasta do projeto</p>
+            </div>
+            <pre><code>meu_projeto/
+├── app/
+├── <span class="input">nome_do_seu_app</span>/
+│   ├── migrations/
+<span class="hl">│   ├── static/</span>
+<span class="hl">│   │   └── <span class="input">nome_do_seu_app</span>/</span>
+<span class="hl">│   │       └── css/</span>
+<span class="hl">│   │           └── style.css</span>
+<span class="hl">│   ├── templates/</span>
+<span class="hl">│   │   └── <span class="input">nome_do_seu_app</span>/</span>
+<span class="hl">│   │       └── person_list.html</span>
+<span class="hl">│   ├── urls.py</span>
+│   ├── models.py
+│   └── views.py
+└── manage.py</code></pre>
+          </div>
+
+          <dl class="files">
+            <dt><code><span class="input">nome_do_seu_app</span>/templates/<span class="input">nome_do_seu_app</span>/</code></dt>
+            <dd>Templates do app. O Django encontra essa pasta sozinho (<code>APP_DIRS = True</code>).</dd>
+
+            <dt><code><span class="input">nome_do_seu_app</span>/static/<span class="input">nome_do_seu_app</span>/</code></dt>
+            <dd>CSS, JS e imagens do app. Também é encontrada sozinha, sem configurar nada.</dd>
+
+            <dt><code>urls.py</code></dt>
+            <dd>Rotas do app. O <code>startapp</code> não cria, crie o arquivo vazio.</dd>
+          </dl>
+
+          <aside class="note">
+            <p class="note__title">Por que repetir o nome do app?</p>
+            <p>O Django junta os templates e statics de todos os apps num lugar só. Se dois apps tiverem um <code>style.css</code>, um sobrescreve o outro. A subpasta com o nome do app evita isso: <code>templates/<span class="input">nome_do_seu_app</span>/</code> e <code>static/<span class="input">nome_do_seu_app</span>/</code>.</p>
+          </aside>
+
+          <h3 class="substep"><span>✓</span> Conferir o static</h3>
+          <p>O <code>settings.py</code> já vem com a linha abaixo, não precisa mudar:</p>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>app/settings.py</p>
+            </div>
+            <pre><code>STATIC_URL = <span class="str">'static/'</span></code></pre>
+          </div>
+
+          <aside class="note note--tip">
+            <p class="note__title">E em produção?</p>
+            <p>Com <code>DEBUG = True</code> o <code>runserver</code> entrega os statics sozinho. No deploy se usa <code>STATIC_ROOT</code> e <code>python manage.py collectstatic</code>, veremos depois.</p>
+          </aside>
+
+          <aside class="note">
+            <p class="note__title">Documentação</p>
+            <p><a href="https://docs.djangoproject.com/pt-br/stable/howto/static-files/" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/howto/static-files</a></p>
+            <p><a href="https://docs.djangoproject.com/pt-br/stable/topics/templates/" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/topics/templates</a></p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- Passo 21 -->
+      <details class="step" id="passo-21">
+        <summary class="step__header">
+          <span class="step__number">21</span>
+          <div>
+            <p class="step__label">Passo 21</p>
+            <h2 class="step__title">Criar a ListView</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <p>A <code>ListView</code> é uma <strong>view genérica</strong> do Django: busca os registros do model e entrega para o template, sem precisar escrever a consulta.</p>
+
+          <h3 class="substep"><span>1</span> A view</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>nome_do_seu_app/views.py</p>
+            </div>
+            <pre><code><span class="kw">from</span> django.views.generic <span class="kw">import</span> ListView
+<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.models <span class="kw">import</span> Person
+
+
+<span class="kw">class</span> <span class="cls">PersonListView</span>(ListView):
+    model = Person
+<span class="hl">    template_name = <span class="str">"<span class="input">nome_do_seu_app</span>/person_list.html"</span></span>
+<span class="hl">    context_object_name = <span class="str">"people"</span></span>
+    paginate_by = <span class="num">10</span></code></pre>
+          </div>
+
+          <dl class="files">
+            <dt><code>model</code></dt>
+            <dd>Model listado. A view faz <code>Person.objects.all()</code>, respeitando o <code>ordering</code> do <code>Meta</code>.</dd>
+
+            <dt><code>template_name</code></dt>
+            <dd>Template usado. Opcional, o padrão já é <code><span class="input">nome_do_seu_app</span>/person_list.html</code>, mas deixar escrito fica mais claro.</dd>
+
+            <dt><code>context_object_name</code></dt>
+            <dd>Nome da lista no template. Sem ele, use <code>person_list</code> ou <code>object_list</code>.</dd>
+
+            <dt><code>paginate_by</code></dt>
+            <dd>Quantos registros por página. Opcional.</dd>
+          </dl>
+
+          <h3 class="substep"><span>2</span> As rotas do app</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>nome_do_seu_app/urls.py</p>
+            </div>
+            <pre><code><span class="kw">from</span> django.urls <span class="kw">import</span> path
+<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.views <span class="kw">import</span> PersonListView
+
+app_name = <span class="str">"<span class="input">nome_do_seu_app</span>"</span>
+
+urlpatterns = [
+<span class="hl">    path(<span class="str">"pessoas/"</span>, PersonListView.as_view(), name=<span class="str">"person_list"</span>),</span>
+]</code></pre>
+          </div>
+
+          <h3 class="substep"><span>3</span> Incluir no projeto</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>app/urls.py</p>
+            </div>
+            <pre><code><span class="kw">from</span> django.contrib <span class="kw">import</span> admin
+<span class="kw">from</span> django.urls <span class="kw">import</span> path, include
+
+urlpatterns = [
+    path(<span class="str">'admin/'</span>, admin.site.urls),
+<span class="hl">    path(<span class="str">''</span>, include(<span class="str">'<span class="input">nome_do_seu_app</span>.urls'</span>)),</span>
+]</code></pre>
+          </div>
+
+          <dl class="files">
+            <dt><code>as_view()</code></dt>
+            <dd>Transforma a classe em uma view que o <code>path</code> entende. Sempre necessário em views de classe.</dd>
+
+            <dt><code>name</code></dt>
+            <dd>Apelido da rota, usado nos links: <code>{% url '<span class="input">nome_do_seu_app</span>:person_list' %}</code>.</dd>
+
+            <dt><code>app_name</code></dt>
+            <dd>Namespace do app, evita conflito se outro app tiver uma rota com o mesmo <code>name</code>.</dd>
+
+            <dt><code>include</code></dt>
+            <dd>Liga as rotas do app às rotas do projeto.</dd>
+          </dl>
+
+          <aside class="note">
+            <p class="note__title">Documentação</p>
+            <p><a href="https://docs.djangoproject.com/pt-br/stable/ref/class-based-views/generic-display/#listview" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/ref/class-based-views/generic-display</a></p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- Passo 22 -->
+      <details class="step" id="passo-22">
+        <summary class="step__header">
+          <span class="step__number">22</span>
+          <div>
+            <p class="step__label">Passo 22</p>
+            <h2 class="step__title">Criar o template da lista</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <h3 class="substep"><span>1</span> A página da lista</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>nome_do_seu_app/templates/nome_do_seu_app/person_list.html</p>
+            </div>
+            <pre><code><span class="hl"><span class="kw">{% load static %}</span></span>
+&lt;!DOCTYPE html&gt;
+&lt;html lang=<span class="str">"pt-br"</span>&gt;
+&lt;head&gt;
+    &lt;meta charset=<span class="str">"UTF-8"</span>&gt;
+    &lt;meta name=<span class="str">"viewport"</span> content=<span class="str">"width=device-width, initial-scale=1.0"</span>&gt;
+    &lt;title&gt;Pessoas&lt;/title&gt;
+<span class="hl">    &lt;link rel=<span class="str">"stylesheet"</span> href=<span class="str">"<span class="kw">{% static '<span class="input">nome_do_seu_app</span>/css/style.css' %}</span>"</span>&gt;</span>
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Pessoas&lt;/h1&gt;
+
+    &lt;ul&gt;
+<span class="hl">        <span class="kw">{% for person in people %}</span></span>
+            &lt;li&gt;{{ person.first_name }} {{ person.last_name }}&lt;/li&gt;
+<span class="hl">        <span class="kw">{% empty %}</span></span>
+            &lt;li&gt;Nenhuma pessoa cadastrada.&lt;/li&gt;
+<span class="hl">        <span class="kw">{% endfor %}</span></span>
+    &lt;/ul&gt;
+
+    <span class="kw">{% if is_paginated %}</span>
+        &lt;nav&gt;
+            <span class="kw">{% if page_obj.has_previous %}</span>
+                &lt;a href=<span class="str">"<span class="kw">{% querystring page=page_obj.previous_page_number %}</span>"</span>&gt;Anterior&lt;/a&gt;
+            <span class="kw">{% endif %}</span>
+            &lt;span&gt;Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}&lt;/span&gt;
+            <span class="kw">{% if page_obj.has_next %}</span>
+                &lt;a href=<span class="str">"<span class="kw">{% querystring page=page_obj.next_page_number %}</span>"</span>&gt;Próxima&lt;/a&gt;
+            <span class="kw">{% endif %}</span>
+        &lt;/nav&gt;
+    <span class="kw">{% endif %}</span>
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+          </div>
+
+          <h3 class="substep"><span>2</span> O CSS</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>nome_do_seu_app/static/nome_do_seu_app/css/style.css</p>
+            </div>
+            <pre><code>body {
+    font-family: system-ui, sans-serif;
+    max-width: <span class="num">720px</span>;
+    margin: <span class="num">40px</span> auto;
+    padding: <span class="num">0</span> <span class="num">16px</span>;
+}</code></pre>
+          </div>
+
+          <h3 class="substep"><span>?</span> Entendendo o código</h3>
+
+          <dl class="files">
+            <dt><code>{% load static %}</code></dt>
+            <dd>Libera a tag <code>{% static %}</code>. Precisa estar em <strong>cada</strong> template que a usa.</dd>
+
+            <dt><code>{% static '...' %}</code></dt>
+            <dd>Monta o caminho do arquivo, ex.: <code>/static/<span class="input">nome_do_seu_app</span>/css/style.css</code>.</dd>
+
+            <dt><code>{{ ... }}</code></dt>
+            <dd>Exibe um valor. <code>{% ... %}</code> executa uma lógica (for, if).</dd>
+
+            <dt><code>{% empty %}</code></dt>
+            <dd>Mostrado quando a lista está vazia.</dd>
+
+            <dt><code>page_obj</code></dt>
+            <dd>Criado pelo <code>paginate_by</code>, controla a navegação entre páginas.</dd>
+
+            <dt><code>{% querystring %}</code></dt>
+            <dd>Monta o link da página (<code>?page=2</code>) mantendo os outros parâmetros da URL, como uma busca. Disponível a partir do Django 5.1.</dd>
+          </dl>
+
+          <h3 class="substep"><span>✓</span> Resultado esperado</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>Terminal</p>
+            </div>
+            <pre><code><span class="prompt">&gt;</span> python manage.py runserver</code></pre>
+          </div>
+
+          <p class="center">Acesse <code>http://127.0.0.1:8000/pessoas/</code> e veja as pessoas cadastradas no admin.</p>
+
+          <aside class="note">
+            <p class="note__title">TemplateDoesNotExist?</p>
+            <p>Confira o caminho: <code>templates/<span class="input">nome_do_seu_app</span>/person_list.html</code>, dentro do app, e se o app está no <code>INSTALLED_APPS</code>.</p>
+          </aside>
+
+          <aside class="note note--tip">
+            <p class="note__title">CSS não carregou?</p>
+            <p>Reinicie o <code>runserver</code> após criar a pasta <code>static/</code> e force a atualização do navegador com <code>Ctrl + F5</code>.</p>
           </aside>
         </div>
       </details>
