@@ -108,7 +108,17 @@
         </ol>
       </details>
 
-      <!-- Próximas partes (Forms...) serão adicionadas aqui -->
+      <!-- Parte VIII -->
+      <details class="toc__section" open>
+        <summary class="toc__part"><span>VIII</span> Formulários</summary>
+        <ol class="toc__list">
+          <li><a href="#passo-23">Criar o ModelForm</a></li>
+          <li><a href="#passo-24">Criar a UpdateView</a></li>
+          <li><a href="#passo-25">Criar o template do formulário</a></li>
+        </ol>
+      </details>
+
+      <!-- Próximas partes serão adicionadas aqui -->
     </aside>
 
     <!-- ===== Conteúdo ===== -->
@@ -1727,6 +1737,247 @@ urlpatterns = [
           <aside class="note note--tip">
             <p class="note__title">CSS não carregou?</p>
             <p>Reinicie o <code>runserver</code> após criar a pasta <code>static/</code> e force a atualização do navegador com <code>Ctrl + F5</code>.</p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- ===== Parte VIII ===== -->
+      <header class="part" id="parte-8">
+        <p class="part__label">Parte VIII</p>
+        <h2 class="part__title">Formulários</h2>
+      </header>
+
+      <!-- Passo 23 -->
+      <details class="step" id="passo-23">
+        <summary class="step__header">
+          <span class="step__number">23</span>
+          <div>
+            <p class="step__label">Passo 23</p>
+            <h2 class="step__title">Criar o ModelForm</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <p>O <strong>ModelForm</strong> cria um formulário a partir do model: os campos, rótulos e validações vêm prontos. Crie o arquivo <code>forms.py</code> dentro do app:</p>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>nome_do_seu_app/forms.py</p>
+            </div>
+            <pre><code><span class="kw">from</span> django <span class="kw">import</span> forms
+<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.models <span class="kw">import</span> Person
+
+
+<span class="kw">class</span> <span class="cls">PersonForm</span>(forms.ModelForm):
+    <span class="kw">class</span> <span class="cls">Meta</span>:
+<span class="hl">        model = Person</span>
+<span class="hl">        fields = [<span class="str">"first_name"</span>, <span class="str">"last_name"</span>]</span></code></pre>
+          </div>
+
+          <dl class="files">
+            <dt><code>forms.ModelForm</code></dt>
+            <dd>Formulário ligado a um model. Salvar o formulário grava no banco.</dd>
+
+            <dt><code>model</code></dt>
+            <dd>Model usado para montar o formulário.</dd>
+
+            <dt><code>fields</code></dt>
+            <dd>Campos exibidos no formulário. Os rótulos vêm do <code>verbose_name</code> de cada campo.</dd>
+          </dl>
+
+          <aside class="note note--tip">
+            <p class="note__title">Por que um forms.py?</p>
+            <p>Com o formulário separado, a mesma classe serve para criar e editar, e dá para personalizar widgets e validações num lugar só.</p>
+          </aside>
+
+          <aside class="note">
+            <p class="note__title">Documentação</p>
+            <p><a href="https://docs.djangoproject.com/pt-br/stable/topics/forms/modelforms/" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/topics/forms/modelforms</a></p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- Passo 24 -->
+      <details class="step" id="passo-24">
+        <summary class="step__header">
+          <span class="step__number">24</span>
+          <div>
+            <p class="step__label">Passo 24</p>
+            <h2 class="step__title">Criar a UpdateView</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <p>A <code>UpdateView</code> é a view genérica de <strong>edição</strong>: busca o registro pelo <code>pk</code> da URL, preenche o formulário e salva as alterações.</p>
+
+          <h3 class="substep"><span>1</span> A view</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>nome_do_seu_app/views.py</p>
+            </div>
+            <pre><code><span class="hl"><span class="kw">from</span> django.contrib.auth.mixins <span class="kw">import</span> LoginRequiredMixin</span>
+<span class="hl"><span class="kw">from</span> django.urls <span class="kw">import</span> reverse_lazy</span>
+<span class="kw">from</span> django.views.generic <span class="kw">import</span> ListView<span class="hl">, UpdateView</span>
+<span class="hl"><span class="kw">from</span> <span class="input">nome_do_seu_app</span>.forms <span class="kw">import</span> PersonForm</span>
+<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.models <span class="kw">import</span> Person
+
+
+<span class="kw">class</span> <span class="cls">PersonListView</span>(ListView):
+    ...
+
+
+<span class="hl"><span class="kw">class</span> <span class="cls">PersonUpdateView</span>(LoginRequiredMixin, UpdateView):</span>
+<span class="hl">    model = Person</span>
+<span class="hl">    form_class = PersonForm</span>
+<span class="hl">    template_name = <span class="str">"<span class="input">nome_do_seu_app</span>/person_form.html"</span></span>
+<span class="hl">    context_object_name = <span class="str">"person"</span></span>
+<span class="hl">    <span class="cm"># fields = ["first_name", "last_name"]</span></span>
+<span class="hl">    success_url = reverse_lazy(<span class="str">"<span class="input">nome_do_seu_app</span>:person_list"</span>)</span>
+<span class="hl">    login_url = reverse_lazy(<span class="str">"admin:login"</span>)</span></code></pre>
+          </div>
+
+          <dl class="files">
+            <dt><code>LoginRequiredMixin</code></dt>
+            <dd>Só deixa entrar quem está logado. Precisa vir <strong>antes</strong> da <code>UpdateView</code> na lista de classes.</dd>
+
+            <dt><code>form_class</code></dt>
+            <dd>Formulário usado, o <code>PersonForm</code> do passo anterior.</dd>
+
+            <dt><code>fields</code> (comentado)</dt>
+            <dd>Alternativa sem <code>forms.py</code>: o Django monta o formulário sozinho. Use <code>form_class</code> <strong>ou</strong> <code>fields</code>, nunca os dois, senão dá erro.</dd>
+
+            <dt><code>context_object_name</code></dt>
+            <dd>Nome do registro no template: <code>{{ person }}</code>. O formulário fica em <code>{{ form }}</code>.</dd>
+
+            <dt><code>success_url</code></dt>
+            <dd>Para onde ir depois de salvar, aqui a lista de pessoas.</dd>
+
+            <dt><code>login_url</code></dt>
+            <dd>Para onde mandar quem não está logado. Usamos a tela de login do admin, que depois volta para a página pedida.</dd>
+
+            <dt><code>reverse_lazy</code></dt>
+            <dd>Transforma o <code>name</code> da rota em URL. É "lazy" porque as rotas ainda não existem quando a classe é lida.</dd>
+          </dl>
+
+          <h3 class="substep"><span>2</span> A rota</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>nome_do_seu_app/urls.py</p>
+            </div>
+            <pre><code><span class="kw">from</span> django.urls <span class="kw">import</span> path
+<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.views <span class="kw">import</span> PersonListView<span class="hl">, PersonUpdateView</span>
+
+app_name = <span class="str">"<span class="input">nome_do_seu_app</span>"</span>
+
+urlpatterns = [
+    path(<span class="str">"pessoas/"</span>, PersonListView.as_view(), name=<span class="str">"person_list"</span>),
+<span class="hl">    path(<span class="str">"pessoas/&lt;int:pk&gt;/editar/"</span>, PersonUpdateView.as_view(), name=<span class="str">"person_update"</span>),</span>
+]</code></pre>
+          </div>
+
+          <dl class="files">
+            <dt><code>&lt;int:pk&gt;</code></dt>
+            <dd>Parte variável da URL: o id da pessoa. Em <code>/pessoas/3/editar/</code> a view edita a pessoa de id 3.</dd>
+          </dl>
+
+          <aside class="note">
+            <p class="note__title">Quem pode logar?</p>
+            <p>A tela de login do admin só aceita usuários com acesso ao admin, como o superusuário criado com <code>createsuperuser</code>.</p>
+          </aside>
+
+          <aside class="note">
+            <p class="note__title">Documentação</p>
+            <p><a href="https://docs.djangoproject.com/pt-br/stable/ref/class-based-views/generic-editing/#updateview" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/ref/class-based-views/generic-editing</a></p>
+            <p><a href="https://docs.djangoproject.com/pt-br/stable/topics/auth/default/#the-loginrequiredmixin-mixin" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/topics/auth/default</a></p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- Passo 25 -->
+      <details class="step" id="passo-25">
+        <summary class="step__header">
+          <span class="step__number">25</span>
+          <div>
+            <p class="step__label">Passo 25</p>
+            <h2 class="step__title">Criar o template do formulário</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <h3 class="substep"><span>1</span> A página do formulário</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>nome_do_seu_app/templates/nome_do_seu_app/person_form.html</p>
+            </div>
+            <pre><code><span class="kw">{% load static %}</span>
+&lt;!DOCTYPE html&gt;
+&lt;html lang=<span class="str">"pt-br"</span>&gt;
+&lt;head&gt;
+    &lt;meta charset=<span class="str">"UTF-8"</span>&gt;
+    &lt;meta name=<span class="str">"viewport"</span> content=<span class="str">"width=device-width, initial-scale=1.0"</span>&gt;
+    &lt;title&gt;Editar pessoa&lt;/title&gt;
+    &lt;link rel=<span class="str">"stylesheet"</span> href=<span class="str">"<span class="kw">{% static '<span class="input">nome_do_seu_app</span>/css/style.css' %}</span>"</span>&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Editar {{ person }}&lt;/h1&gt;
+
+<span class="hl">    &lt;form method=<span class="str">"post"</span>&gt;</span>
+<span class="hl">        <span class="kw">{% csrf_token %}</span></span>
+<span class="hl">        {{ form.as_p }}</span>
+        &lt;button type=<span class="str">"submit"</span>&gt;Salvar&lt;/button&gt;
+        &lt;a href=<span class="str">"<span class="kw">{% url '<span class="input">nome_do_seu_app</span>:person_list' %}</span>"</span>&gt;Cancelar&lt;/a&gt;
+<span class="hl">    &lt;/form&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+          </div>
+
+          <h3 class="substep"><span>2</span> Link de edição na lista</h3>
+          <p>No <code>person_list.html</code> do passo 22, adicione um link em cada pessoa:</p>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>nome_do_seu_app/templates/nome_do_seu_app/person_list.html</p>
+            </div>
+            <pre><code><span class="kw">{% for person in people %}</span>
+    &lt;li&gt;
+        {{ person.first_name }} {{ person.last_name }}
+<span class="hl">        &lt;a href=<span class="str">"<span class="kw">{% url '<span class="input">nome_do_seu_app</span>:person_update' person.pk %}</span>"</span>&gt;Editar&lt;/a&gt;</span>
+    &lt;/li&gt;
+<span class="kw">{% empty %}</span>
+    &lt;li&gt;Nenhuma pessoa cadastrada.&lt;/li&gt;
+<span class="kw">{% endfor %}</span></code></pre>
+          </div>
+
+          <h3 class="substep"><span>?</span> Entendendo o código</h3>
+
+          <dl class="files">
+            <dt><code>method="post"</code></dt>
+            <dd>Envia os dados para a mesma URL. A <code>UpdateView</code> valida, salva e redireciona para o <code>success_url</code>.</dd>
+
+            <dt><code>{% csrf_token %}</code></dt>
+            <dd>Proteção contra envios falsos de outros sites. Obrigatório em todo formulário <code>post</code>, sem ele o Django responde 403.</dd>
+
+            <dt><code>{{ form.as_p }}</code></dt>
+            <dd>Desenha cada campo dentro de um <code>&lt;p&gt;</code>, com rótulo e mensagens de erro.</dd>
+
+            <dt><code>{% url '...' person.pk %}</code></dt>
+            <dd>Monta a URL da rota passando o id, ex.: <code>/pessoas/3/editar/</code>.</dd>
+          </dl>
+
+          <h3 class="substep"><span>✓</span> Resultado esperado</h3>
+          <p class="center">Acesse <code>http://127.0.0.1:8000/pessoas/</code> e clique em <strong>Editar</strong>. Sem login, você vai para o login do admin. Depois de logar, altere o nome, salve e volte para a lista atualizada.</p>
+
+          <aside class="note">
+            <p class="note__title">Erro 404?</p>
+            <p>Não existe pessoa com aquele id. Confira o número na URL ou cadastre pessoas no admin.</p>
           </aside>
         </div>
       </details>

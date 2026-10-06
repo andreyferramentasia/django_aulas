@@ -166,8 +166,13 @@ body {
 .toc {
   position: sticky;
   top: 2rem;
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule) transparent;
   border-left: 2px solid var(--rule);
   padding-left: 1.25rem;
+  padding-right: .5rem;
 }
 
 .toc__title {
@@ -828,7 +833,7 @@ code {
     gap: 2rem;
   }
 
-  .toc { position: static; }
+  .toc { position: static; max-height: none; overflow: visible; }
 
   .step__header,
   .step__body { padding-left: 1.25rem; padding-right: 1.25rem; }
