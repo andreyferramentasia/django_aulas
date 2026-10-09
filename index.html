@@ -35,6 +35,11 @@
     <!-- ===== Sumário ===== -->
     <aside class="toc">
       <h2 class="toc__title">Sumário</h2>
+      <ul class="color-legend">
+        <li><span class="color-legend__dot"></span> Passo / Back-end</li>
+        <li><span class="color-legend__dot color-legend__dot--front"></span> Front-end</li>
+        <li><span class="color-legend__dot color-legend__dot--extra"></span> Extra</li>
+      </ul>
 
       <!-- Parte I -->
       <details class="toc__section" open>
@@ -100,21 +105,55 @@
 
       <!-- Parte VII -->
       <details class="toc__section" open>
-        <summary class="toc__part"><span>VII</span> Views e Templates</summary>
+        <summary class="toc__part"><span>VII</span> Templates e Static</summary>
         <ol class="toc__list">
-          <li><a href="#passo-20">Criar as pastas templates e static</a></li>
-          <li><a href="#passo-21">Criar a ListView</a></li>
-          <li><a href="#passo-22">Criar o template da lista</a></li>
+          <li class="toc__front"><a href="#passo-20">Criar as pastas templates e static</a></li>
         </ol>
       </details>
 
       <!-- Parte VIII -->
       <details class="toc__section" open>
-        <summary class="toc__part"><span>VIII</span> Formulários</summary>
+        <summary class="toc__part"><span>VIII</span> Prévia do CRUD</summary>
+        <ol class="toc__list">
+          <li class="toc__extra"><a href="#fluxo-requisicao">O caminho de uma requisição</a></li>
+          <li class="toc__extra"><a href="#extra-bootstrap">Importar o Bootstrap</a></li>
+        </ol>
+      </details>
+
+      <!-- Parte IX -->
+      <details class="toc__section" open>
+        <summary class="toc__part"><span>IX</span> CRUD · Read</summary>
+        <ol class="toc__list">
+          <li><a href="#passo-21">Criar a ListView</a></li>
+          <li class="toc__front"><a href="#passo-22">Criar o template da lista</a></li>
+        </ol>
+      </details>
+
+      <!-- Parte X -->
+      <details class="toc__section" open>
+        <summary class="toc__part"><span>X</span> CRUD · Create</summary>
         <ol class="toc__list">
           <li><a href="#passo-23">Criar o ModelForm</a></li>
-          <li><a href="#passo-24">Criar a UpdateView</a></li>
-          <li><a href="#passo-25">Criar o template do formulário</a></li>
+          <li><a href="#passo-24">Criar a CreateView</a></li>
+          <li class="toc__front"><a href="#passo-25">Criar o template de cadastro</a></li>
+        </ol>
+      </details>
+
+      <!-- Parte XI -->
+      <details class="toc__section" open>
+        <summary class="toc__part"><span>XI</span> CRUD · Update</summary>
+        <ol class="toc__list">
+          <li><a href="#passo-26">Criar a UpdateView</a></li>
+          <li class="toc__front"><a href="#passo-27">Criar o template de edição</a></li>
+        </ol>
+      </details>
+
+      <!-- Parte XII -->
+      <details class="toc__section" open>
+        <summary class="toc__part"><span>XII</span> CRUD · Delete</summary>
+        <ol class="toc__list">
+          <li><a href="#passo-28">Criar a DeleteView</a></li>
+          <li class="toc__front"><a href="#passo-29">Criar o template de exclusão</a></li>
         </ol>
       </details>
 
@@ -1450,11 +1489,11 @@ Applying <span class="input">nome_do_seu_app</span>.0001_initial... OK</code></p
       <!-- ===== Parte VII ===== -->
       <header class="part" id="parte-7">
         <p class="part__label">Parte VII</p>
-        <h2 class="part__title">Views e Templates</h2>
+        <h2 class="part__title">Templates e Static</h2>
       </header>
 
       <!-- Passo 20 -->
-      <details class="step" id="passo-20">
+      <details class="step step--front" id="passo-20">
         <summary class="step__header">
           <span class="step__number">20</span>
           <div>
@@ -1527,6 +1566,179 @@ Applying <span class="input">nome_do_seu_app</span>.0001_initial... OK</code></p
           </aside>
         </div>
       </details>
+
+      <!-- ===== Parte VIII ===== -->
+      <header class="part" id="parte-8">
+        <p class="part__label">Parte VIII</p>
+        <h2 class="part__title">Prévia do CRUD</h2>
+      </header>
+
+      <!-- Antes de codar: fluxo -->
+      <details class="step step--extra" id="fluxo-requisicao">
+        <summary class="step__header">
+          <span class="step__number">?</span>
+          <div>
+            <p class="step__label">Antes de codar</p>
+            <h2 class="step__title">O caminho de uma requisição</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <p>Antes do código, veja como as peças se ligam. Siga os números: é o caminho de um acesso a <code>/pessoas/</code>. As cores das linhas mostram o que cada parte do CRUD usa.</p>
+
+          <figure class="diagram">
+            <div class="diagram__scroll">
+              <svg viewBox="0 0 740 400" role="img" aria-label="Fluxo do Django: include na URL geral, URL do app, views, models e forms, template HTML com CSS e JS">
+                <!-- Ligações -->
+                <g class="d-edge">
+                  <line class="d-path-read" x1="120" y1="70" x2="300" y2="220"/>
+                  <line class="d-path-form" x1="100" y1="230" x2="300" y2="220"/>
+                  <line class="d-path-read" x1="300" y1="220" x2="510" y2="80"/>
+                  <line class="d-path-read" x1="510" y1="80" x2="640" y2="230"/>
+                  <line class="d-path-read" x1="300" y1="220" x2="490" y2="330"/>
+                  <line class="d-edge--back" x1="490" y1="330" x2="640" y2="230"/>
+                </g>
+
+                <!-- Textos das ligações -->
+                <g class="d-label">
+                  <text x="222" y="132">busca os dados</text>
+                  <text x="198" y="210">formulário</text>
+                  <text x="392" y="138">chama a view</text>
+                  <text x="614" y="158">include</text>
+                  <text x="370" y="292">render</text>
+                  <text x="560" y="268">resposta</text>
+                </g>
+
+                <!-- Nós -->
+                <g class="d-node">
+                  <ellipse cx="120" cy="70" rx="70" ry="32"/>
+                  <text class="d-name" x="120" y="68">models.py</text>
+                  <text class="d-sub" x="120" y="86">tabelas</text>
+
+                  <ellipse cx="100" cy="230" rx="70" ry="32"/>
+                  <text class="d-name" x="100" y="228">forms.py</text>
+                  <text class="d-sub" x="100" y="246">formulários</text>
+
+                  <ellipse class="d-main" cx="300" cy="220" rx="72" ry="36"/>
+                  <text class="d-name" x="300" y="218">views.py</text>
+                  <text class="d-sub" x="300" y="236">o centro de tudo</text>
+
+                  <ellipse cx="510" cy="80" rx="95" ry="34"/>
+                  <text class="d-name" x="510" y="78">nome_do_seu_app/urls.py</text>
+                  <text class="d-sub" x="510" y="96">url do meu app</text>
+
+                  <ellipse class="d-edge-node" cx="640" cy="230" rx="78" ry="34"/>
+                  <text class="d-name" x="640" y="228">app/urls.py</text>
+                  <text class="d-sub" x="640" y="246">url geral</text>
+                  <text class="d-note" x="640" y="286">1 include por app</text>
+
+                  <ellipse cx="490" cy="330" rx="78" ry="34"/>
+                  <text class="d-name" x="490" y="328">templates/</text>
+                  <text class="d-sub" x="490" y="346">html + css + js</text>
+                </g>
+
+                <!-- Ordem do fluxo -->
+                <g class="d-step">
+                  <circle cx="586" cy="202" r="12"/><text x="586" y="206">1</text>
+                  <circle cx="430" cy="56" r="12"/><text x="430" y="60">2</text>
+                  <circle cx="244" cy="192" r="12"/><text x="244" y="196">3</text>
+                  <circle cx="64" cy="48" r="12"/><text x="64" y="52">4</text>
+                  <circle cx="44" cy="208" r="12"/><text x="44" y="212">4</text>
+                  <circle cx="428" cy="306" r="12"/><text x="428" y="310">5</text>
+                </g>
+              </svg>
+            </div>
+            <ul class="diagram__legend">
+              <li><span class="legend-line legend-line--read"></span><span><strong>Read (ListView):</strong> models → views → url do app → url geral → templates.</span></li>
+              <li><span class="legend-line legend-line--form"></span><span><strong>Create e Update (CreateView, UpdateView):</strong> o mesmo caminho, mais o <code>forms.py</code> ligado à view.</span></li>
+              <li><span class="legend-line legend-line--read"></span><span><strong>Delete (DeleteView):</strong> o mesmo caminho do Read, sem <code>forms.py</code>. O template é a página de confirmação.</span></li>
+              <li><span class="legend-line legend-line--back"></span><span><strong>Resposta:</strong> a página pronta volta para o navegador.</span></li>
+            </ul>
+            <figcaption>
+              <strong>1</strong> o navegador pede <code>/pessoas/</code> e a URL geral passa para o app pelo <code>include</code> ·
+              <strong>2</strong> a URL do app escolhe a view ·
+              <strong>3</strong> a view entra em ação ·
+              <strong>4</strong> busca dados no model e, se tiver formulário, usa o form ·
+              <strong>5</strong> monta o HTML com o template e devolve a página (linha tracejada).
+            </figcaption>
+          </figure>
+        </div>
+      </details>
+
+      <!-- Antes de codar: Bootstrap -->
+      <details class="step step--extra" id="extra-bootstrap">
+        <summary class="step__header">
+          <span class="step__number">+</span>
+          <div>
+            <p class="step__label">Antes de codar</p>
+            <h2 class="step__title">Importar o Bootstrap</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <p>O <strong>Bootstrap</strong> é uma biblioteca de CSS pronta: você coloca classes no HTML (<code>btn</code>, <code>table</code>, <code>container</code>) e ganha botões e tabelas bonitos sem escrever CSS.</p>
+
+          <h3 class="substep"><span>1</span> Importar via CDN</h3>
+          <p>Um <strong>CDN</strong> (rede de distribuição de conteúdo) é um servidor público que hospeda arquivos como o Bootstrap. Em vez de baixar e guardar o CSS e o JS no seu <code>static/</code>, você só aponta para o endereço deles. O navegador baixa de lá ao abrir a página, e se a pessoa já visitou outro site que usa o mesmo arquivo, ele já vem do cache.</p>
+          <p>Copie as linhas do site oficial (<a href="https://getbootstrap.com/" target="_blank" rel="noopener">getbootstrap.com</a>, seção <em>Include via CDN</em>) e cole no <code>&lt;head&gt;</code>:</p>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>dentro do &lt;head&gt;</p>
+            </div>
+            <pre><code><span class="t-tag">&lt;link</span> <span class="t-attr">href</span>=<span class="t-val">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"</span> <span class="t-attr">rel</span>=<span class="t-val">"stylesheet"</span>
+    <span class="t-attr">integrity</span>=<span class="t-val">"sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"</span> <span class="t-attr">crossorigin</span>=<span class="t-val">"anonymous"</span><span class="t-tag">&gt;</span>
+<span class="t-tag">&lt;script</span> <span class="t-attr">src</span>=<span class="t-val">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"</span>
+    <span class="t-attr">integrity</span>=<span class="t-val">"sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"</span> <span class="t-attr">crossorigin</span>=<span class="t-val">"anonymous"</span>
+    <span class="t-attr">defer</span><span class="t-tag">&gt;</span><span class="t-tag">&lt;/script</span><span class="t-tag">&gt;</span></code></pre>
+          </div>
+
+          <dl class="files">
+            <dt><code>cdn.jsdelivr.net</code></dt>
+            <dd>O CDN que hospeda o Bootstrap. O <code>@5.3.8</code> no endereço fixa a versão, assim o site não muda sozinho quando sair uma nova.</dd>
+
+            <dt><code>bootstrap.min.css</code></dt>
+            <dd>O CSS com todas as classes. O <code>.min</code> é a versão compactada, menor para baixar.</dd>
+
+            <dt><code>bootstrap.bundle.min.js</code></dt>
+            <dd>O JS dos componentes que se mexem: menus, modais, alertas que fecham. O <code>bundle</code> já inclui o Popper, usado nos menus.</dd>
+
+            <dt><code>integrity</code></dt>
+            <dd>Uma "impressão digital" do arquivo. Se o arquivo do CDN for alterado, o navegador não carrega. Copie exatamente como está.</dd>
+
+            <dt><code>crossorigin</code></dt>
+            <dd>Necessário para o <code>integrity</code> funcionar com arquivos de outro site.</dd>
+
+            <dt><code>defer</code></dt>
+            <dd>Carrega o JS sem travar a página.</dd>
+          </dl>
+
+          <aside class="note">
+            <p class="note__title">E o Bootstrap 6?</p>
+            <p>Já existe o <strong>6.0.0-alpha.1</strong>, mas é <strong>alpha</strong>: versão de teste, que ainda pode mudar classes e ter bugs. Por isso o tutorial usa a <strong>5.3.8</strong>, a última estável. Quando a 6 sair estável, basta trocar as linhas do CDN pelas novas do site oficial.</p>
+          </aside>
+
+          <h3 class="substep"><span>2</span> Onde colocar</h3>
+          <p>Ainda não temos um template base (<code>base.html</code>), então cada template carrega o que precisa. Vamos colocar o Bootstrap no <strong>template da lista</strong> (<code>person_list.html</code>, passo 22), porque é nele que ficam os botões do CRUD: <strong>Cadastrar</strong>, <strong>Editar</strong> e <strong>Excluir</strong>.</p>
+
+          <aside class="note">
+            <p class="note__title">Sem internet?</p>
+            <p>O Bootstrap vem do CDN, então sem internet a página aparece sem estilo. O CRUD continua funcionando.</p>
+          </aside>
+
+          <aside class="note">
+            <p class="note__title">Documentação</p>
+            <p><a href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" target="_blank" rel="noopener">getbootstrap.com/docs/5.3</a></p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- ===== Parte IX ===== -->
+      <header class="part" id="parte-9">
+        <p class="part__label">Parte IX</p>
+        <h2 class="part__title">CRUD · Read</h2>
+      </header>
 
       <!-- Passo 21 -->
       <details class="step" id="passo-21">
@@ -1628,7 +1840,7 @@ urlpatterns = [
       </details>
 
       <!-- Passo 22 -->
-      <details class="step" id="passo-22">
+      <details class="step step--front" id="passo-22">
         <summary class="step__header">
           <span class="step__number">22</span>
           <div>
@@ -1645,39 +1857,44 @@ urlpatterns = [
               <span></span><span></span><span></span>
               <p>nome_do_seu_app/templates/nome_do_seu_app/person_list.html</p>
             </div>
-            <pre><code><span class="hl"><span class="kw">{% load static %}</span></span>
-&lt;!DOCTYPE html&gt;
-&lt;html lang=<span class="str">"pt-br"</span>&gt;
-&lt;head&gt;
-    &lt;meta charset=<span class="str">"UTF-8"</span>&gt;
-    &lt;meta name=<span class="str">"viewport"</span> content=<span class="str">"width=device-width, initial-scale=1.0"</span>&gt;
-    &lt;title&gt;Pessoas&lt;/title&gt;
-<span class="hl">    &lt;link rel=<span class="str">"stylesheet"</span> href=<span class="str">"<span class="kw">{% static '<span class="input">nome_do_seu_app</span>/css/style.css' %}</span>"</span>&gt;</span>
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;h1&gt;Pessoas&lt;/h1&gt;
+            <pre><code><span class="hl"><span class="t-dtl">{% load static %}</span></span>
+<span class="t-tag">&lt;!DOCTYPE</span> <span class="t-attr">html</span><span class="t-tag">&gt;</span>
+<span class="t-tag">&lt;html</span> <span class="t-attr">lang</span>=<span class="t-val">"pt-br"</span><span class="t-tag">&gt;</span>
+<span class="t-tag">&lt;head</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;meta</span> <span class="t-attr">charset</span>=<span class="t-val">"UTF-8"</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;meta</span> <span class="t-attr">name</span>=<span class="t-val">"viewport"</span> <span class="t-attr">content</span>=<span class="t-val">"width=device-width, initial-scale=1.0"</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;title</span><span class="t-tag">&gt;</span>Pessoas<span class="t-tag">&lt;/title</span><span class="t-tag">&gt;</span>
+<span class="hl">    <span class="t-tag">&lt;link</span> <span class="t-attr">rel</span>=<span class="t-val">"stylesheet"</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% static </span><span class="t-val">'<span class="input">nome_do_seu_app</span>/css/style.css'</span><span class="t-dtl"> %}</span><span class="t-val">"</span><span class="t-tag">&gt;</span></span>
+<span class="hl">    <span class="t-tag">&lt;link</span> <span class="t-attr">href</span>=<span class="t-val">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"</span> <span class="t-attr">rel</span>=<span class="t-val">"stylesheet"</span></span>
+<span class="hl">        <span class="t-attr">integrity</span>=<span class="t-val">"sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"</span> <span class="t-attr">crossorigin</span>=<span class="t-val">"anonymous"</span><span class="t-tag">&gt;</span></span>
+<span class="hl">    <span class="t-tag">&lt;script</span> <span class="t-attr">src</span>=<span class="t-val">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"</span></span>
+<span class="hl">        <span class="t-attr">integrity</span>=<span class="t-val">"sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"</span> <span class="t-attr">crossorigin</span>=<span class="t-val">"anonymous"</span></span>
+<span class="hl">        <span class="t-attr">defer</span><span class="t-tag">&gt;</span><span class="t-tag">&lt;/script</span><span class="t-tag">&gt;</span></span>
+<span class="t-tag">&lt;/head</span><span class="t-tag">&gt;</span>
+<span class="t-tag">&lt;body</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Pessoas<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
 
-    &lt;ul&gt;
-<span class="hl">        <span class="kw">{% for person in people %}</span></span>
-            &lt;li&gt;{{ person.first_name }} {{ person.last_name }}&lt;/li&gt;
-<span class="hl">        <span class="kw">{% empty %}</span></span>
-            &lt;li&gt;Nenhuma pessoa cadastrada.&lt;/li&gt;
-<span class="hl">        <span class="kw">{% endfor %}</span></span>
-    &lt;/ul&gt;
+    <span class="t-tag">&lt;ul</span><span class="t-tag">&gt;</span>
+<span class="hl">        <span class="t-dtl">{% for person in people %}</span></span>
+            <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span><span class="t-var">{{ person.first_name }}</span> <span class="t-var">{{ person.last_name }}</span><span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
+<span class="hl">        <span class="t-dtl">{% empty %}</span></span>
+            <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span>Nenhuma pessoa cadastrada.<span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
+<span class="hl">        <span class="t-dtl">{% endfor %}</span></span>
+    <span class="t-tag">&lt;/ul</span><span class="t-tag">&gt;</span>
 
-    <span class="kw">{% if is_paginated %}</span>
-        &lt;nav&gt;
-            <span class="kw">{% if page_obj.has_previous %}</span>
-                &lt;a href=<span class="str">"<span class="kw">{% querystring page=page_obj.previous_page_number %}</span>"</span>&gt;Anterior&lt;/a&gt;
-            <span class="kw">{% endif %}</span>
-            &lt;span&gt;Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}&lt;/span&gt;
-            <span class="kw">{% if page_obj.has_next %}</span>
-                &lt;a href=<span class="str">"<span class="kw">{% querystring page=page_obj.next_page_number %}</span>"</span>&gt;Próxima&lt;/a&gt;
-            <span class="kw">{% endif %}</span>
-        &lt;/nav&gt;
-    <span class="kw">{% endif %}</span>
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
+    <span class="t-dtl">{% if is_paginated %}</span>
+        <span class="t-tag">&lt;nav</span><span class="t-tag">&gt;</span>
+            <span class="t-dtl">{% if page_obj.has_previous %}</span>
+                <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% querystring page=page_obj.previous_page_number %}</span><span class="t-val">"</span><span class="t-tag">&gt;</span>Anterior<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+            <span class="t-dtl">{% endif %}</span>
+            <span class="t-tag">&lt;span</span><span class="t-tag">&gt;</span>Página <span class="t-var">{{ page_obj.number }}</span> de <span class="t-var">{{ page_obj.paginator.num_pages }}</span><span class="t-tag">&lt;/span</span><span class="t-tag">&gt;</span>
+            <span class="t-dtl">{% if page_obj.has_next %}</span>
+                <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% querystring page=page_obj.next_page_number %}</span><span class="t-val">"</span><span class="t-tag">&gt;</span>Próxima<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+            <span class="t-dtl">{% endif %}</span>
+        <span class="t-tag">&lt;/nav</span><span class="t-tag">&gt;</span>
+    <span class="t-dtl">{% endif %}</span>
+<span class="t-tag">&lt;/body</span><span class="t-tag">&gt;</span>
+<span class="t-tag">&lt;/html</span><span class="t-tag">&gt;</span></code></pre>
           </div>
 
           <h3 class="substep"><span>2</span> O CSS</h3>
@@ -1741,10 +1958,10 @@ urlpatterns = [
         </div>
       </details>
 
-      <!-- ===== Parte VIII ===== -->
-      <header class="part" id="parte-8">
-        <p class="part__label">Parte VIII</p>
-        <h2 class="part__title">Formulários</h2>
+      <!-- ===== Parte X ===== -->
+      <header class="part" id="parte-10">
+        <p class="part__label">Parte X</p>
+        <h2 class="part__title">CRUD · Create</h2>
       </header>
 
       <!-- Passo 23 -->
@@ -1804,12 +2021,12 @@ urlpatterns = [
           <span class="step__number">24</span>
           <div>
             <p class="step__label">Passo 24</p>
-            <h2 class="step__title">Criar a UpdateView</h2>
+            <h2 class="step__title">Criar a CreateView</h2>
           </div>
         </summary>
 
         <div class="step__body">
-          <p>A <code>UpdateView</code> é a view genérica de <strong>edição</strong>: busca o registro pelo <code>pk</code> da URL, preenche o formulário e salva as alterações.</p>
+          <p>A <code>CreateView</code> é a view genérica de <strong>cadastro</strong>: mostra o formulário vazio, valida o que foi digitado e grava um registro novo no banco.</p>
 
           <h3 class="substep"><span>1</span> A view</h3>
 
@@ -1818,9 +2035,8 @@ urlpatterns = [
               <span></span><span></span><span></span>
               <p>nome_do_seu_app/views.py</p>
             </div>
-            <pre><code><span class="hl"><span class="kw">from</span> django.contrib.auth.mixins <span class="kw">import</span> LoginRequiredMixin</span>
-<span class="hl"><span class="kw">from</span> django.urls <span class="kw">import</span> reverse_lazy</span>
-<span class="kw">from</span> django.views.generic <span class="kw">import</span> ListView<span class="hl">, UpdateView</span>
+            <pre><code><span class="hl"><span class="kw">from</span> django.urls <span class="kw">import</span> reverse_lazy</span>
+<span class="kw">from</span> django.views.generic <span class="kw">import</span> ListView<span class="hl">, CreateView</span>
 <span class="hl"><span class="kw">from</span> <span class="input">nome_do_seu_app</span>.forms <span class="kw">import</span> PersonForm</span>
 <span class="kw">from</span> <span class="input">nome_do_seu_app</span>.models <span class="kw">import</span> Person
 
@@ -1829,34 +2045,22 @@ urlpatterns = [
     ...
 
 
-<span class="hl"><span class="kw">class</span> <span class="cls">PersonUpdateView</span>(LoginRequiredMixin, UpdateView):</span>
+<span class="hl"><span class="kw">class</span> <span class="cls">PersonCreateView</span>(CreateView):</span>
 <span class="hl">    model = Person</span>
 <span class="hl">    form_class = PersonForm</span>
-<span class="hl">    template_name = <span class="str">"<span class="input">nome_do_seu_app</span>/person_form.html"</span></span>
-<span class="hl">    context_object_name = <span class="str">"person"</span></span>
-<span class="hl">    <span class="cm"># fields = ["first_name", "last_name"]</span></span>
-<span class="hl">    success_url = reverse_lazy(<span class="str">"<span class="input">nome_do_seu_app</span>:person_list"</span>)</span>
-<span class="hl">    login_url = reverse_lazy(<span class="str">"admin:login"</span>)</span></code></pre>
+<span class="hl">    template_name = <span class="str">"<span class="input">nome_do_seu_app</span>/person_form_create.html"</span></span>
+<span class="hl">    success_url = reverse_lazy(<span class="str">"<span class="input">nome_do_seu_app</span>:person_list"</span>)</span></code></pre>
           </div>
 
           <dl class="files">
-            <dt><code>LoginRequiredMixin</code></dt>
-            <dd>Só deixa entrar quem está logado. Precisa vir <strong>antes</strong> da <code>UpdateView</code> na lista de classes.</dd>
-
             <dt><code>form_class</code></dt>
             <dd>Formulário usado, o <code>PersonForm</code> do passo anterior.</dd>
 
-            <dt><code>fields</code> (comentado)</dt>
-            <dd>Alternativa sem <code>forms.py</code>: o Django monta o formulário sozinho. Use <code>form_class</code> <strong>ou</strong> <code>fields</code>, nunca os dois, senão dá erro.</dd>
-
-            <dt><code>context_object_name</code></dt>
-            <dd>Nome do registro no template: <code>{{ person }}</code>. O formulário fica em <code>{{ form }}</code>.</dd>
+            <dt><code>template_name</code></dt>
+            <dd>Página do cadastro, <code>person_form_create.html</code>, criada no próximo passo.</dd>
 
             <dt><code>success_url</code></dt>
             <dd>Para onde ir depois de salvar, aqui a lista de pessoas.</dd>
-
-            <dt><code>login_url</code></dt>
-            <dd>Para onde mandar quem não está logado. Usamos a tela de login do admin, que depois volta para a página pedida.</dd>
 
             <dt><code>reverse_lazy</code></dt>
             <dd>Transforma o <code>name</code> da rota em URL. É "lazy" porque as rotas ainda não existem quando a classe é lida.</dd>
@@ -1870,12 +2074,153 @@ urlpatterns = [
               <p>nome_do_seu_app/urls.py</p>
             </div>
             <pre><code><span class="kw">from</span> django.urls <span class="kw">import</span> path
-<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.views <span class="kw">import</span> PersonListView<span class="hl">, PersonUpdateView</span>
+<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.views <span class="kw">import</span> PersonListView<span class="hl">, PersonCreateView</span>
 
 app_name = <span class="str">"<span class="input">nome_do_seu_app</span>"</span>
 
 urlpatterns = [
     path(<span class="str">"pessoas/"</span>, PersonListView.as_view(), name=<span class="str">"person_list"</span>),
+<span class="hl">    path(<span class="str">"pessoas/nova/"</span>, PersonCreateView.as_view(), name=<span class="str">"person_create"</span>),</span>
+]</code></pre>
+          </div>
+
+          <aside class="note">
+            <p class="note__title">Documentação</p>
+            <p><a href="https://docs.djangoproject.com/pt-br/stable/ref/class-based-views/generic-editing/#createview" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/ref/class-based-views/generic-editing</a></p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- Passo 25 -->
+      <details class="step step--front" id="passo-25">
+        <summary class="step__header">
+          <span class="step__number">25</span>
+          <div>
+            <p class="step__label">Passo 25</p>
+            <h2 class="step__title">Criar o template de cadastro</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <p>Um HTML simples, só com o título e o formulário. O <code>{{ form.as_p }}</code> desenha os campos sozinho.</p>
+
+          <h3 class="substep"><span>1</span> A página de cadastro</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>nome_do_seu_app/templates/nome_do_seu_app/person_form_create.html</p>
+            </div>
+            <pre><code><span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Nova pessoa<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
+<span class="hl"><span class="t-tag">&lt;form</span> <span class="t-attr">method</span>=<span class="t-val">"post"</span> <span class="t-attr">enctype</span>=<span class="t-val">"multipart/form-data"</span><span class="t-tag">&gt;</span></span>
+<span class="hl">    <span class="t-dtl">{% csrf_token %}</span></span>
+<span class="hl">    <span class="t-var">{{ form.as_p }}</span></span>
+    <span class="t-tag">&lt;button</span> <span class="t-attr">type</span>=<span class="t-val">"submit"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-primary"</span><span class="t-tag">&gt;</span>Salvar<span class="t-tag">&lt;/button</span><span class="t-tag">&gt;</span>
+<span class="hl"><span class="t-tag">&lt;/form</span><span class="t-tag">&gt;</span></span></code></pre>
+          </div>
+
+          <h3 class="substep"><span>2</span> Link de cadastro na lista</h3>
+          <p>No <code>person_list.html</code> do passo 22, logo abaixo do <code>&lt;h1&gt;</code>:</p>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>nome_do_seu_app/templates/nome_do_seu_app/person_list.html</p>
+            </div>
+            <pre><code><span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Pessoas<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
+<span class="hl"><span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_create'</span><span class="t-dtl"> %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-warning"</span><span class="t-tag">&gt;</span>Nova pessoa<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span></span></code></pre>
+          </div>
+
+          <h3 class="substep"><span>?</span> Entendendo o código</h3>
+
+          <dl class="files">
+            <dt>Por que fora do <code>for</code>?</dt>
+            <dd>Tudo que está dentro do <code>{% for person in people %}</code> se repete uma vez para cada pessoa. Se o botão ficasse lá dentro, com 10 pessoas apareceriam 10 botões <strong>Nova pessoa</strong>. Ele fica fora, logo abaixo do <code>&lt;h1&gt;</code>, porque cadastrar não depende de nenhuma pessoa da lista: é um botão só, e não precisa de <code>pk</code>. Já <strong>Editar</strong> e <strong>Excluir</strong> ficam dentro do <code>for</code>, porque cada pessoa precisa do seu.</dd>
+
+            <dt><code>method="post"</code></dt>
+            <dd>Envia os dados para a mesma URL. A view valida, salva e redireciona para o <code>success_url</code>.</dd>
+
+            <dt><code>{% csrf_token %}</code></dt>
+            <dd>Proteção contra envios falsos de outros sites. Obrigatório em todo formulário <code>post</code>, sem ele o Django responde 403.</dd>
+
+            <dt><code>{{ form.as_p }}</code></dt>
+            <dd>Desenha cada campo dentro de um <code>&lt;p&gt;</code>, com rótulo e mensagens de erro.</dd>
+
+            <dt><code>enctype="multipart/form-data"</code></dt>
+            <dd>Necessário quando o formulário envia arquivos (<code>ImageField</code>, <code>FileField</code>). Sem arquivo não faz diferença, então pode deixar sempre.</dd>
+          </dl>
+
+          <aside class="note note--tip">
+            <p class="note__title">Sem &lt;html&gt; e &lt;head&gt;?</p>
+            <p>O navegador monta a página assim mesmo, então para começar basta o conteúdo. Como só a lista importa o Bootstrap, aqui o botão aparece sem estilo. Depois, com um <code>base.html</code>, todas as páginas ganham o Bootstrap de uma vez.</p>
+          </aside>
+
+          <h3 class="substep"><span>✓</span> Resultado esperado</h3>
+          <p class="center">Acesse <code>http://127.0.0.1:8000/pessoas/</code> e clique em <strong>Nova pessoa</strong>. Preencha, salve e veja a pessoa na lista.</p>
+        </div>
+      </details>
+
+      <!-- ===== Parte XI ===== -->
+      <header class="part" id="parte-11">
+        <p class="part__label">Parte XI</p>
+        <h2 class="part__title">CRUD · Update</h2>
+      </header>
+
+      <!-- Passo 26 -->
+      <details class="step" id="passo-26">
+        <summary class="step__header">
+          <span class="step__number">26</span>
+          <div>
+            <p class="step__label">Passo 26</p>
+            <h2 class="step__title">Criar a UpdateView</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <p>A <code>UpdateView</code> é a view genérica de <strong>edição</strong>. É quase igual à <code>CreateView</code>: a diferença é que busca o registro pelo <code>pk</code> da URL e preenche o formulário com ele.</p>
+
+          <h3 class="substep"><span>1</span> A view</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>nome_do_seu_app/views.py</p>
+            </div>
+            <pre><code><span class="kw">from</span> django.views.generic <span class="kw">import</span> ListView, CreateView<span class="hl">, UpdateView</span>
+...
+
+
+<span class="hl"><span class="kw">class</span> <span class="cls">PersonUpdateView</span>(UpdateView):</span>
+<span class="hl">    model = Person</span>
+<span class="hl">    form_class = PersonForm</span>
+<span class="hl">    template_name = <span class="str">"<span class="input">nome_do_seu_app</span>/person_form_update.html"</span></span>
+<span class="hl">    context_object_name = <span class="str">"person"</span></span>
+<span class="hl">    success_url = reverse_lazy(<span class="str">"<span class="input">nome_do_seu_app</span>:person_list"</span>)</span></code></pre>
+          </div>
+
+          <dl class="files">
+            <dt><code>template_name</code></dt>
+            <dd>Página da edição, <code>person_form_update.html</code>, criada no próximo passo.</dd>
+
+            <dt><code>context_object_name</code></dt>
+            <dd>Nome do registro no template: <code>{{ person }}</code>, usado no título "Editar Fulano".</dd>
+          </dl>
+
+          <h3 class="substep"><span>2</span> A rota</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>nome_do_seu_app/urls.py</p>
+            </div>
+            <pre><code><span class="kw">from</span> django.urls <span class="kw">import</span> path
+<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.views <span class="kw">import</span> PersonListView, PersonCreateView<span class="hl">, PersonUpdateView</span>
+
+app_name = <span class="str">"<span class="input">nome_do_seu_app</span>"</span>
+
+urlpatterns = [
+    path(<span class="str">"pessoas/"</span>, PersonListView.as_view(), name=<span class="str">"person_list"</span>),
+    path(<span class="str">"pessoas/nova/"</span>, PersonCreateView.as_view(), name=<span class="str">"person_create"</span>),
 <span class="hl">    path(<span class="str">"pessoas/&lt;int:pk&gt;/editar/"</span>, PersonUpdateView.as_view(), name=<span class="str">"person_update"</span>),</span>
 ]</code></pre>
           </div>
@@ -1886,99 +2231,214 @@ urlpatterns = [
           </dl>
 
           <aside class="note">
-            <p class="note__title">Quem pode logar?</p>
-            <p>A tela de login do admin só aceita usuários com acesso ao admin, como o superusuário criado com <code>createsuperuser</code>.</p>
-          </aside>
-
-          <aside class="note">
             <p class="note__title">Documentação</p>
             <p><a href="https://docs.djangoproject.com/pt-br/stable/ref/class-based-views/generic-editing/#updateview" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/ref/class-based-views/generic-editing</a></p>
-            <p><a href="https://docs.djangoproject.com/pt-br/stable/topics/auth/default/#the-loginrequiredmixin-mixin" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/topics/auth/default</a></p>
           </aside>
         </div>
       </details>
 
-      <!-- Passo 25 -->
-      <details class="step" id="passo-25">
+      <!-- Passo 27 -->
+      <details class="step step--front" id="passo-27">
         <summary class="step__header">
-          <span class="step__number">25</span>
+          <span class="step__number">27</span>
           <div>
-            <p class="step__label">Passo 25</p>
-            <h2 class="step__title">Criar o template do formulário</h2>
+            <p class="step__label">Passo 27</p>
+            <h2 class="step__title">Criar o template de edição</h2>
           </div>
         </summary>
 
         <div class="step__body">
-          <h3 class="substep"><span>1</span> A página do formulário</h3>
+          <p>Igual ao cadastro, mas o formulário já abre preenchido com os dados da pessoa.</p>
+
+          <h3 class="substep"><span>1</span> A página de edição</h3>
 
           <div class="terminal">
             <div class="terminal__bar">
               <span></span><span></span><span></span>
-              <p>nome_do_seu_app/templates/nome_do_seu_app/person_form.html</p>
+              <p>nome_do_seu_app/templates/nome_do_seu_app/person_form_update.html</p>
             </div>
-            <pre><code><span class="kw">{% load static %}</span>
-&lt;!DOCTYPE html&gt;
-&lt;html lang=<span class="str">"pt-br"</span>&gt;
-&lt;head&gt;
-    &lt;meta charset=<span class="str">"UTF-8"</span>&gt;
-    &lt;meta name=<span class="str">"viewport"</span> content=<span class="str">"width=device-width, initial-scale=1.0"</span>&gt;
-    &lt;title&gt;Editar pessoa&lt;/title&gt;
-    &lt;link rel=<span class="str">"stylesheet"</span> href=<span class="str">"<span class="kw">{% static '<span class="input">nome_do_seu_app</span>/css/style.css' %}</span>"</span>&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;h1&gt;Editar {{ person }}&lt;/h1&gt;
-
-<span class="hl">    &lt;form method=<span class="str">"post"</span>&gt;</span>
-<span class="hl">        <span class="kw">{% csrf_token %}</span></span>
-<span class="hl">        {{ form.as_p }}</span>
-        &lt;button type=<span class="str">"submit"</span>&gt;Salvar&lt;/button&gt;
-        &lt;a href=<span class="str">"<span class="kw">{% url '<span class="input">nome_do_seu_app</span>:person_list' %}</span>"</span>&gt;Cancelar&lt;/a&gt;
-<span class="hl">    &lt;/form&gt;</span>
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
+            <pre><code><span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Editar <span class="t-var">{{ person }}</span><span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
+<span class="hl"><span class="t-tag">&lt;form</span> <span class="t-attr">method</span>=<span class="t-val">"post"</span> <span class="t-attr">enctype</span>=<span class="t-val">"multipart/form-data"</span><span class="t-tag">&gt;</span></span>
+<span class="hl">    <span class="t-dtl">{% csrf_token %}</span></span>
+<span class="hl">    <span class="t-var">{{ form.as_p }}</span></span>
+    <span class="t-tag">&lt;button</span> <span class="t-attr">type</span>=<span class="t-val">"submit"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-primary"</span><span class="t-tag">&gt;</span>Salvar<span class="t-tag">&lt;/button</span><span class="t-tag">&gt;</span>
+<span class="hl"><span class="t-tag">&lt;/form</span><span class="t-tag">&gt;</span></span></code></pre>
           </div>
 
           <h3 class="substep"><span>2</span> Link de edição na lista</h3>
-          <p>No <code>person_list.html</code> do passo 22, adicione um link em cada pessoa:</p>
+          <p>No <code>person_list.html</code>, adicione um link em cada pessoa:</p>
 
           <div class="terminal">
             <div class="terminal__bar">
               <span></span><span></span><span></span>
               <p>nome_do_seu_app/templates/nome_do_seu_app/person_list.html</p>
             </div>
-            <pre><code><span class="kw">{% for person in people %}</span>
-    &lt;li&gt;
-        {{ person.first_name }} {{ person.last_name }}
-<span class="hl">        &lt;a href=<span class="str">"<span class="kw">{% url '<span class="input">nome_do_seu_app</span>:person_update' person.pk %}</span>"</span>&gt;Editar&lt;/a&gt;</span>
-    &lt;/li&gt;
-<span class="kw">{% empty %}</span>
-    &lt;li&gt;Nenhuma pessoa cadastrada.&lt;/li&gt;
-<span class="kw">{% endfor %}</span></code></pre>
+            <pre><code><span class="t-dtl">{% for person in people %}</span>
+    <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span>
+        <span class="t-var">{{ person.first_name }}</span> <span class="t-var">{{ person.last_name }}</span>
+<span class="hl">        <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_update'</span><span class="t-dtl"> person.pk %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-primary"</span><span class="t-tag">&gt;</span>Editar<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span></span>
+    <span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
+<span class="t-dtl">{% empty %}</span>
+    <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span>Nenhuma pessoa cadastrada.<span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
+<span class="t-dtl">{% endfor %}</span></code></pre>
           </div>
 
-          <h3 class="substep"><span>?</span> Entendendo o código</h3>
-
           <dl class="files">
-            <dt><code>method="post"</code></dt>
-            <dd>Envia os dados para a mesma URL. A <code>UpdateView</code> valida, salva e redireciona para o <code>success_url</code>.</dd>
-
-            <dt><code>{% csrf_token %}</code></dt>
-            <dd>Proteção contra envios falsos de outros sites. Obrigatório em todo formulário <code>post</code>, sem ele o Django responde 403.</dd>
-
-            <dt><code>{{ form.as_p }}</code></dt>
-            <dd>Desenha cada campo dentro de um <code>&lt;p&gt;</code>, com rótulo e mensagens de erro.</dd>
-
             <dt><code>{% url '...' person.pk %}</code></dt>
             <dd>Monta a URL da rota passando o id, ex.: <code>/pessoas/3/editar/</code>.</dd>
+
+            <dt>Por que pega o id certo?</dt>
+            <dd>O link está <strong>dentro do <code>{% for person in people %}</code></strong>. A cada volta do for, <code>person</code> é uma pessoa diferente, então <code>person.pk</code> muda junto: na pessoa de id 1 o link vira <code>/pessoas/1/editar/</code>, na de id 2 vira <code>/pessoas/2/editar/</code>, e assim por diante. Cada linha da lista ganha o link da sua própria pessoa. Fora do for, <code>person</code> não existe e o link não funciona.</dd>
           </dl>
 
           <h3 class="substep"><span>✓</span> Resultado esperado</h3>
-          <p class="center">Acesse <code>http://127.0.0.1:8000/pessoas/</code> e clique em <strong>Editar</strong>. Sem login, você vai para o login do admin. Depois de logar, altere o nome, salve e volte para a lista atualizada.</p>
+          <p class="center">Na lista, clique em <strong>Editar</strong>. O formulário abre preenchido e com o título "Editar". Altere o nome, salve e volte para a lista atualizada.</p>
 
           <aside class="note">
             <p class="note__title">Erro 404?</p>
-            <p>Não existe pessoa com aquele id. Confira o número na URL ou cadastre pessoas no admin.</p>
+            <p>Não existe pessoa com aquele id. Confira o número na URL ou cadastre pessoas antes.</p>
           </aside>
+
+        </div>
+      </details>
+
+      <!-- ===== Parte XII ===== -->
+      <header class="part" id="parte-12">
+        <p class="part__label">Parte XII</p>
+        <h2 class="part__title">CRUD · Delete</h2>
+      </header>
+
+      <!-- Passo 28 -->
+      <details class="step" id="passo-28">
+        <summary class="step__header">
+          <span class="step__number">28</span>
+          <div>
+            <p class="step__label">Passo 28</p>
+            <h2 class="step__title">Criar a DeleteView</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <p>A <code>DeleteView</code> é a view genérica de <strong>exclusão</strong>: busca o registro pelo <code>pk</code>, mostra uma página de confirmação e só apaga quando o usuário confirma.</p>
+
+          <h3 class="substep"><span>1</span> A view</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>nome_do_seu_app/views.py</p>
+            </div>
+            <pre><code><span class="kw">from</span> django.views.generic <span class="kw">import</span> ListView, CreateView, UpdateView<span class="hl">, DeleteView</span>
+...
+
+
+<span class="hl"><span class="kw">class</span> <span class="cls">PersonDeleteView</span>(DeleteView):</span>
+<span class="hl">    model = Person</span>
+<span class="hl">    template_name = <span class="str">"<span class="input">nome_do_seu_app</span>/person_confirm_delete.html"</span></span>
+<span class="hl">    context_object_name = <span class="str">"person"</span></span>
+<span class="hl">    success_url = reverse_lazy(<span class="str">"<span class="input">nome_do_seu_app</span>:person_list"</span>)</span></code></pre>
+          </div>
+
+          <dl class="files">
+            <dt>Sem <code>form_class</code></dt>
+            <dd>Excluir não tem campos para preencher, então não usa formulário.</dd>
+
+            <dt><code>person_confirm_delete.html</code></dt>
+            <dd>Página que pergunta "tem certeza?". Abrir o link não apaga nada, só o <code>post</code> do botão apaga.</dd>
+          </dl>
+
+          <h3 class="substep"><span>2</span> A rota</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>nome_do_seu_app/urls.py</p>
+            </div>
+            <pre><code><span class="kw">from</span> django.urls <span class="kw">import</span> path
+<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.views <span class="kw">import</span> PersonListView, PersonCreateView, PersonUpdateView<span class="hl">, PersonDeleteView</span>
+
+app_name = <span class="str">"<span class="input">nome_do_seu_app</span>"</span>
+
+urlpatterns = [
+    path(<span class="str">"pessoas/"</span>, PersonListView.as_view(), name=<span class="str">"person_list"</span>),
+    path(<span class="str">"pessoas/nova/"</span>, PersonCreateView.as_view(), name=<span class="str">"person_create"</span>),
+    path(<span class="str">"pessoas/&lt;int:pk&gt;/editar/"</span>, PersonUpdateView.as_view(), name=<span class="str">"person_update"</span>),
+<span class="hl">    path(<span class="str">"pessoas/&lt;int:pk&gt;/excluir/"</span>, PersonDeleteView.as_view(), name=<span class="str">"person_delete"</span>),</span>
+]</code></pre>
+          </div>
+
+          <aside class="note">
+            <p class="note__title">Atenção</p>
+            <p>O <code>Course</code> aponta para <code>Person</code> com <code>on_delete=models.CASCADE</code>: excluir um professor apaga também os cursos dele. Se trocar para <code>PROTECT</code>, o Django não deixa excluir quem tem cursos.</p>
+          </aside>
+
+          <aside class="note">
+            <p class="note__title">Documentação</p>
+            <p><a href="https://docs.djangoproject.com/pt-br/stable/ref/class-based-views/generic-editing/#deleteview" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/ref/class-based-views/generic-editing</a></p>
+          </aside>
+        </div>
+      </details>
+
+      <!-- Passo 29 -->
+      <details class="step step--front" id="passo-29">
+        <summary class="step__header">
+          <span class="step__number">29</span>
+          <div>
+            <p class="step__label">Passo 29</p>
+            <h2 class="step__title">Criar o template de exclusão</h2>
+          </div>
+        </summary>
+
+        <div class="step__body">
+          <p>A <code>DeleteView</code> do passo anterior precisa de uma página que pergunta "tem certeza?", e a lista precisa de um botão para chegar nela.</p>
+
+          <h3 class="substep"><span>1</span> A página de confirmação</h3>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>nome_do_seu_app/templates/nome_do_seu_app/person_confirm_delete.html</p>
+            </div>
+            <pre><code><span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Excluir <span class="t-var">{{ person }}</span>?<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
+<span class="hl"><span class="t-tag">&lt;form</span> <span class="t-attr">method</span>=<span class="t-val">"post"</span><span class="t-tag">&gt;</span></span>
+<span class="hl">    <span class="t-dtl">{% csrf_token %}</span></span>
+    <span class="t-tag">&lt;button</span> <span class="t-attr">type</span>=<span class="t-val">"submit"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-danger"</span><span class="t-tag">&gt;</span>Excluir<span class="t-tag">&lt;/button</span><span class="t-tag">&gt;</span>
+<span class="hl"><span class="t-tag">&lt;/form</span><span class="t-tag">&gt;</span></span></code></pre>
+          </div>
+
+          <h3 class="substep"><span>2</span> Link de exclusão na lista</h3>
+          <p>No <code>person_list.html</code>, ao lado do <strong>Editar</strong>:</p>
+
+          <div class="terminal">
+            <div class="terminal__bar">
+              <span></span><span></span><span></span>
+              <p>nome_do_seu_app/templates/nome_do_seu_app/person_list.html</p>
+            </div>
+            <pre><code><span class="t-dtl">{% for person in people %}</span>
+    <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span>
+        <span class="t-var">{{ person.first_name }}</span> <span class="t-var">{{ person.last_name }}</span>
+        <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_update'</span><span class="t-dtl"> person.pk %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-primary"</span><span class="t-tag">&gt;</span>Editar<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+<span class="hl">        <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_delete'</span><span class="t-dtl"> person.pk %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-danger"</span><span class="t-tag">&gt;</span>Excluir<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span></span>
+    <span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
+<span class="t-dtl">{% empty %}</span>
+    <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span>Nenhuma pessoa cadastrada.<span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
+<span class="t-dtl">{% endfor %}</span></code></pre>
+          </div>
+
+          <dl class="files">
+            <dt><code>method="post"</code></dt>
+            <dd>Só o envio do formulário apaga. Abrir a página pelo link (um <code>get</code>) apenas mostra a pergunta.</dd>
+
+            <dt><code>{% csrf_token %}</code></dt>
+            <dd>Obrigatório aqui também, mesmo sem campos: sem ele o Django responde 403.</dd>
+
+            <dt><code>person.pk</code></dt>
+            <dd>Mesma ideia do Editar: dentro do <code>for</code>, cada linha gera o link da sua própria pessoa.</dd>
+          </dl>
+
+          <h3 class="substep"><span>✓</span> Resultado esperado</h3>
+          <p class="center">Na lista, clique em <strong>Excluir</strong>, confirme em <strong>Excluir</strong> e volte para a lista sem aquela pessoa.</p>
+
         </div>
       </details>
 

@@ -15,6 +15,9 @@
   --django-light: #44b78b;
   --django-pale:  #e4f2eb;
 
+  --front:        #1d4f7a;
+  --front-pale:   #e3edf6;
+
   --gold:         #b08d3c;
   --gold-pale:    #f7eed8;
 
@@ -243,9 +246,11 @@ body {
   content: counter(toc, decimal-leading-zero) " ";
   font-family: var(--mono);
   font-size: .8rem;
-  color: var(--gold);
+  color: var(--django);
   margin-right: .35rem;
 }
+
+.toc__list li.toc__front::before { color: var(--front); }
 
 .toc__list a {
   color: var(--ink);
@@ -280,6 +285,7 @@ body {
 
 .toc__list li.toc__extra::before {
   content: "+ ";
+  color: var(--gold);
   font-weight: 600;
 }
 
@@ -291,6 +297,49 @@ body {
 }
 
 .step--extra { border-style: dashed; }
+
+/* Passos de front-end (templates, HTML, CSS) */
+.step--front .step__number {
+  background: var(--front);
+  box-shadow: 0 0 0 4px var(--front-pale);
+}
+
+/* Legenda das cores dos passos */
+.color-legend {
+  list-style: none;
+  margin: -.5rem 0 1.25rem;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem .9rem;
+  font-family: var(--sans);
+  font-size: .72rem;
+  color: var(--ink-soft);
+}
+
+.color-legend li {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+}
+
+.color-legend__dot {
+  width: .6rem;
+  height: .6rem;
+  border-radius: 50%;
+  background: var(--django);
+  box-shadow: 0 0 0 2px var(--django-pale);
+}
+
+.color-legend__dot--front {
+  background: var(--front);
+  box-shadow: 0 0 0 2px var(--front-pale);
+}
+
+.color-legend__dot--extra {
+  background: var(--gold);
+  box-shadow: 0 0 0 2px var(--gold-pale);
+}
 
 /* ---------- Parte (seção maior) ---------- */
 .part {
@@ -578,7 +627,7 @@ code {
 .terminal code {
   background: none;
   padding: 0;
-  font-size: 1rem;
+  font-size: .82rem;
   color: #e8efe9;
 }
 
@@ -608,6 +657,14 @@ code {
 
 .terminal .num { color: #d7a6f0; }
 
+/* Templates HTML: tema de editor */
+.terminal .t-tag  { color: #6cb6ff; }                   /* <form> </div> */
+.terminal .t-attr { color: #9cdcfe; font-style: italic; } /* type, method, href */
+.terminal .t-val  { color: #f0a77c; }                   /* "post", "submit" */
+.terminal .t-dtl  { color: #d197f0; }                   /* {% for %} {% url %} */
+.terminal .t-var  { color: #4ec9b0; }                   /* {{ person }} */
+.terminal .t-cm   { color: #7d8f85; font-style: italic; }
+
 /* Blocos de código longos com rolagem */
 .terminal--tall pre {
   max-height: 480px;
@@ -636,7 +693,8 @@ code {
   font-weight: 700;
 }
 
-.terminal pre code { white-space: pre-wrap; }
+/* Sem quebra automática: linha longa rola para o lado, como no editor */
+.terminal pre code { white-space: pre; }
 
 /* ---------- Capturas de tela ---------- */
 .screenshot {
@@ -714,6 +772,136 @@ code {
 }
 
 /* ---------- Lista de arquivos (o que é cada um) ---------- */
+/* ---------- Diagrama (como as peças se ligam) ---------- */
+.diagram {
+  margin: 1.25rem 0 2rem;
+  padding: 1rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: #fff;
+}
+
+.diagram__scroll { overflow-x: auto; }
+
+.diagram svg {
+  display: block;
+  width: 100%;
+  min-width: 560px;
+  height: auto;
+}
+
+.d-edge line {
+  stroke: var(--ink-soft);
+  stroke-width: 2;
+}
+
+.d-edge .d-path-read { stroke: var(--django-light); stroke-width: 4; }
+.d-edge .d-path-form { stroke: var(--gold); stroke-width: 4; }
+
+.d-edge .d-edge--back {
+  stroke: var(--ink-soft);
+  stroke-dasharray: 6 5;
+}
+
+.d-label text {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-style: italic;
+  fill: var(--ink-soft);
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: #fff;
+  stroke-width: 5px;
+}
+
+.d-node ellipse {
+  fill: var(--paper);
+  stroke: var(--django);
+  stroke-width: 2;
+}
+
+.d-node .d-main { fill: var(--django-pale); stroke-width: 3; }
+.d-node .d-edge-node { fill: var(--gold-pale); stroke: var(--gold); }
+
+.d-node text { text-anchor: middle; }
+
+.d-name {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  fill: var(--django);
+}
+
+.d-sub {
+  font-family: var(--sans);
+  font-size: 11px;
+  fill: var(--ink-soft);
+}
+
+.d-note {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--gold);
+}
+
+.d-step circle { fill: var(--gold); }
+
+.d-step text {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  fill: #fff;
+  text-anchor: middle;
+}
+
+.diagram__legend {
+  list-style: none;
+  margin: .75rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: .4rem;
+  font-family: var(--sans);
+  font-size: .85rem;
+  color: var(--ink-soft);
+}
+
+.diagram__legend li {
+  display: flex;
+  align-items: baseline;
+  gap: .6rem;
+}
+
+.legend-line {
+  flex: none;
+  width: 2rem;
+  height: 0;
+  border-top: 4px solid var(--django-light);
+  transform: translateY(-.25em);
+}
+
+.legend-line--form { border-top-color: var(--gold); }
+.legend-line--back { border-top: 2px dashed var(--ink-soft); }
+
+.diagram figcaption {
+  margin-top: .75rem;
+  font-family: var(--sans);
+  font-size: .85rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.diagram figcaption strong {
+  display: inline-grid;
+  place-items: center;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  background: var(--gold);
+  color: #fff;
+  font-size: .75rem;
+}
+
 .files {
   display: grid;
   grid-template-columns: max-content 1fr;
