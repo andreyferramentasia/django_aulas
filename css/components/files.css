@@ -1,0 +1,20 @@
+/* ---------- Lista de arquivos (nome + o que é) ----------
+   <dl class="files"><dt><code>views.py</code></dt><dd>...</dd></dl> */
+.files {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: .55rem 1.25rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.files dt { margin: 0; }
+
+.files dd {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 560px) {
+  .files { grid-template-columns: 1fr; gap: .15rem; }
+  .files dd { margin-bottom: .7rem; }
+}

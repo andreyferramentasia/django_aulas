@@ -1,0 +1,45 @@
+/* ---------- Tabela ----------
+   <div class="table-wrap"><table class="table [table--wide]">...</table></div> */
+.table-wrap {
+  overflow-x: auto;
+  margin: 1rem 0 1.5rem;
+}
+
+.table {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  border-collapse: collapse;
+  font-size: 1.05rem;
+}
+
+.table th {
+  font-family: var(--sans);
+  font-size: .75rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--django);
+  padding: .55rem .9rem;
+  border-bottom: 2px solid var(--django);
+}
+
+.table td {
+  text-align: center;
+  padding: .5rem .9rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.table tbody tr:nth-child(even) { background: var(--paper); }
+
+/* Tabela larga, para frases (não só valores curtos) */
+.table--wide { max-width: none; }
+
+.table--wide th,
+.table--wide td {
+  text-align: left;
+  padding: .85rem 1.25rem;
+  line-height: 1.5;
+}
+
+.table--wide td code { white-space: nowrap; }

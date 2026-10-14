@@ -1,0 +1,39 @@
+/* ---------- Atalho de teclado em destaque ---------- */
+.shortcut {
+  margin: 2rem 0;
+  padding: 2rem 1rem 1.25rem;
+  background: var(--paper);
+  border: 1px dashed var(--rule);
+  border-radius: var(--radius);
+  text-align: center;
+}
+
+.shortcut__keys {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .75rem;
+}
+
+.shortcut figcaption {
+  margin-top: 1.1rem;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--ink-soft);
+}
+
+.kbd--lg {
+  font-size: 1.3rem;
+  font-weight: 600;
+  padding: .6em 1em;
+  min-width: 3.2em;
+  border-bottom-width: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, .06);
+}
+
+.plus {
+  font-family: var(--sans);
+  font-size: 1.4rem;
+  color: var(--ink-soft);
+}

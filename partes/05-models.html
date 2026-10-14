@@ -1,0 +1,192 @@
+<section class="part" id="parte-5" data-title="Models">
+
+  <details class="step" id="passo-17" data-title="Criar os models">
+
+    <div class="step__body">
+      <p>Cada <strong>model</strong> é uma classe Python que vira uma <strong>tabela</strong> no banco. Cada atributo vira uma <strong>coluna</strong>.</p>
+
+      <div class="terminal" data-title="nome_do_seu_app/models.py">
+        <pre><code><span class="kw">from</span> django.db <span class="kw">import</span> models
+
+
+<span class="kw">class</span> <span class="cls">Person</span>(models.Model):
+    first_name = models.CharField(verbose_name=<span class="str">"Nome"</span>, max_length=<span class="num">30</span>)
+    last_name = models.CharField(verbose_name=<span class="str">"Sobrenome"</span>, max_length=<span class="num">30</span>)
+
+    <span class="kw">class</span> <span class="cls">Meta</span>:
+        verbose_name = <span class="str">"Pessoa"</span>
+        verbose_name_plural = <span class="str">"Pessoas"</span>
+        ordering = [<span class="str">"first_name"</span>]
+
+    <span class="kw">def</span> __str__(self):
+        <span class="kw">return</span> <span class="str">f"{self.first_name} {self.last_name}"</span>
+
+
+<span class="kw">class</span> <span class="cls">Course</span>(models.Model):
+<span class="hl">    PERIOD_CHOICES = [</span>
+<span class="hl">        (<span class="str">"M"</span>, <span class="str">"Matutino"</span>),</span>
+<span class="hl">        (<span class="str">"V"</span>, <span class="str">"Vespertino"</span>),</span>
+<span class="hl">        (<span class="str">"N"</span>, <span class="str">"Noturno"</span>),</span>
+<span class="hl">    ]</span>
+
+    name = models.CharField(verbose_name=<span class="str">"Nome do curso"</span>, max_length=<span class="num">100</span>)
+    description = models.TextField(verbose_name=<span class="str">"Descrição"</span>, blank=<span class="kw">True</span>)
+    workload = models.PositiveIntegerField(verbose_name=<span class="str">"Carga horária (h)"</span>, default=<span class="num">0</span>)
+<span class="hl">    period = models.CharField(</span>
+<span class="hl">        verbose_name=<span class="str">"Período"</span>,</span>
+<span class="hl">        max_length=<span class="num">1</span>,</span>
+<span class="hl">        choices=PERIOD_CHOICES,</span>
+<span class="hl">        default=<span class="str">"M"</span>,</span>
+<span class="hl">    )</span>
+<span class="hl">    teacher = models.ForeignKey(</span>
+<span class="hl">        Person,</span>
+<span class="hl">        on_delete=models.CASCADE,</span>
+<span class="hl">        verbose_name=<span class="str">"Professor"</span>,</span>
+<span class="hl">    )</span>
+
+    <span class="kw">class</span> <span class="cls">Meta</span>:
+        verbose_name = <span class="str">"Curso"</span>
+        verbose_name_plural = <span class="str">"Cursos"</span>
+        ordering = [<span class="str">"name"</span>]
+
+    <span class="kw">def</span> __str__(self):
+        <span class="kw">return</span> self.name</code></pre>
+      </div>
+
+      <h4 class="substep"><span>?</span> Entendendo o código</h4>
+
+      <dl class="files">
+        <dt><code>Person</code></dt>
+        <dd>Exemplo da documentação oficial do Django.</dd>
+
+        <dt><code>CharField</code></dt>
+        <dd>Texto curto, exige <code>max_length</code>.</dd>
+
+        <dt><code>TextField</code></dt>
+        <dd>Texto longo. <code>blank=True</code> deixa o campo opcional.</dd>
+
+        <dt><code>PositiveIntegerField</code></dt>
+        <dd>Número inteiro, sem negativos. <code>default=0</code> define o valor inicial. Outros: <code>IntegerField</code>, <code>DecimalField</code> (valores com casas decimais, ex.: preço).</dd>
+
+        <dt><code>choices</code></dt>
+        <dd>Limita o campo a uma lista de opções. No admin vira um menu de seleção.</dd>
+
+        <dt><code>ForeignKey</code></dt>
+        <dd>Chave estrangeira, liga cada curso a uma pessoa (o professor).</dd>
+
+        <dt><code>on_delete</code></dt>
+        <dd><code>CASCADE</code> apaga os cursos se a pessoa for apagada.</dd>
+
+        <dt><code>verbose_name</code> (no campo)</dt>
+        <dd>Rótulo do campo exibido no admin e nos formulários, ex.: <code>verbose_name="Nome"</code>.</dd>
+
+        <dt><code>class Meta</code></dt>
+        <dd>Configurações do model, não viram coluna.</dd>
+
+        <dt><code>verbose_name</code></dt>
+        <dd>Nome do model no singular, exibido no admin.</dd>
+
+        <dt><code>verbose_name_plural</code></dt>
+        <dd>Nome no plural. Sem ele o Django só adiciona "s", o que erra em palavras como "Professor" (viraria "Professors").</dd>
+
+        <dt><code>ordering</code></dt>
+        <dd>Ordem padrão das listagens. Use <code>"-name"</code> para ordem decrescente.</dd>
+
+        <dt><code>__str__</code></dt>
+        <dd>Texto exibido no admin no lugar de <code>Person object (1)</code>.</dd>
+      </dl>
+
+      <h4 class="substep"><span>≡</span> Como funciona o choices</h4>
+      <p class="center">Cada opção é um par <code>(valor no banco, texto na tela)</code>:</p>
+
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr><th>Grava no banco</th><th>Aparece na tela</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>M</code></td><td>Matutino</td></tr>
+            <tr><td><code>V</code></td><td>Vespertino</td></tr>
+            <tr><td><code>N</code></td><td>Noturno</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Para mostrar o texto em vez da letra, o Django cria o método <code>get_period_display()</code>:</p>
+
+      <div class="terminal" data-title="Exemplo">
+        <pre><code>course.period                <span class="cm"># "M"</span>
+course.get_period_display()  <span class="cm"># "Matutino"</span></code></pre>
+      </div>
+
+      <aside class="note note--tip">
+        <p class="note__title">Relação</p>
+        <p>Uma pessoa pode ter <strong>vários</strong> cursos, cada curso tem <strong>um</strong> professor.</p>
+      </aside>
+
+      <aside class="note">
+        <p class="note__title">Documentação</p>
+        <p><a href="https://docs.djangoproject.com/pt-br/stable/topics/db/models/" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/topics/db/models</a></p>
+      </aside>
+    </div>
+  </details>
+
+  <details class="step" id="passo-18" data-title="Enviar os models para o banco">
+
+    <div class="step__body">
+      <h4 class="substep"><span>1</span> Registrar o app</h4>
+      <p>Se ainda não fez, adicione o app no final do <code>INSTALLED_APPS</code>:</p>
+
+      <div class="terminal" data-title="app/settings.py">
+        <pre><code>INSTALLED_APPS = [
+    <span class="str">'jazzmin'</span>,
+    <span class="str">'django.contrib.admin'</span>,
+    ...
+    <span class="str">'django.contrib.staticfiles'</span>,
+<span class="hl">    <span class="str">'nome_do_seu_app'</span>,</span>
+]</code></pre>
+      </div>
+
+      <h4 class="substep"><span>2</span> Verificar o projeto</h4>
+
+      <div class="terminal" data-title="Terminal">
+        <pre><code><span class="prompt">&gt;</span> python manage.py check
+System check identified no issues (0 silenced).</code></pre>
+      </div>
+
+      <h4 class="substep"><span>3</span> Gerar a migração</h4>
+
+      <div class="terminal" data-title="Terminal">
+        <pre><code><span class="prompt">&gt;</span> python manage.py makemigrations
+Migrations for '<span class="input">nome_do_seu_app</span>':
+  <span class="input">nome_do_seu_app</span>\migrations\0001_initial.py
+    + Create model Person
+    + Create model Course</code></pre>
+      </div>
+
+      <h4 class="substep"><span>4</span> Aplicar no banco</h4>
+
+      <div class="terminal" data-title="Terminal">
+        <pre><code><span class="prompt">&gt;</span> python manage.py migrate
+Applying <span class="input">nome_do_seu_app</span>.0001_initial... OK</code></pre>
+      </div>
+
+      <dl class="files">
+        <dt><code>check</code></dt>
+        <dd>Procura erros no projeto (models, settings) sem alterar nada.</dd>
+
+        <dt><code>makemigrations</code></dt>
+        <dd>Lê o <code>models.py</code> e gera o arquivo de migração.</dd>
+
+        <dt><code>migrate</code></dt>
+        <dd>Executa a migração e cria as tabelas no <code>db.sqlite3</code>.</dd>
+      </dl>
+
+      <aside class="note note--tip">
+        <p class="note__title">Sempre que alterar o models.py</p>
+        <p>Rode <code>check</code>, <code>makemigrations</code> e <code>migrate</code> novamente.</p>
+      </aside>
+    </div>
+  </details>
+
+</section>

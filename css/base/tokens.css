@@ -1,0 +1,70 @@
+/* =========================================================
+   Tokens: cores, fontes e medidas usadas em todo o site.
+   Mude aqui para alterar o tema inteiro.
+   ========================================================= */
+
+:root {
+  /* Papel e tinta */
+  --paper:        #faf7f0;
+  --paper-dark:   #f1ece0;
+  --paper-hover:  #ebe4d3;
+  --surface:      #fff;
+  --ink:          #1f2a24;
+  --ink-soft:     #4a564f;
+  --rule:         #d9d1bf;
+  --on-dark:      #f4f1e8;
+
+  /* Back-end (verde do Django) */
+  --django:       #0c4b33;
+  --django-light: #44b78b;
+  --django-pale:  #e4f2eb;
+
+  /* Front-end */
+  --front:        #1d4f7a;
+  --front-pale:   #e3edf6;
+
+  /* Extra e avisos */
+  --gold:         #b08d3c;
+  --gold-pale:    #f7eed8;
+  --danger:       #c0392b;
+
+  /* Cor de destaque: componentes usam --accent, os modificadores trocam o valor */
+  --accent:       var(--django);
+  --accent-pale:  var(--django-pale);
+
+  /* Terminal (tema escuro de editor) */
+  --term-bg:      #16211c;
+  --term-bar:     #0f1814;
+  --term-border:  #25332c;
+  --term-text:    #e8efe9;
+  --term-muted:   #8a9a91;
+  --term-comment: #7d8f85;
+  --term-red:     #e0685c;
+  --term-yellow:  #e3b341;
+
+  /* Tipografia */
+  --serif: "EB Garamond", Georgia, "Times New Roman", serif;
+  --sans:  "Inter", "Segoe UI", system-ui, sans-serif;
+  --mono:  "JetBrains Mono", Consolas, monospace;
+
+  /* Medidas */
+  --container: 1300px;
+  --radius:    6px;
+  --pill:      999px;
+  --shadow: 0 1px 2px rgba(31, 42, 36, .06), 0 6px 20px rgba(31, 42, 36, .06);
+}
+
+/* Variações de destaque, reaproveitadas por passo, sumário e legenda */
+.step--front,
+.toc__item--front,
+.color-legend__dot--front {
+  --accent:      var(--front);
+  --accent-pale: var(--front-pale);
+}
+
+.step--extra,
+.toc__item--extra,
+.color-legend__dot--extra {
+  --accent:      var(--gold);
+  --accent-pale: var(--gold-pale);
+}

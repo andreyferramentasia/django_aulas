@@ -1,0 +1,36 @@
+/* ---------- Lista de instruções numerada ---------- */
+.instructions {
+  counter-reset: item;
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+
+/* Listas continuadas: <ol class="instructions" start="3"> */
+.instructions[start="2"] { counter-reset: item 1; }
+.instructions[start="3"] { counter-reset: item 2; }
+.instructions[start="4"] { counter-reset: item 3; }
+.instructions[start="5"] { counter-reset: item 4; }
+
+.instructions li {
+  counter-increment: item;
+  position: relative;
+  padding: .2rem 0 .9rem 2.6rem;
+}
+
+.instructions li::before {
+  content: counter(item);
+  position: absolute;
+  left: 0;
+  top: .35rem;
+  width: 1.7rem;
+  height: 1.7rem;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid var(--django-light);
+  border-radius: 50%;
+  font-family: var(--sans);
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--django);
+}

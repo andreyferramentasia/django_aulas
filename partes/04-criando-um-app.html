@@ -1,0 +1,66 @@
+<section class="part" id="parte-4" data-title="Criando um App">
+
+  <details class="step" id="passo-16" data-title="Criar o seu app">
+
+    <div class="step__body">
+      <p>Um <strong>app</strong> é uma parte do projeto com uma função específica (cursos, usuários, pagamentos...). Um projeto pode ter vários apps.</p>
+
+      <div class="terminal" data-title="Terminal">
+        <pre><code><span class="prompt">&gt;</span> python manage.py startapp <span class="input">nome_do_seu_app</span></code></pre>
+      </div>
+
+      <aside class="note note--tip">
+        <p class="note__title">Dica</p>
+        <p>Minúsculas, sem espaços ou acentos, de preferência no plural: <code>courses</code>, <code>students</code>.</p>
+      </aside>
+
+      <h4 class="substep"><span>✓</span> Estrutura gerada</h4>
+
+      <div class="terminal" data-title="Pasta do projeto">
+        <pre><code>meu_projeto/
+├── app/
+├── <span class="input">nome_do_seu_app</span>/
+│   ├── migrations/
+│   │   └── __init__.py
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── tests.py
+│   └── views.py
+└── manage.py</code></pre>
+      </div>
+
+      <h4 class="substep"><span>?</span> O que é cada arquivo</h4>
+
+      <dl class="files">
+        <dt><code>models.py</code></dt>
+        <dd>Tabelas do banco de dados, escritas como classes Python.</dd>
+
+        <dt><code>views.py</code></dt>
+        <dd>Lógica das páginas, recebe a requisição e devolve a resposta.</dd>
+
+        <dt><code>admin.py</code></dt>
+        <dd>Registra os models para aparecerem no painel <code>/admin</code>.</dd>
+
+        <dt><code>apps.py</code></dt>
+        <dd>Configuração do app (nome, rótulo).</dd>
+
+        <dt><code>tests.py</code></dt>
+        <dd>Testes automatizados do app.</dd>
+
+        <dt><code>migrations/</code></dt>
+        <dd>Histórico das alterações no banco, gerado pelo <code>makemigrations</code>.</dd>
+
+        <dt><code>__init__.py</code></dt>
+        <dd>Indica ao Python que a pasta é um pacote. Fica vazio.</dd>
+      </dl>
+
+      <aside class="note">
+        <p class="note__title">Atenção</p>
+        <p>O <code>startapp</code> não cria <code>urls.py</code> nem a pasta <code>templates/</code>, eles são criados manualmente quando necessário.</p>
+      </aside>
+    </div>
+  </details>
+
+</section>

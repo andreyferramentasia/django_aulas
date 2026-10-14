@@ -1,0 +1,62 @@
+<section class="part" id="parte-7" data-title="Templates e Static">
+
+  <details class="step step--front" id="passo-20" data-title="Criar as pastas templates e static">
+
+    <div class="step__body">
+      <p>O <strong>template</strong> é o HTML da página. Os arquivos <strong>static</strong> são CSS, JavaScript e imagens. Crie as pastas assim:</p>
+
+      <div class="terminal" data-title="Pasta do projeto">
+        <pre><code>meu_projeto/
+├── app/
+├── <span class="input">nome_do_seu_app</span>/
+│   ├── migrations/
+<span class="hl">│   ├── static/</span>
+<span class="hl">│   │   └── <span class="input">nome_do_seu_app</span>/</span>
+<span class="hl">│   │       └── css/</span>
+<span class="hl">│   │           └── style.css</span>
+<span class="hl">│   ├── templates/</span>
+<span class="hl">│   │   └── <span class="input">nome_do_seu_app</span>/</span>
+<span class="hl">│   │       └── person_list.html</span>
+<span class="hl">│   ├── urls.py</span>
+│   ├── models.py
+│   └── views.py
+└── manage.py</code></pre>
+      </div>
+
+      <dl class="files">
+        <dt><code><span class="input">nome_do_seu_app</span>/templates/<span class="input">nome_do_seu_app</span>/</code></dt>
+        <dd>Templates do app. O Django encontra essa pasta sozinho (<code>APP_DIRS = True</code>).</dd>
+
+        <dt><code><span class="input">nome_do_seu_app</span>/static/<span class="input">nome_do_seu_app</span>/</code></dt>
+        <dd>CSS, JS e imagens do app. Também é encontrada sozinha, sem configurar nada.</dd>
+
+        <dt><code>urls.py</code></dt>
+        <dd>Rotas do app. O <code>startapp</code> não cria, crie o arquivo vazio.</dd>
+      </dl>
+
+      <aside class="note">
+        <p class="note__title">Por que repetir o nome do app?</p>
+        <p>O Django junta os templates e statics de todos os apps num lugar só. Se dois apps tiverem um <code>style.css</code>, um sobrescreve o outro. A subpasta com o nome do app evita isso: <code>templates/<span class="input">nome_do_seu_app</span>/</code> e <code>static/<span class="input">nome_do_seu_app</span>/</code>.</p>
+      </aside>
+
+      <h4 class="substep"><span>✓</span> Conferir o static</h4>
+      <p>O <code>settings.py</code> já vem com a linha abaixo, não precisa mudar:</p>
+
+      <div class="terminal" data-title="app/settings.py">
+        <pre><code>STATIC_URL = <span class="str">'static/'</span></code></pre>
+      </div>
+
+      <aside class="note note--tip">
+        <p class="note__title">E em produção?</p>
+        <p>Com <code>DEBUG = True</code> o <code>runserver</code> entrega os statics sozinho. No deploy se usa <code>STATIC_ROOT</code> e <code>python manage.py collectstatic</code>, veremos depois.</p>
+      </aside>
+
+      <aside class="note">
+        <p class="note__title">Documentação</p>
+        <p><a href="https://docs.djangoproject.com/pt-br/stable/howto/static-files/" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/howto/static-files</a></p>
+        <p><a href="https://docs.djangoproject.com/pt-br/stable/topics/templates/" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/topics/templates</a></p>
+      </aside>
+    </div>
+  </details>
+
+</section>

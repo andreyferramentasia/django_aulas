@@ -1,0 +1,65 @@
+/* =========================================================
+   Base: elementos HTML puros e utilitários.
+   ========================================================= */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Código inline */
+code {
+  font-family: var(--mono);
+  font-size: .82em;
+  background: var(--django-pale);
+  color: var(--django);
+  padding: .12em .4em;
+  border-radius: 4px;
+}
+
+/* Teclas */
+kbd {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: .8em;
+  line-height: 1;
+  padding: .3em .55em;
+  background: linear-gradient(var(--surface), #f0ede6);
+  border: 1px solid #c9c2b2;
+  border-bottom-width: 3px;
+  border-radius: 5px;
+  color: var(--ink);
+  vertical-align: .1em;
+}
+
+/* Rótulo pequeno em caixa alta (kicker, "Parte I", "Passo 1", "Sumário") */
+.eyebrow {
+  font-family: var(--sans);
+  font-size: .75rem;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* Utilitários */
+.center   { text-align: center; }
+.required { color: var(--danger); font-weight: 700; }
+
+/* Aviso quando as partes não carregam (ex.: aberto via file://) */
+.load-error {
+  padding: 1.5rem 2rem;
+  border: 1px dashed var(--danger);
+  border-radius: var(--radius);
+  background: var(--surface);
+}

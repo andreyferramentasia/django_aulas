@@ -1,0 +1,129 @@
+/* ---------- Diagrama SVG (como as peças se ligam) ---------- */
+.diagram {
+  margin: 1.25rem 0 2rem;
+  padding: 1rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.diagram__scroll { overflow-x: auto; }
+
+.diagram svg {
+  display: block;
+  width: 100%;
+  min-width: 560px;
+  height: auto;
+}
+
+.d-edge line {
+  stroke: var(--ink-soft);
+  stroke-width: 2;
+}
+
+.d-edge .d-path-read { stroke: var(--django-light); stroke-width: 4; }
+.d-edge .d-path-form { stroke: var(--gold); stroke-width: 4; }
+
+.d-edge .d-edge--back {
+  stroke: var(--ink-soft);
+  stroke-dasharray: 6 5;
+}
+
+.d-label text {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-style: italic;
+  fill: var(--ink-soft);
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: var(--surface);
+  stroke-width: 5px;
+}
+
+.d-node ellipse {
+  fill: var(--paper);
+  stroke: var(--django);
+  stroke-width: 2;
+}
+
+.d-node .d-main { fill: var(--django-pale); stroke-width: 3; }
+.d-node .d-edge-node { fill: var(--gold-pale); stroke: var(--gold); }
+
+.d-node text { text-anchor: middle; }
+
+.d-name {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  fill: var(--django);
+}
+
+.d-sub {
+  font-family: var(--sans);
+  font-size: 11px;
+  fill: var(--ink-soft);
+}
+
+.d-note {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--gold);
+}
+
+.d-step circle { fill: var(--gold); }
+
+.d-step text {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  fill: var(--surface);
+  text-anchor: middle;
+}
+
+.diagram__legend {
+  list-style: none;
+  margin: .75rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: .4rem;
+  font-family: var(--sans);
+  font-size: .85rem;
+  color: var(--ink-soft);
+}
+
+.diagram__legend li {
+  display: flex;
+  align-items: baseline;
+  gap: .6rem;
+}
+
+.legend-line {
+  flex: none;
+  width: 2rem;
+  height: 0;
+  border-top: 4px solid var(--django-light);
+  transform: translateY(-.25em);
+}
+
+.legend-line--form { border-top-color: var(--gold); }
+.legend-line--back { border-top: 2px dashed var(--ink-soft); }
+
+.diagram figcaption {
+  margin-top: .75rem;
+  font-family: var(--sans);
+  font-size: .85rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.diagram figcaption strong {
+  display: inline-grid;
+  place-items: center;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  background: var(--gold);
+  color: var(--surface);
+  font-size: .75rem;
+}

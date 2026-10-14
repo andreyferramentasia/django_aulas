@@ -1,0 +1,59 @@
+<section class="part" id="parte-6" data-title="Painel Admin">
+
+  <details class="step" id="passo-19" data-title="Registrar os models no admin">
+
+    <div class="step__body">
+      <p>Para os models aparecerem no <code>/admin</code>, registre-os no <code>admin.py</code> do app:</p>
+
+      <div class="terminal" data-title="nome_do_seu_app/admin.py">
+        <pre><code><span class="kw">from</span> django.contrib <span class="kw">import</span> admin
+<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.models <span class="kw">import</span> Person, Course
+
+
+<span class="kw">class</span> <span class="cls">PersonAdmin</span>(admin.ModelAdmin):
+    list_display = (<span class="str">"first_name"</span>, <span class="str">"last_name"</span>)
+    search_fields = (<span class="str">"first_name"</span>, <span class="str">"last_name"</span>)
+
+
+<span class="kw">class</span> <span class="cls">CourseAdmin</span>(admin.ModelAdmin):
+    list_display = (<span class="str">"name"</span>, <span class="str">"teacher"</span>, <span class="str">"workload"</span>, <span class="str">"period"</span>)
+    search_fields = (<span class="str">"name"</span>,)
+    list_filter = (<span class="str">"teacher"</span>, <span class="str">"period"</span>)
+
+
+<span class="hl">admin.site.register(Person, PersonAdmin)</span>
+<span class="hl">admin.site.register(Course, CourseAdmin)</span></code></pre>
+      </div>
+
+      <h4 class="substep"><span>?</span> Entendendo o código</h4>
+
+      <dl class="files">
+        <dt><code>ModelAdmin</code></dt>
+        <dd>Classe que configura como o model aparece no admin.</dd>
+
+        <dt><code>list_display</code></dt>
+        <dd>Colunas exibidas na listagem.</dd>
+
+        <dt><code>search_fields</code></dt>
+        <dd>Campos usados na barra de busca.</dd>
+
+        <dt><code>list_filter</code></dt>
+        <dd>Filtros na lateral da listagem.</dd>
+
+        <dt><code>admin.site.register</code></dt>
+        <dd>Liga o model à sua configuração no admin.</dd>
+      </dl>
+
+      <aside class="note">
+        <p class="note__title">Atenção</p>
+        <p>Tuplas com um item precisam de vírgula: <code>("name",)</code>. Sem ela, o Django dá erro.</p>
+      </aside>
+
+      <aside class="note note--tip">
+        <p class="note__title">Import absoluto</p>
+        <p>Use o nome do app, o mesmo do <code>name</code> em <code>apps.py</code>: <code>from nome_do_seu_app.models import ...</code>. Fica claro de onde vem cada classe.</p>
+      </aside>
+    </div>
+  </details>
+
+</section>

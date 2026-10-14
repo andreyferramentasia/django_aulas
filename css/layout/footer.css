@@ -1,0 +1,20 @@
+/* ---------- Rodapé ---------- */
+.footer {
+  background: var(--django);
+  text-align: center;
+  padding: 2rem 1rem;
+  font-family: var(--sans);
+  font-size: .85rem;
+  color: var(--surface);
+}
+
+.footer p { margin: .2rem 0; }
+
+.footer a {
+  color: var(--django-light);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s;
+}
+
+.footer a:hover { border-bottom-color: var(--django-light); }

@@ -1,0 +1,51 @@
+/* ---------- Barra de janela (três bolinhas + título) ----------
+   Criada por js/components.js a partir de data-title,
+   usada no terminal (--dark) e nas capturas de tela (padrão). */
+.window-bar {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .55rem 1rem;
+  background: var(--paper-dark);
+  border-bottom: 1px solid var(--rule);
+}
+
+.window-bar__dot {
+  width: .65rem;
+  height: .65rem;
+  border-radius: 50%;
+  background: var(--rule);
+}
+
+.window-bar__title {
+  flex: 1;
+  margin: 0 0 0 .6rem;
+  padding: .15rem .8rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--pill);
+  font-family: var(--mono);
+  font-size: .75rem;
+  color: var(--ink-soft);
+}
+
+/* Variante escura: terminal / editor */
+.window-bar--dark {
+  padding: .6rem 1rem;
+  background: var(--term-bar);
+  border-bottom-color: var(--term-border);
+}
+
+.window-bar--dark .window-bar__dot { width: .7rem; height: .7rem; }
+.window-bar--dark .window-bar__dot:nth-child(1) { background: var(--term-red); }
+.window-bar--dark .window-bar__dot:nth-child(2) { background: var(--term-yellow); }
+.window-bar--dark .window-bar__dot:nth-child(3) { background: var(--django-light); }
+
+.window-bar--dark .window-bar__title {
+  flex: none;
+  padding: 0;
+  background: none;
+  border: 0;
+  font-family: var(--sans);
+  color: var(--term-muted);
+}

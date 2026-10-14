@@ -1,0 +1,103 @@
+/* ---------- Cabeçalho ---------- */
+.hero {
+  background:
+    radial-gradient(circle at 85% 20%, rgba(68, 183, 139, .25), transparent 45%),
+    var(--django);
+  color: var(--on-dark);
+  padding: 2.25rem 1.5rem 1.75rem;
+  border-bottom: 4px solid var(--gold);
+}
+
+.hero__inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  position: relative;
+}
+
+.hero__docs {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-family: var(--sans);
+  font-size: .85rem;
+  font-weight: 500;
+  color: var(--on-dark);
+  text-decoration: none;
+  padding: .45rem 1rem;
+  border: 1px solid rgba(244, 241, 232, .4);
+  border-radius: var(--pill);
+  transition: background .2s, color .2s, border-color .2s;
+}
+
+.hero__docs:hover {
+  background: var(--django-light);
+  border-color: var(--django-light);
+  color: var(--django);
+}
+
+.hero__kicker {
+  font-size: .8rem;
+  letter-spacing: .18em;
+  color: var(--django-light);
+  margin-bottom: .75rem;
+}
+
+.hero__author {
+  font-size: 1.15rem;
+  font-style: italic;
+  margin: -.4rem 0 1rem;
+  opacity: .9;
+}
+
+.hero__lattes {
+  margin-left: .6rem;
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: .75rem;
+  font-weight: 500;
+  letter-spacing: .05em;
+  color: var(--django-light);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  vertical-align: middle;
+  transition: border-color .2s;
+}
+
+.hero__lattes:hover { border-bottom-color: var(--django-light); }
+
+.hero__title {
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0 0 1rem;
+}
+
+.hero__title em {
+  font-style: italic;
+  color: var(--django-light);
+}
+
+.hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--sans);
+  font-size: .8rem;
+}
+
+.hero__meta li {
+  border: 1px solid rgba(244, 241, 232, .35);
+  border-radius: var(--pill);
+  padding: .3rem .9rem;
+}
+
+@media (max-width: 640px) {
+  .hero__docs {
+    position: static;
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+}

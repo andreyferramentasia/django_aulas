@@ -1,0 +1,155 @@
+<section class="part" id="parte-10" data-title="CRUD · Create">
+
+  <details class="step" id="passo-23" data-title="Criar o ModelForm">
+
+    <div class="step__body">
+      <p>O <strong>ModelForm</strong> cria um formulário a partir do model: os campos, rótulos e validações vêm prontos. Crie o arquivo <code>forms.py</code> dentro do app:</p>
+
+      <div class="terminal" data-title="nome_do_seu_app/forms.py">
+        <pre><code><span class="kw">from</span> django <span class="kw">import</span> forms
+<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.models <span class="kw">import</span> Person
+
+
+<span class="kw">class</span> <span class="cls">PersonForm</span>(forms.ModelForm):
+    <span class="kw">class</span> <span class="cls">Meta</span>:
+<span class="hl">        model = Person</span>
+<span class="hl">        fields = [<span class="str">"first_name"</span>, <span class="str">"last_name"</span>]</span></code></pre>
+      </div>
+
+      <dl class="files">
+        <dt><code>forms.ModelForm</code></dt>
+        <dd>Formulário ligado a um model. Salvar o formulário grava no banco.</dd>
+
+        <dt><code>model</code></dt>
+        <dd>Model usado para montar o formulário.</dd>
+
+        <dt><code>fields</code></dt>
+        <dd>Campos exibidos no formulário. Os rótulos vêm do <code>verbose_name</code> de cada campo.</dd>
+      </dl>
+
+      <aside class="note note--tip">
+        <p class="note__title">Por que um forms.py?</p>
+        <p>Com o formulário separado, a mesma classe serve para criar e editar, e dá para personalizar widgets e validações num lugar só.</p>
+      </aside>
+
+      <aside class="note">
+        <p class="note__title">Documentação</p>
+        <p><a href="https://docs.djangoproject.com/pt-br/stable/topics/forms/modelforms/" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/topics/forms/modelforms</a></p>
+      </aside>
+    </div>
+  </details>
+
+  <details class="step" id="passo-24" data-title="Criar a CreateView">
+
+    <div class="step__body">
+      <p>A <code>CreateView</code> é a view genérica de <strong>cadastro</strong>: mostra o formulário vazio, valida o que foi digitado e grava um registro novo no banco.</p>
+
+      <h4 class="substep"><span>1</span> A view</h4>
+
+      <div class="terminal" data-title="nome_do_seu_app/views.py">
+        <pre><code><span class="hl"><span class="kw">from</span> django.urls <span class="kw">import</span> reverse_lazy</span>
+<span class="kw">from</span> django.views.generic <span class="kw">import</span> ListView<span class="hl">, CreateView</span>
+<span class="hl"><span class="kw">from</span> <span class="input">nome_do_seu_app</span>.forms <span class="kw">import</span> PersonForm</span>
+<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.models <span class="kw">import</span> Person
+
+
+<span class="kw">class</span> <span class="cls">PersonListView</span>(ListView):
+    ...
+
+
+<span class="hl"><span class="kw">class</span> <span class="cls">PersonCreateView</span>(CreateView):</span>
+<span class="hl">    model = Person</span>
+<span class="hl">    form_class = PersonForm</span>
+<span class="hl">    template_name = <span class="str">"<span class="input">nome_do_seu_app</span>/person_form_create.html"</span></span>
+<span class="hl">    success_url = reverse_lazy(<span class="str">"<span class="input">nome_do_seu_app</span>:person_list"</span>)</span></code></pre>
+      </div>
+
+      <dl class="files">
+        <dt><code>form_class</code></dt>
+        <dd>Formulário usado, o <code>PersonForm</code> do passo anterior.</dd>
+
+        <dt><code>template_name</code></dt>
+        <dd>Página do cadastro, <code>person_form_create.html</code>, criada no próximo passo.</dd>
+
+        <dt><code>success_url</code></dt>
+        <dd>Para onde ir depois de salvar, aqui a lista de pessoas.</dd>
+
+        <dt><code>reverse_lazy</code></dt>
+        <dd>Transforma o <code>name</code> da rota em URL. É "lazy" porque as rotas ainda não existem quando a classe é lida.</dd>
+      </dl>
+
+      <h4 class="substep"><span>2</span> A rota</h4>
+
+      <div class="terminal" data-title="nome_do_seu_app/urls.py">
+        <pre><code><span class="kw">from</span> django.urls <span class="kw">import</span> path
+<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.views <span class="kw">import</span> PersonListView<span class="hl">, PersonCreateView</span>
+
+app_name = <span class="str">"<span class="input">nome_do_seu_app</span>"</span>
+
+urlpatterns = [
+    path(<span class="str">"pessoas/"</span>, PersonListView.as_view(), name=<span class="str">"person_list"</span>),
+<span class="hl">    path(<span class="str">"pessoas/nova/"</span>, PersonCreateView.as_view(), name=<span class="str">"person_create"</span>),</span>
+]</code></pre>
+      </div>
+
+      <aside class="note">
+        <p class="note__title">Documentação</p>
+        <p><a href="https://docs.djangoproject.com/pt-br/stable/ref/class-based-views/generic-editing/#createview" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/ref/class-based-views/generic-editing</a></p>
+      </aside>
+    </div>
+  </details>
+
+  <details class="step step--front" id="passo-25" data-title="Criar o template de cadastro">
+
+    <div class="step__body">
+      <p>Um HTML simples, só com o título e o formulário. O <code>{{ form.as_p }}</code> desenha os campos sozinho.</p>
+
+      <h4 class="substep"><span>1</span> A página de cadastro</h4>
+
+      <div class="terminal" data-title="nome_do_seu_app/templates/nome_do_seu_app/person_form_create.html">
+        <pre><code><span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Nova pessoa<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
+<span class="hl"><span class="t-tag">&lt;form</span> <span class="t-attr">method</span>=<span class="t-val">"post"</span> <span class="t-attr">enctype</span>=<span class="t-val">"multipart/form-data"</span><span class="t-tag">&gt;</span></span>
+<span class="hl">    <span class="t-dtl">{% csrf_token %}</span></span>
+<span class="hl">    <span class="t-var">{{ form.as_p }}</span></span>
+    <span class="t-tag">&lt;button</span> <span class="t-attr">type</span>=<span class="t-val">"submit"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-primary"</span><span class="t-tag">&gt;</span>Salvar<span class="t-tag">&lt;/button</span><span class="t-tag">&gt;</span>
+<span class="hl"><span class="t-tag">&lt;/form</span><span class="t-tag">&gt;</span></span></code></pre>
+      </div>
+
+      <h4 class="substep"><span>2</span> Link de cadastro na lista</h4>
+      <p>No <code>person_list.html</code> do passo 22, logo abaixo do <code>&lt;h1&gt;</code>:</p>
+
+      <div class="terminal" data-title="nome_do_seu_app/templates/nome_do_seu_app/person_list.html">
+        <pre><code><span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Pessoas<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
+<span class="hl"><span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_create'</span><span class="t-dtl"> %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-warning"</span><span class="t-tag">&gt;</span>Nova pessoa<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span></span></code></pre>
+      </div>
+
+      <h4 class="substep"><span>?</span> Entendendo o código</h4>
+
+      <dl class="files">
+        <dt>Por que fora do <code>for</code>?</dt>
+        <dd>Tudo que está dentro do <code>{% for person in people %}</code> se repete uma vez para cada pessoa. Se o botão ficasse lá dentro, com 10 pessoas apareceriam 10 botões <strong>Nova pessoa</strong>. Ele fica fora, logo abaixo do <code>&lt;h1&gt;</code>, porque cadastrar não depende de nenhuma pessoa da lista: é um botão só, e não precisa de <code>pk</code>. Já <strong>Editar</strong> e <strong>Excluir</strong> ficam dentro do <code>for</code>, porque cada pessoa precisa do seu.</dd>
+
+        <dt><code>method="post"</code></dt>
+        <dd>Envia os dados para a mesma URL. A view valida, salva e redireciona para o <code>success_url</code>.</dd>
+
+        <dt><code>{% csrf_token %}</code></dt>
+        <dd>Proteção contra envios falsos de outros sites. Obrigatório em todo formulário <code>post</code>, sem ele o Django responde 403.</dd>
+
+        <dt><code>{{ form.as_p }}</code></dt>
+        <dd>Desenha cada campo dentro de um <code>&lt;p&gt;</code>, com rótulo e mensagens de erro.</dd>
+
+        <dt><code>enctype="multipart/form-data"</code></dt>
+        <dd>Necessário quando o formulário envia arquivos (<code>ImageField</code>, <code>FileField</code>). Sem arquivo não faz diferença, então pode deixar sempre.</dd>
+      </dl>
+
+      <aside class="note note--tip">
+        <p class="note__title">Sem &lt;html&gt; e &lt;head&gt;?</p>
+        <p>O navegador monta a página assim mesmo, então para começar basta o conteúdo. Como só a lista importa o Bootstrap, aqui o botão aparece sem estilo. Depois, com um <code>base.html</code>, todas as páginas ganham o Bootstrap de uma vez.</p>
+      </aside>
+
+      <h4 class="substep"><span>✓</span> Resultado esperado</h4>
+      <p class="center">Acesse <code>http://127.0.0.1:8000/pessoas/</code> e clique em <strong>Nova pessoa</strong>. Preencha, salve e veja a pessoa na lista.</p>
+    </div>
+  </details>
+
+</section>

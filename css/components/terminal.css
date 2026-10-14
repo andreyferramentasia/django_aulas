@@ -1,0 +1,81 @@
+/* ---------- Terminal / bloco de código ----------
+   <div class="terminal" data-title="arquivo.py"><pre><code>...</code></pre></div> */
+.terminal {
+  margin: 1.5rem 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--term-bg);
+  box-shadow: var(--shadow);
+}
+
+.terminal + .terminal { margin-top: -.5rem; }
+
+.terminal pre {
+  margin: 0;
+  padding: 1.2rem 1.4rem;
+  overflow-x: auto;
+}
+
+.terminal code {
+  background: none;
+  padding: 0;
+  font-size: .82rem;
+  color: var(--term-text);
+  white-space: pre; /* linha longa rola para o lado, como no editor */
+}
+
+/* Blocos longos com rolagem */
+.terminal--tall pre {
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+/* ---------- Realce de sintaxe ---------- */
+
+/* Terminal */
+.terminal .prompt {
+  color: var(--django-light);
+  margin-right: .4rem;
+  user-select: none;
+}
+
+.terminal .comment {
+  color: var(--term-comment);
+  font-style: italic;
+  user-select: none;
+}
+
+.terminal .warn  { color: #f08a7e; }
+.terminal .input { color: var(--term-yellow); }
+
+/* Python */
+.terminal .kw  { color: var(--term-yellow); }
+.terminal .str { color: #9fd8b8; }
+.terminal .cls { color: #7cc4f0; }
+.terminal .num { color: #d7a6f0; }
+
+.terminal .cm,
+.terminal .t-cm { color: var(--term-comment); font-style: italic; }
+
+/* Templates HTML */
+.terminal .t-tag  { color: #6cb6ff; }                     /* <form> </div> */
+.terminal .t-attr { color: #9cdcfe; font-style: italic; } /* type, method, href */
+.terminal .t-val  { color: #f0a77c; }                     /* "post", "submit" */
+.terminal .t-dtl  { color: #d197f0; }                     /* {% for %} {% url %} */
+.terminal .t-var  { color: #4ec9b0; }                     /* {{ person }} */
+
+/* Linha destacada (código novo) */
+.terminal .hl {
+  position: relative;
+  font-weight: 600;
+  color: var(--surface);
+}
+
+/* Marcador na margem esquerda (não é copiado) */
+.terminal .hl::before {
+  content: "›";
+  position: absolute;
+  left: -1rem;
+  color: var(--term-yellow);
+  font-weight: 700;
+}

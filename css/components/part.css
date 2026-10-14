@@ -1,0 +1,24 @@
+/* ---------- Parte (agrupa vários passos) ----------
+   <section class="part" data-title="..."> em partes/*.html;
+   o cabeçalho é criado por js/components.js. */
+.part { scroll-margin-top: 1.5rem; }
+
+.part + .part { margin-top: 3.5rem; }
+
+.part__header {
+  margin: 0 0 1.5rem;
+  padding-bottom: .75rem;
+  border-bottom: 2px solid var(--django);
+}
+
+.part__label {
+  letter-spacing: .18em;
+  color: var(--gold);
+}
+
+.part__title {
+  font-size: 2.1rem;
+  line-height: 1.2;
+  color: var(--django);
+  margin: .1rem 0 0;
+}

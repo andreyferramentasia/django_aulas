@@ -1,0 +1,43 @@
+/* ---------- Nota / dica ----------
+   <aside class="note [note--tip]"><p class="note__title">Dica</p>...</aside> */
+.note {
+  margin: 1.75rem 0 0;
+  padding: 1.1rem 1.4rem;
+  border-left: 4px solid var(--gold);
+  background: var(--gold-pale);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.note--tip {
+  border-left-color: var(--django-light);
+  background: var(--django-pale);
+}
+
+.note p:last-child { margin-bottom: 0; }
+
+.note__title {
+  font-family: var(--sans);
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 .4rem;
+}
+
+.note--tip .note__title { color: var(--django); }
+
+.note a {
+  color: var(--django);
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.note .bullets {
+  margin: -.4rem 0 1rem;
+  padding-left: 1.3rem;
+}
+
+.note .bullets li { margin-bottom: .3rem; }
+
+.note .bullets code { white-space: normal; }

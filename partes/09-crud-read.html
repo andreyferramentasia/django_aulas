@@ -1,0 +1,181 @@
+<section class="part" id="parte-9" data-title="CRUD · Read">
+
+  <details class="step" id="passo-21" data-title="Criar a ListView">
+
+    <div class="step__body">
+      <p>A <code>ListView</code> é uma <strong>view genérica</strong> do Django: busca os registros do model e entrega para o template, sem precisar escrever a consulta.</p>
+
+      <h4 class="substep"><span>1</span> A view</h4>
+
+      <div class="terminal" data-title="nome_do_seu_app/views.py">
+        <pre><code><span class="kw">from</span> django.views.generic <span class="kw">import</span> ListView
+<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.models <span class="kw">import</span> Person
+
+
+<span class="kw">class</span> <span class="cls">PersonListView</span>(ListView):
+    model = Person
+<span class="hl">    template_name = <span class="str">"<span class="input">nome_do_seu_app</span>/person_list.html"</span></span>
+<span class="hl">    context_object_name = <span class="str">"people"</span></span>
+    paginate_by = <span class="num">10</span></code></pre>
+      </div>
+
+      <dl class="files">
+        <dt><code>model</code></dt>
+        <dd>Model listado. A view faz <code>Person.objects.all()</code>, respeitando o <code>ordering</code> do <code>Meta</code>.</dd>
+
+        <dt><code>template_name</code></dt>
+        <dd>Template usado. Opcional, o padrão já é <code><span class="input">nome_do_seu_app</span>/person_list.html</code>, mas deixar escrito fica mais claro.</dd>
+
+        <dt><code>context_object_name</code></dt>
+        <dd>Nome da lista no template. Sem ele, use <code>person_list</code> ou <code>object_list</code>.</dd>
+
+        <dt><code>paginate_by</code></dt>
+        <dd>Quantos registros por página. Opcional.</dd>
+      </dl>
+
+      <h4 class="substep"><span>2</span> As rotas do app</h4>
+
+      <div class="terminal" data-title="nome_do_seu_app/urls.py">
+        <pre><code><span class="kw">from</span> django.urls <span class="kw">import</span> path
+<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.views <span class="kw">import</span> PersonListView
+
+app_name = <span class="str">"<span class="input">nome_do_seu_app</span>"</span>
+
+urlpatterns = [
+<span class="hl">    path(<span class="str">"pessoas/"</span>, PersonListView.as_view(), name=<span class="str">"person_list"</span>),</span>
+]</code></pre>
+      </div>
+
+      <h4 class="substep"><span>3</span> Incluir no projeto</h4>
+
+      <div class="terminal" data-title="app/urls.py">
+        <pre><code><span class="kw">from</span> django.contrib <span class="kw">import</span> admin
+<span class="kw">from</span> django.urls <span class="kw">import</span> path, include
+
+urlpatterns = [
+    path(<span class="str">'admin/'</span>, admin.site.urls),
+<span class="hl">    path(<span class="str">''</span>, include(<span class="str">'<span class="input">nome_do_seu_app</span>.urls'</span>)),</span>
+]</code></pre>
+      </div>
+
+      <dl class="files">
+        <dt><code>as_view()</code></dt>
+        <dd>Transforma a classe em uma view que o <code>path</code> entende. Sempre necessário em views de classe.</dd>
+
+        <dt><code>name</code></dt>
+        <dd>Apelido da rota, usado nos links: <code>{% url '<span class="input">nome_do_seu_app</span>:person_list' %}</code>.</dd>
+
+        <dt><code>app_name</code></dt>
+        <dd>Namespace do app, evita conflito se outro app tiver uma rota com o mesmo <code>name</code>.</dd>
+
+        <dt><code>include</code></dt>
+        <dd>Liga as rotas do app às rotas do projeto.</dd>
+      </dl>
+
+      <aside class="note">
+        <p class="note__title">Documentação</p>
+        <p><a href="https://docs.djangoproject.com/pt-br/stable/ref/class-based-views/generic-display/#listview" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/ref/class-based-views/generic-display</a></p>
+      </aside>
+    </div>
+  </details>
+
+  <details class="step step--front" id="passo-22" data-title="Criar o template da lista">
+
+    <div class="step__body">
+      <h4 class="substep"><span>1</span> A página da lista</h4>
+
+      <div class="terminal" data-title="nome_do_seu_app/templates/nome_do_seu_app/person_list.html">
+        <pre><code><span class="hl"><span class="t-dtl">{% load static %}</span></span>
+<span class="t-tag">&lt;!DOCTYPE</span> <span class="t-attr">html</span><span class="t-tag">&gt;</span>
+<span class="t-tag">&lt;html</span> <span class="t-attr">lang</span>=<span class="t-val">"pt-br"</span><span class="t-tag">&gt;</span>
+<span class="t-tag">&lt;head</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;meta</span> <span class="t-attr">charset</span>=<span class="t-val">"UTF-8"</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;meta</span> <span class="t-attr">name</span>=<span class="t-val">"viewport"</span> <span class="t-attr">content</span>=<span class="t-val">"width=device-width, initial-scale=1.0"</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;title</span><span class="t-tag">&gt;</span>Pessoas<span class="t-tag">&lt;/title</span><span class="t-tag">&gt;</span>
+<span class="hl">    <span class="t-tag">&lt;link</span> <span class="t-attr">rel</span>=<span class="t-val">"stylesheet"</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% static </span><span class="t-val">'<span class="input">nome_do_seu_app</span>/css/style.css'</span><span class="t-dtl"> %}</span><span class="t-val">"</span><span class="t-tag">&gt;</span></span>
+<span class="hl">    <span class="t-tag">&lt;link</span> <span class="t-attr">href</span>=<span class="t-val">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"</span> <span class="t-attr">rel</span>=<span class="t-val">"stylesheet"</span></span>
+<span class="hl">        <span class="t-attr">integrity</span>=<span class="t-val">"sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"</span> <span class="t-attr">crossorigin</span>=<span class="t-val">"anonymous"</span><span class="t-tag">&gt;</span></span>
+<span class="hl">    <span class="t-tag">&lt;script</span> <span class="t-attr">src</span>=<span class="t-val">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"</span></span>
+<span class="hl">        <span class="t-attr">integrity</span>=<span class="t-val">"sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"</span> <span class="t-attr">crossorigin</span>=<span class="t-val">"anonymous"</span></span>
+<span class="hl">        <span class="t-attr">defer</span><span class="t-tag">&gt;</span><span class="t-tag">&lt;/script</span><span class="t-tag">&gt;</span></span>
+<span class="t-tag">&lt;/head</span><span class="t-tag">&gt;</span>
+<span class="t-tag">&lt;body</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Pessoas<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
+
+    <span class="t-tag">&lt;ul</span><span class="t-tag">&gt;</span>
+<span class="hl">        <span class="t-dtl">{% for person in people %}</span></span>
+            <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span><span class="t-var">{{ person.first_name }}</span> <span class="t-var">{{ person.last_name }}</span><span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
+<span class="hl">        <span class="t-dtl">{% empty %}</span></span>
+            <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span>Nenhuma pessoa cadastrada.<span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
+<span class="hl">        <span class="t-dtl">{% endfor %}</span></span>
+    <span class="t-tag">&lt;/ul</span><span class="t-tag">&gt;</span>
+
+    <span class="t-dtl">{% if is_paginated %}</span>
+        <span class="t-tag">&lt;nav</span><span class="t-tag">&gt;</span>
+            <span class="t-dtl">{% if page_obj.has_previous %}</span>
+                <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% querystring page=page_obj.previous_page_number %}</span><span class="t-val">"</span><span class="t-tag">&gt;</span>Anterior<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+            <span class="t-dtl">{% endif %}</span>
+            <span class="t-tag">&lt;span</span><span class="t-tag">&gt;</span>Página <span class="t-var">{{ page_obj.number }}</span> de <span class="t-var">{{ page_obj.paginator.num_pages }}</span><span class="t-tag">&lt;/span</span><span class="t-tag">&gt;</span>
+            <span class="t-dtl">{% if page_obj.has_next %}</span>
+                <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% querystring page=page_obj.next_page_number %}</span><span class="t-val">"</span><span class="t-tag">&gt;</span>Próxima<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+            <span class="t-dtl">{% endif %}</span>
+        <span class="t-tag">&lt;/nav</span><span class="t-tag">&gt;</span>
+    <span class="t-dtl">{% endif %}</span>
+<span class="t-tag">&lt;/body</span><span class="t-tag">&gt;</span>
+<span class="t-tag">&lt;/html</span><span class="t-tag">&gt;</span></code></pre>
+      </div>
+
+      <h4 class="substep"><span>2</span> O CSS</h4>
+
+      <div class="terminal" data-title="nome_do_seu_app/static/nome_do_seu_app/css/style.css">
+        <pre><code>body {
+    font-family: system-ui, sans-serif;
+    max-width: <span class="num">720px</span>;
+    margin: <span class="num">40px</span> auto;
+    padding: <span class="num">0</span> <span class="num">16px</span>;
+}</code></pre>
+      </div>
+
+      <h4 class="substep"><span>?</span> Entendendo o código</h4>
+
+      <dl class="files">
+        <dt><code>{% load static %}</code></dt>
+        <dd>Libera a tag <code>{% static %}</code>. Precisa estar em <strong>cada</strong> template que a usa.</dd>
+
+        <dt><code>{% static '...' %}</code></dt>
+        <dd>Monta o caminho do arquivo, ex.: <code>/static/<span class="input">nome_do_seu_app</span>/css/style.css</code>.</dd>
+
+        <dt><code>{{ ... }}</code></dt>
+        <dd>Exibe um valor. <code>{% ... %}</code> executa uma lógica (for, if).</dd>
+
+        <dt><code>{% empty %}</code></dt>
+        <dd>Mostrado quando a lista está vazia.</dd>
+
+        <dt><code>page_obj</code></dt>
+        <dd>Criado pelo <code>paginate_by</code>, controla a navegação entre páginas.</dd>
+
+        <dt><code>{% querystring %}</code></dt>
+        <dd>Monta o link da página (<code>?page=2</code>) mantendo os outros parâmetros da URL, como uma busca. Disponível a partir do Django 5.1.</dd>
+      </dl>
+
+      <h4 class="substep"><span>✓</span> Resultado esperado</h4>
+
+      <div class="terminal" data-title="Terminal">
+        <pre><code><span class="prompt">&gt;</span> python manage.py runserver</code></pre>
+      </div>
+
+      <p class="center">Acesse <code>http://127.0.0.1:8000/pessoas/</code> e veja as pessoas cadastradas no admin.</p>
+
+      <aside class="note">
+        <p class="note__title">TemplateDoesNotExist?</p>
+        <p>Confira o caminho: <code>templates/<span class="input">nome_do_seu_app</span>/person_list.html</code>, dentro do app, e se o app está no <code>INSTALLED_APPS</code>.</p>
+      </aside>
+
+      <aside class="note note--tip">
+        <p class="note__title">CSS não carregou?</p>
+        <p>Reinicie o <code>runserver</code> após criar a pasta <code>static/</code> e force a atualização do navegador com <code>Ctrl + F5</code>.</p>
+      </aside>
+    </div>
+  </details>
+
+</section>

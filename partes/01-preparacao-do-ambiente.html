@@ -1,0 +1,126 @@
+<section class="part" id="parte-1" data-title="Preparação do Ambiente">
+
+  <details class="step" id="passo-1" data-title="Criar a pasta do projeto">
+
+    <div class="step__body">
+      <ol class="instructions">
+        <li>Abra o Explorador de Arquivos (<kbd>Win</kbd> + <kbd>E</kbd>).</li>
+        <li>Crie uma nova pasta.</li>
+        <li>Dê um nome e pressione <kbd>Enter</kbd>.</li>
+      </ol>
+
+      <figure class="shortcut">
+        <div class="shortcut__keys">
+          <kbd class="kbd--lg">Ctrl</kbd>
+          <span class="plus">+</span>
+          <kbd class="kbd--lg">Shift</kbd>
+          <span class="plus">+</span>
+          <kbd class="kbd--lg">N</kbd>
+        </div>
+        <figcaption>Nova pasta</figcaption>
+      </figure>
+
+      <aside class="note note--tip">
+        <p class="note__title">Dica</p>
+        <p>Sem espaços ou acentos: <code>meu_projeto</code></p>
+      </aside>
+    </div>
+  </details>
+
+  <details class="step" id="passo-2" data-title="Criar o ambiente virtual">
+
+    <div class="step__body">
+      <ol class="instructions">
+        <li>Abra o terminal dentro da pasta do projeto.</li>
+        <li>Execute o comando:</li>
+      </ol>
+
+      <div class="terminal" data-title="Terminal">
+        <pre><code><span class="prompt">&gt;</span> python -m venv .venv</code></pre>
+      </div>
+
+      <aside class="note note--tip">
+        <p class="note__title">Dica</p>
+        <p>A pasta <code>.venv</code> guarda as bibliotecas só deste projeto.</p>
+      </aside>
+    </div>
+  </details>
+
+  <details class="step" id="passo-3" data-title="Ativar o ambiente virtual">
+
+    <div class="step__body">
+      <h4 class="substep"><span>A</span> Automático, VS Code</h4>
+      <p>A extensão <strong>Python</strong> ativa a <code>.venv</code> sozinha ao abrir um novo terminal.</p>
+
+      <h4 class="substep"><span>B</span> Manual</h4>
+
+      <div class="terminal" data-title="PowerShell">
+        <pre><code><span class="prompt">&gt;</span> .venv\Scripts\Activate.ps1</code></pre>
+      </div>
+
+      <div class="terminal" data-title="CMD">
+        <pre><code><span class="prompt">&gt;</span> .venv\Scripts\activate</code></pre>
+      </div>
+
+      <h4 class="substep substep--warn"><span>!</span> Erro de permissão no PowerShell?</h4>
+      <p>Ajuste a política de execução do Windows:</p>
+
+      <div class="terminal" data-title="PowerShell · só este terminal">
+        <pre><code><span class="prompt">&gt;</span> Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned</code></pre>
+      </div>
+
+      <div class="terminal" data-title="PowerShell · permanente para o usuário">
+        <pre><code><span class="prompt">&gt;</span> Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned</code></pre>
+      </div>
+
+      <aside class="note">
+        <p class="note__title">Ainda com problema?</p>
+        <p>Use o <strong>CMD</strong> em vez do PowerShell.</p>
+      </aside>
+
+      <div class="terminal" data-title="CMD">
+        <pre><code><span class="prompt">&gt;</span> .venv\Scripts\activate.bat</code></pre>
+      </div>
+
+      <aside class="note note--tip">
+        <p class="note__title">Funcionou?</p>
+        <p>O terminal passa a mostrar <code>(.venv)</code> no início da linha.</p>
+      </aside>
+    </div>
+  </details>
+
+  <details class="step" id="passo-4" data-title="Instalar as bibliotecas">
+
+    <div class="step__body">
+      <p>Com a <code>(.venv)</code> ativa, execute:</p>
+
+      <div class="terminal" data-title="Terminal">
+        <pre><code><span class="prompt">&gt;</span> python.exe -m pip install --upgrade pip
+<span class="prompt">&gt;</span> pip install django
+<span class="prompt">&gt;</span> pip install django-jazzmin==3.0.1</code></pre>
+      </div>
+
+      <aside class="note">
+        <p class="note__title">Atenção</p>
+        <p>Use a versão <code>3.0.1</code> do Jazzmin, versões mais novas estão com problemas.</p>
+      </aside>
+
+      <h4 class="substep"><span>✓</span> Verificar a instalação</h4>
+
+      <div class="terminal" data-title="Terminal">
+        <pre><code><span class="comment"># Versão do Python</span>
+<span class="prompt">&gt;</span> python --version
+
+<span class="comment"># Versão do Django</span>
+<span class="prompt">&gt;</span> django-admin --version
+
+<span class="comment"># Versão do Jazzmin</span>
+<span class="prompt">&gt;</span> pip show django-jazzmin
+
+<span class="comment"># Todas as bibliotecas instaladas</span>
+<span class="prompt">&gt;</span> pip list</code></pre>
+      </div>
+    </div>
+  </details>
+
+</section>

@@ -1,0 +1,338 @@
+<section class="part" id="parte-2" data-title="Criação do Projeto">
+
+  <details class="step" id="passo-5" data-title="Iniciar o projeto">
+
+    <div class="step__body">
+      <div class="terminal" data-title="Terminal">
+        <pre><code><span class="prompt">&gt;</span> django-admin startproject app .</code></pre>
+      </div>
+
+      <aside class="note">
+        <p class="note__title">Atenção ao ponto</p>
+        <p>O <code>.</code> cria o projeto na pasta atual, sem gerar uma pasta extra.</p>
+      </aside>
+
+      <h4 class="substep"><span>✓</span> Estrutura gerada</h4>
+
+      <div class="terminal" data-title="Pasta do projeto">
+        <pre><code>meu_projeto/
+├── .venv/
+├── app/
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+└── manage.py</code></pre>
+      </div>
+    </div>
+  </details>
+
+  <details class="step" id="passo-6" data-title="Rodar o servidor">
+
+    <div class="step__body">
+      <p>Com a <code>(.venv)</code> ativa, execute:</p>
+
+      <div class="terminal" data-title="Terminal">
+        <pre><code><span class="prompt">&gt;</span> python manage.py runserver</code></pre>
+      </div>
+
+      <ol class="instructions">
+        <li>Acesse <code>http://127.0.0.1:8000</code> no navegador.</li>
+        <li>Para parar o servidor: <kbd>Ctrl</kbd> + <kbd>C</kbd></li>
+      </ol>
+
+      <h4 class="substep"><span>✓</span> Resultado esperado</h4>
+
+      <figure class="screenshot" data-title="127.0.0.1:8000">
+        <img src="imagens/foguete_django.png" alt="Página inicial do Django com o foguete: The install worked successfully!">
+        <figcaption>Página inicial, instalação funcionando</figcaption>
+      </figure>
+
+      <figure class="screenshot" data-title="127.0.0.1:8000/admin">
+        <img src="imagens/django_incial_admin.png" alt="Tela de login do Django administration">
+        <figcaption>Painel administrativo em <code>/admin</code></figcaption>
+      </figure>
+
+      <aside class="note note--tip">
+        <p class="note__title">Banco de dados</p>
+        <p>Na primeira execução é criado o arquivo <code>db.sqlite3</code> na pasta do projeto.</p>
+      </aside>
+    </div>
+  </details>
+
+  <details class="step" id="passo-7" data-title="Primeira migração">
+
+    <div class="step__body">
+      <p>Ao rodar o servidor, o terminal exibe este aviso:</p>
+
+      <div class="terminal" data-title="Saída do runserver">
+        <pre><code><span class="warn">You have 18 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, sessions.
+Run 'python manage.py migrate' to apply them.</span>
+September 29, 2026 - 08:25:53
+Django version 6.1.1, using settings 'app.settings'
+Starting WSGI development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.</code></pre>
+      </div>
+
+      <ol class="instructions">
+        <li>Pare o servidor: <kbd>Ctrl</kbd> + <kbd>C</kbd></li>
+        <li>Aplique as migrações padrão do Django:</li>
+      </ol>
+
+      <div class="terminal" data-title="Terminal">
+        <pre><code><span class="prompt">&gt;</span> python manage.py migrate</code></pre>
+      </div>
+
+      <aside class="note note--tip">
+        <p class="note__title">O que acontece?</p>
+        <p>São criadas no <code>db.sqlite3</code> as tabelas de usuários, sessões e do admin.</p>
+      </aside>
+    </div>
+  </details>
+
+  <details class="step" id="passo-8" data-title="Criar o superusuário">
+
+    <div class="step__body">
+      <div class="terminal" data-title="Terminal">
+        <pre><code><span class="prompt">&gt;</span> python manage.py createsuperuser
+Username (leave blank to use 'andrey'): <span class="input">admin</span>
+Email address: <span class="input">admin@admin.br</span>
+Password: <span class="comment"># nada aparece ao digitar</span>
+Password (again): <span class="comment"># nada aparece ao digitar</span>
+<span class="warn">The password is too similar to the email address.</span>
+Bypass password validation and create user anyway? [y/N]: <span class="input">y</span>
+Superuser created successfully.</code></pre>
+      </div>
+
+      <ol class="instructions">
+        <li><strong>Username:</strong> nome de acesso.</li>
+        <li><strong>Email:</strong> precisa ter formato de e-mail, com <code>@</code> e terminando em <code>.com</code> ou <code>.br</code>.</li>
+        <li><strong>Password:</strong> senha e confirmação.</li>
+      </ol>
+
+      <aside class="note">
+        <p class="note__title">A senha não aparece</p>
+        <p>Ao digitar a senha, nada é exibido no terminal. É normal, digite e pressione <kbd>Enter</kbd>.</p>
+      </aside>
+
+      <aside class="note note--tip">
+        <p class="note__title">Senha fraca?</p>
+        <p>O Django avisa quando a senha é fraca, por exemplo:</p>
+        <ul class="bullets">
+          <li><code>The password is too similar to the email address.</code> (parecida com o e-mail)</li>
+          <li><code>This password is too short.</code> (curta demais)</li>
+          <li><code>This password is too common.</code> (comum demais)</li>
+        </ul>
+        <p>Em seguida pergunta <code>Bypass password validation and create user anyway? [y/N]</code>:</p>
+        <ul class="bullets">
+          <li><kbd>y</kbd> (yes): cria o usuário mesmo assim.</li>
+          <li><kbd>N</kbd> (no): cancela e pede a senha novamente. É o padrão ao apertar só <kbd>Enter</kbd>.</li>
+        </ul>
+        <p>Em desenvolvimento, pode usar <kbd>y</kbd>. Em produção, use uma senha forte.</p>
+      </aside>
+
+      <h4 class="substep"><span>✓</span> Primeiro login</h4>
+
+      <ol class="instructions">
+        <li>Rode o servidor: <code>python manage.py runserver</code></li>
+        <li>Acesse <code>http://127.0.0.1:8000/admin</code> e entre com o usuário criado.</li>
+      </ol>
+
+      <figure class="screenshot" data-title="127.0.0.1:8000/admin">
+        <img src="imagens/primeiro_login.png" alt="Painel Django administration após o login, com Groups e Users">
+        <figcaption>Painel administrativo após o primeiro login</figcaption>
+      </figure>
+    </div>
+  </details>
+
+  <details class="step step--extra" id="extra-jazzmin" data-title="Ajustando o Jazzmin">
+
+    <div class="step__body">
+      <h4 class="substep"><span>1</span> Registrar o app</h4>
+      <p>No arquivo <code>app/settings.py</code>, adicione <code>'jazzmin'</code> no <strong>topo</strong> do <code>INSTALLED_APPS</code>:</p>
+
+      <div class="terminal" data-title="app/settings.py">
+        <pre><code>INSTALLED_APPS = [
+<span class="hl">    <span class="str">'jazzmin'</span>,</span>
+    <span class="str">'django.contrib.admin'</span>,
+    <span class="str">'django.contrib.auth'</span>,
+    <span class="str">'django.contrib.contenttypes'</span>,
+    <span class="str">'django.contrib.sessions'</span>,
+    <span class="str">'django.contrib.messages'</span>,
+    <span class="str">'django.contrib.staticfiles'</span>,
+]</code></pre>
+      </div>
+
+      <aside class="note">
+        <p class="note__title">Atenção</p>
+        <p>Não esqueça a <strong>vírgula</strong> depois de <code>'jazzmin'</code>. Ele precisa vir <strong>antes</strong> do <code>django.contrib.admin</code>.</p>
+      </aside>
+
+      <figure class="screenshot" data-title="127.0.0.1:8000/admin">
+        <img src="imagens/jazzmin.png" alt="Painel administrativo do Django com o tema Jazzmin">
+        <figcaption>Admin com o Jazzmin ativo</figcaption>
+      </figure>
+
+      <h4 class="substep"><span>2</span> Configurações do Jazzmin</h4>
+      <p>No <strong>final</strong> do <code>app/settings.py</code>, adicione:</p>
+
+      <div class="terminal terminal--tall" data-title="app/settings.py · final do arquivo">
+        <pre><code>JAZZMIN_SETTINGS = {
+<span class="cm">    # title of the window (Will default to current_admin_site.site_title if absent or None)</span>
+    <span class="str">"site_title"</span>: <span class="str">"Library Admin"</span>,
+
+<span class="cm">    # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)</span>
+    <span class="str">"site_header"</span>: <span class="str">"Library"</span>,
+
+<span class="cm">    # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)</span>
+    <span class="str">"site_brand"</span>: <span class="str">"Library"</span>,
+
+<span class="cm">    # Logo to use for your site, must be present in static files, used for brand on top left</span>
+    <span class="str">"site_logo"</span>: <span class="str">"books/img/logo.png"</span>,
+
+<span class="cm">    # Logo to use for your site, must be present in static files, used for login form logo (defaults to site_logo)</span>
+    <span class="str">"login_logo"</span>: <span class="kw">None</span>,
+
+<span class="cm">    # Logo to use for login form in dark themes (defaults to login_logo)</span>
+    <span class="str">"login_logo_dark"</span>: <span class="kw">None</span>,
+
+<span class="cm">    # CSS classes that are applied to the logo above</span>
+    <span class="str">"site_logo_classes"</span>: <span class="str">"img-circle"</span>,
+
+<span class="cm">    # Relative path to a favicon for your site, will default to site_logo if absent (ideally 32x32 px)</span>
+    <span class="str">"site_icon"</span>: <span class="kw">None</span>,
+
+<span class="cm">    # Welcome text on the login screen</span>
+    <span class="str">"welcome_sign"</span>: <span class="str">"Welcome to the library"</span>,
+
+<span class="cm">    # Copyright on the footer</span>
+    <span class="str">"copyright"</span>: <span class="str">"Acme Library Ltd"</span>,
+
+<span class="cm">    # List of model admins to search from the search bar, search bar omitted if excluded</span>
+<span class="cm">    # If you want to use a single search field you dont need to use a list, you can use a simple string </span>
+    <span class="str">"search_model"</span>: [<span class="str">"auth.User"</span>, <span class="str">"auth.Group"</span>],
+
+<span class="cm">    # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user</span>
+    <span class="str">"user_avatar"</span>: <span class="kw">None</span>,
+
+<span class="cm">    ############</span>
+<span class="cm">    # Top Menu #</span>
+<span class="cm">    ############</span>
+
+<span class="cm">    # Links to put along the top menu</span>
+    <span class="str">"topmenu_links"</span>: [
+
+<span class="cm">        # Url that gets reversed (Permissions can be added)</span>
+        {<span class="str">"name"</span>: <span class="str">"Home"</span>,  <span class="str">"url"</span>: <span class="str">"admin:index"</span>, <span class="str">"permissions"</span>: [<span class="str">"auth.view_user"</span>]},
+
+<span class="cm">        # external url that opens in a new window (Permissions can be added)</span>
+        {<span class="str">"name"</span>: <span class="str">"Support"</span>, <span class="str">"url"</span>: <span class="str">"https://github.com/farridav/django-jazzmin/issues"</span>, <span class="str">"new_window"</span>: <span class="kw">True</span>},
+
+<span class="cm">        # model admin to link to (Permissions checked against model)</span>
+        {<span class="str">"model"</span>: <span class="str">"auth.User"</span>},
+
+<span class="cm">        # App with dropdown menu to all its models pages (Permissions checked against models)</span>
+        {<span class="str">"app"</span>: <span class="str">"books"</span>},
+    ],
+
+<span class="cm">    #############</span>
+<span class="cm">    # User Menu #</span>
+<span class="cm">    #############</span>
+
+<span class="cm">    # Additional links to include in the user menu on the top right (&quot;app&quot; url type is not allowed)</span>
+    <span class="str">"usermenu_links"</span>: [
+        {<span class="str">"name"</span>: <span class="str">"Support"</span>, <span class="str">"url"</span>: <span class="str">"https://github.com/farridav/django-jazzmin/issues"</span>, <span class="str">"new_window"</span>: <span class="kw">True</span>},
+        {<span class="str">"model"</span>: <span class="str">"auth.user"</span>}
+    ],
+
+<span class="cm">    #############</span>
+<span class="cm">    # Side Menu #</span>
+<span class="cm">    #############</span>
+
+<span class="cm">    # Whether to display the side menu</span>
+    <span class="str">"show_sidebar"</span>: <span class="kw">True</span>,
+
+<span class="cm">    # Whether to aut expand the menu</span>
+    <span class="str">"navigation_expanded"</span>: <span class="kw">True</span>,
+
+<span class="cm">    # Hide these apps when generating side menu e.g (auth)</span>
+    <span class="str">"hide_apps"</span>: [],
+
+<span class="cm">    # Hide these models when generating side menu (e.g auth.user)</span>
+    <span class="str">"hide_models"</span>: [],
+
+<span class="cm">    # List of apps (and/or models) to base side menu ordering off of (does not need to contain all apps/models)</span>
+    <span class="str">"order_with_respect_to"</span>: [<span class="str">"auth"</span>, <span class="str">"books"</span>, <span class="str">"books.author"</span>, <span class="str">"books.book"</span>],
+
+<span class="cm">    # Custom links to append to app groups, keyed on app name</span>
+    <span class="str">"custom_links"</span>: {
+        <span class="str">"books"</span>: [{
+            <span class="str">"name"</span>: <span class="str">"Make Messages"</span>, 
+            <span class="str">"url"</span>: <span class="str">"make_messages"</span>, 
+            <span class="str">"icon"</span>: <span class="str">"fas fa-comments"</span>,
+            <span class="str">"permissions"</span>: [<span class="str">"books.view_book"</span>]
+        }]
+    },
+
+<span class="cm">    # Custom icons for side menu apps/models See https://fontawesome.com/icons?d=gallery&amp;m=free&amp;v=5.0.0,5.0.1,5.0.10,5.0.11,5.0.12,5.0.13,5.0.2,5.0.3,5.0.4,5.0.5,5.0.6,5.0.7,5.0.8,5.0.9,5.1.0,5.1.1,5.2.0,5.3.0,5.3.1,5.4.0,5.4.1,5.4.2,5.13.0,5.12.0,5.11.2,5.11.1,5.10.0,5.9.0,5.8.2,5.8.1,5.7.2,5.7.1,5.7.0,5.6.3,5.5.0,5.4.2</span>
+<span class="cm">    # for the full list of 5.13.0 free icon classes</span>
+    <span class="str">"icons"</span>: {
+        <span class="str">"auth"</span>: <span class="str">"fas fa-users-cog"</span>,
+        <span class="str">"auth.user"</span>: <span class="str">"fas fa-user"</span>,
+        <span class="str">"auth.Group"</span>: <span class="str">"fas fa-users"</span>,
+    },
+<span class="cm">    # Icons that are used when one is not manually specified</span>
+    <span class="str">"default_icon_parents"</span>: <span class="str">"fas fa-chevron-circle-right"</span>,
+    <span class="str">"default_icon_children"</span>: <span class="str">"fas fa-circle"</span>,
+
+<span class="cm">    #################</span>
+<span class="cm">    # Related Modal #</span>
+<span class="cm">    #################</span>
+<span class="cm">    # Use modals instead of popups</span>
+    <span class="str">"related_modal_active"</span>: <span class="kw">False</span>,
+
+<span class="cm">    #############</span>
+<span class="cm">    # UI Tweaks #</span>
+<span class="cm">    #############</span>
+<span class="cm">    # Relative paths to custom CSS/JS scripts (must be present in static files)</span>
+    <span class="str">"custom_css"</span>: <span class="kw">None</span>,
+    <span class="str">"custom_js"</span>: <span class="kw">None</span>,
+<span class="cm">    # Whether to link font from fonts.googleapis.com (use custom_css to supply font otherwise)</span>
+    <span class="str">"use_google_fonts_cdn"</span>: <span class="kw">True</span>,
+<span class="cm">    # Whether to show the UI customizer on the sidebar</span>
+<span class="hl">    <span class="str">"show_ui_builder"</span>: <span class="kw">True</span>,</span>
+
+<span class="cm">    ###############</span>
+<span class="cm">    # Change view #</span>
+<span class="cm">    ###############</span>
+<span class="cm">    # Render out the change view as a single form, or in tabs, current options are</span>
+<span class="cm">    # - single</span>
+<span class="cm">    # - horizontal_tabs (default)</span>
+<span class="cm">    # - vertical_tabs</span>
+<span class="cm">    # - collapsible</span>
+<span class="cm">    # - carousel</span>
+    <span class="str">"changeform_format"</span>: <span class="str">"horizontal_tabs"</span>,
+<span class="cm">    # override change forms on a per modeladmin basis</span>
+    <span class="str">"changeform_format_overrides"</span>: {<span class="str">"auth.user"</span>: <span class="str">"collapsible"</span>, <span class="str">"auth.group"</span>: <span class="str">"vertical_tabs"</span>},
+<span class="cm">    # Add a language dropdown into the admin</span>
+<span class="hl">    <span class="str">"language_chooser"</span>: <span class="kw">False</span>,</span>
+}</code></pre>
+      </div>
+
+      <aside class="note">
+        <p class="note__title">Pontos de atenção</p>
+        <ul class="bullets">
+          <li><code>"language_chooser": False</code>, com <code>True</code> o admin quebra.</li>
+          <li><code>"show_ui_builder": True</code>, ativa o personalizador de tema no admin para configurar do seu jeito.</li>
+        </ul>
+      </aside>
+
+      <aside class="note note--tip">
+        <p class="note__title">Documentação</p>
+        <p>Todas as configurações disponíveis: <a href="https://django-jazzmin.readthedocs.io/configuration/" target="_blank" rel="noopener">django-jazzmin.readthedocs.io/configuration</a></p>
+      </aside>
+    </div>
+  </details>
+
+</section>

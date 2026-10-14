@@ -1,0 +1,118 @@
+<section class="part" id="parte-14" data-title="Protegendo as Views">
+
+  <details class="step" id="passo-33" data-title="Exigir login e permissão nas views">
+
+    <div class="step__body">
+      <p>Agora que existem contas, dá para proteger as views do CRUD. São dois mixins, cada um responde uma pergunta:</p>
+
+      <dl class="files">
+        <dt><code>LoginRequiredMixin</code></dt>
+        <dd><strong>Está logado?</strong> Qualquer usuário logado entra, não importa quem seja. Quem não está logado vai para a tela de login.</dd>
+
+        <dt><code>PermissionRequiredMixin</code></dt>
+        <dd><strong>Pode fazer isso?</strong> Além de logado, o usuário precisa ter a permissão indicada. Logado sem permissão recebe erro <strong>403</strong> (proibido).</dd>
+      </dl>
+
+      <h4 class="substep"><span>?</span> Quando usar cada um</h4>
+
+      <div class="table-wrap">
+        <table class="table table--wide">
+          <thead>
+            <tr><th>Situação</th><th>Use</th><th>Exemplo</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Todo usuário logado pode ver ou fazer</td><td><code>LoginRequiredMixin</code></td><td>Ver a lista de pessoas. Se for o único mixin do CRUD, qualquer usuário logado também cadastra, edita e exclui.</td></tr>
+            <tr><td>Só alguns usuários podem fazer</td><td><code>PermissionRequiredMixin</code></td><td>Cadastrar, editar, excluir</td></tr>
+            <tr><td>Qualquer um, mesmo sem conta</td><td>Nenhum</td><td>Login e cadastro de conta</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4 class="substep"><span>1</span> Dizer onde fica o login</h4>
+      <p>No fim do <code>settings.py</code>. Assim não precisa repetir o <code>login_url</code> em cada view:</p>
+
+      <div class="terminal" data-title="app/settings.py">
+        <pre><code><span class="hl">LOGIN_URL = <span class="str">"accounts:login"</span></span></code></pre>
+      </div>
+
+      <h4 class="substep"><span>2</span> Atualizar as views</h4>
+
+      <div class="terminal" data-title="nome_do_seu_app/views.py">
+        <pre><code><span class="hl"><span class="kw">from</span> django.contrib.auth.mixins <span class="kw">import</span> LoginRequiredMixin, PermissionRequiredMixin</span>
+<span class="kw">from</span> django.urls <span class="kw">import</span> reverse_lazy
+<span class="kw">from</span> django.views.generic <span class="kw">import</span> ListView, CreateView, UpdateView, DeleteView
+<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.forms <span class="kw">import</span> PersonForm
+<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.models <span class="kw">import</span> Person
+
+
+<span class="kw">class</span> <span class="cls">PersonListView</span>(<span class="hl">LoginRequiredMixin, </span>ListView):
+    ...
+
+
+<span class="kw">class</span> <span class="cls">PersonCreateView</span>(<span class="hl">LoginRequiredMixin, PermissionRequiredMixin, </span>CreateView):
+<span class="hl">    permission_required = <span class="str">"<span class="input">nome_do_seu_app</span>.add_person"</span></span>
+    ...
+
+
+<span class="kw">class</span> <span class="cls">PersonUpdateView</span>(<span class="hl">LoginRequiredMixin, PermissionRequiredMixin, </span>UpdateView):
+<span class="hl">    permission_required = <span class="str">"<span class="input">nome_do_seu_app</span>.change_person"</span></span>
+    ...
+
+
+<span class="kw">class</span> <span class="cls">PersonDeleteView</span>(<span class="hl">LoginRequiredMixin, PermissionRequiredMixin, </span>DeleteView):
+<span class="hl">    permission_required = <span class="str">"<span class="input">nome_do_seu_app</span>.delete_person"</span></span>
+    ...</code></pre>
+      </div>
+
+      <dl class="files">
+        <dt>Ordem das classes</dt>
+        <dd>Os mixins vêm <strong>antes</strong> da view genérica (<code>CreateView</code>, <code>UpdateView</code>...). Senão a página abre antes da verificação.</dd>
+
+        <dt><code>permission_required</code></dt>
+        <dd>A permissão exigida, no formato <code>app.acao_model</code>. O Django cria quatro para cada model, sozinho, no <code>migrate</code>: <code>add_person</code>, <code>change_person</code>, <code>delete_person</code> e <code>view_person</code>.</dd>
+
+        <dt>Os dois juntos</dt>
+        <dd>O <code>LoginRequiredMixin</code> vem primeiro: quem não está logado vai para o login. Depois o <code>PermissionRequiredMixin</code> confere a permissão de quem já entrou.</dd>
+      </dl>
+
+      <h4 class="substep"><span>3</span> Dar permissão a um usuário</h4>
+      <p>No admin (<code>/admin</code>), abra <strong>Usuários</strong>, escolha o usuário e, em <strong>Permissões do usuário</strong>, adicione por exemplo <em>Can add person</em>. Para vários usuários de uma vez, crie um <strong>Grupo</strong> com as permissões e coloque os usuários nele.</p>
+
+      <h4 class="substep"><span>4</span> Esconder os botões de quem não pode</h4>
+      <p>Opcional, mas evita botão que leva a um 403. O template recebe as permissões em <code>{{ perms }}</code>:</p>
+
+      <div class="terminal" data-title="nome_do_seu_app/templates/nome_do_seu_app/person_list.html">
+        <pre><code><span class="t-dtl">{% for person in people %}</span>
+    <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span>
+        <span class="t-var">{{ person.first_name }}</span> <span class="t-var">{{ person.last_name }}</span>
+<span class="hl">        <span class="t-dtl">{% if perms.<span class="input">nome_do_seu_app</span>.change_person %}</span></span>
+            <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_update'</span><span class="t-dtl"> person.pk %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-primary"</span><span class="t-tag">&gt;</span>Editar<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+<span class="hl">        <span class="t-dtl">{% endif %}</span></span>
+<span class="hl">        <span class="t-dtl">{% if perms.<span class="input">nome_do_seu_app</span>.delete_person %}</span></span>
+            <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_delete'</span><span class="t-dtl"> person.pk %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-danger"</span><span class="t-tag">&gt;</span>Excluir<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+<span class="hl">        <span class="t-dtl">{% endif %}</span></span>
+    <span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
+<span class="t-dtl">{% endfor %}</span></code></pre>
+      </div>
+
+      <h4 class="substep"><span>✓</span> Resultado esperado</h4>
+      <p class="center">Sem login, <code>/pessoas/</code> manda para a tela de login. Logado com uma conta nova, a lista aparece, mas sem os botões Editar e Excluir, e abrir <code>/pessoas/nova/</code> dá 403. Com o superusuário, tudo funciona.</p>
+
+      <aside class="note note--tip">
+        <p class="note__title">Superusuário</p>
+        <p>O superusuário tem todas as permissões automaticamente, não precisa marcar nenhuma.</p>
+      </aside>
+
+      <aside class="note">
+        <p class="note__title">Esconder o botão não basta</p>
+        <p>O <code>{% if perms %}</code> só esconde o botão. Quem digitar a URL direto ainda chega na view, e é o <code>PermissionRequiredMixin</code> que bloqueia. Use os dois.</p>
+      </aside>
+
+      <aside class="note">
+        <p class="note__title">Documentação</p>
+        <p><a href="https://docs.djangoproject.com/pt-br/stable/topics/auth/default/#the-loginrequiredmixin-mixin" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/topics/auth/default</a></p>
+      </aside>
+    </div>
+  </details>
+
+</section>
