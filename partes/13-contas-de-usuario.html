@@ -17,13 +17,14 @@
 ]</code></pre>
       </div>
 
-      <p>Crie também o <code>urls.py</code> e a pasta de templates, como no passo 20:</p>
+      <p>Crie também o <code>forms.py</code>, o <code>urls.py</code> e a pasta de templates, como no passo 20:</p>
 
       <div class="terminal" data-title="Pasta do projeto">
         <pre><code>meu_projeto/
 ├── accounts/
 <span class="hl">│   ├── templates/</span>
 <span class="hl">│   │   └── accounts/</span>
+<span class="hl">│   ├── forms.py</span>
 <span class="hl">│   ├── urls.py</span>
 │   └── views.py
 ├── app/
@@ -38,18 +39,47 @@
     </div>
   </details>
 
-  <details class="step" id="passo-31" data-title="Criar as views de login, logout e cadastro">
+  <details class="step" id="passo-31" data-title="Criar o formulário de cadastro">
 
     <div class="step__body">
-      <p>O Django já traz as views de login e logout prontas (<code>LoginView</code> e <code>LogoutView</code>) e o formulário de cadastro (<code>UserCreationForm</code>). Basta configurar.</p>
+      <p>O <code>UserCreationForm</code> pede só usuário e senha. Para pedir também e-mail, nome e sobrenome, crie um formulário que herda dele:</p>
+
+      <div class="terminal" data-title="accounts/forms.py">
+        <pre><code><span class="kw">from</span> django.contrib.auth.forms <span class="kw">import</span> UserCreationForm
+<span class="kw">from</span> django.contrib.auth.models <span class="kw">import</span> User
+
+
+<span class="hl"><span class="kw">class</span> <span class="cls">CustomUserCreationForm</span>(UserCreationForm):</span>
+    <span class="kw">class</span> <span class="cls">Meta</span>:
+        model = User
+<span class="hl">        fields = [<span class="str">"username"</span>, <span class="str">"email"</span>, <span class="str">"first_name"</span>, <span class="str">"last_name"</span>, <span class="str">"password1"</span>, <span class="str">"password2"</span>]</span></code></pre>
+      </div>
+
+      <dl class="files">
+        <dt><code>UserCreationForm</code></dt>
+        <dd>Formulário pronto de cadastro, com as validações de senha do Django. Herdando dele, essas validações continuam valendo.</dd>
+
+        <dt><code>model = User</code></dt>
+        <dd>O model de usuário que já vem com o Django.</dd>
+
+        <dt><code>fields</code></dt>
+        <dd>Campos do formulário, na ordem em que aparecem. <code>email</code>, <code>first_name</code> e <code>last_name</code> já existem no <code>User</code>, só não vinham no formulário. <code>password1</code> e <code>password2</code> são a senha e a confirmação.</dd>
+      </dl>
+    </div>
+  </details>
+
+  <details class="step" id="passo-32" data-title="Criar as views de login, logout e cadastro">
+
+    <div class="step__body">
+      <p>O Django já traz as views de login e logout prontas (<code>LoginView</code> e <code>LogoutView</code>). Basta configurar. O cadastro usa o formulário do passo anterior.</p>
 
       <h4 class="substep"><span>1</span> As views</h4>
 
       <div class="terminal" data-title="accounts/views.py">
-        <pre><code><span class="kw">from</span> django.contrib.auth.forms <span class="kw">import</span> UserCreationForm
-<span class="kw">from</span> django.contrib.auth.views <span class="kw">import</span> LoginView, LogoutView
+        <pre><code><span class="kw">from</span> django.contrib.auth.views <span class="kw">import</span> LoginView, LogoutView
 <span class="kw">from</span> django.urls <span class="kw">import</span> reverse_lazy
 <span class="kw">from</span> django.views.generic <span class="kw">import</span> CreateView
+<span class="hl"><span class="kw">from</span> accounts.forms <span class="kw">import</span> CustomUserCreationForm</span>
 
 
 <span class="hl"><span class="kw">class</span> <span class="cls">UserLoginView</span>(LoginView):</span>
@@ -64,7 +94,7 @@
 
 <span class="hl"><span class="kw">class</span> <span class="cls">UserCreateView</span>(CreateView):</span>
     template_name = <span class="str">"accounts/user_form_create.html"</span>
-    form_class = UserCreationForm
+<span class="hl">    form_class = CustomUserCreationForm</span>
     success_url = reverse_lazy(<span class="str">"accounts:login"</span>)</code></pre>
       </div>
 
@@ -81,8 +111,8 @@
         <dt><code>LogoutView</code></dt>
         <dd>Faz o logout. Não tem template: sai e redireciona.</dd>
 
-        <dt><code>UserCreationForm</code></dt>
-        <dd>Formulário pronto de cadastro: usuário, senha e confirmação da senha, com as validações de senha do Django.</dd>
+        <dt><code>form_class</code></dt>
+        <dd>O formulário da página de cadastro, o <code>CustomUserCreationForm</code> do passo anterior.</dd>
 
         <dt><code>CreateView</code></dt>
         <dd>A mesma do passo 24, agora criando um usuário em vez de uma pessoa.</dd>
@@ -128,70 +158,49 @@ urlpatterns = [
     </div>
   </details>
 
-  <details class="step step--front" id="passo-32" data-title="Criar os templates de conta">
+  <details class="step step--front" id="passo-33" data-title="Criar os templates de conta">
 
     <div class="step__body">
-      <p>Duas páginas simples, no mesmo formato dos templates do CRUD, e os botões de entrar e sair na lista.</p>
+      <p>Duas páginas simples, no mesmo formato dos templates do CRUD.</p>
 
       <h4 class="substep"><span>1</span> A página de login</h4>
 
       <div class="terminal" data-title="accounts/templates/accounts/user_login.html">
-        <pre><code><span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Entrar<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
-<span class="hl"><span class="t-tag">&lt;form</span> <span class="t-attr">method</span>=<span class="t-val">"post"</span><span class="t-tag">&gt;</span></span>
-<span class="hl">    <span class="t-dtl">{% csrf_token %}</span></span>
-<span class="hl">    <span class="t-var">{{ form.as_p }}</span></span>
-    <span class="t-tag">&lt;button</span> <span class="t-attr">type</span>=<span class="t-val">"submit"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-primary"</span><span class="t-tag">&gt;</span>Entrar<span class="t-tag">&lt;/button</span><span class="t-tag">&gt;</span>
-<span class="hl"><span class="t-tag">&lt;/form</span><span class="t-tag">&gt;</span></span>
-<span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'accounts:register'</span><span class="t-dtl"> %}</span><span class="t-val">"</span><span class="t-tag">&gt;</span>Criar conta<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span></code></pre>
+        <pre><code><span class="hl"><span class="t-dtl">{% extends "base.html" %}</span></span>
+
+<span class="hl"><span class="t-dtl">{% block title %}</span>Entrar<span class="t-dtl">{% endblock %}</span></span>
+
+<span class="hl"><span class="t-dtl">{% block content %}</span></span>
+    <span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Entrar<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
+<span class="hl">    <span class="t-tag">&lt;form</span> <span class="t-attr">method</span>=<span class="t-val">"post"</span><span class="t-tag">&gt;</span></span>
+<span class="hl">        <span class="t-dtl">{% csrf_token %}</span></span>
+<span class="hl">        <span class="t-var">{{ form.as_p }}</span></span>
+        <span class="t-tag">&lt;button</span> <span class="t-attr">type</span>=<span class="t-val">"submit"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-primary"</span><span class="t-tag">&gt;</span>Entrar<span class="t-tag">&lt;/button</span><span class="t-tag">&gt;</span>
+<span class="hl">    <span class="t-tag">&lt;/form</span><span class="t-tag">&gt;</span></span>
+    <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'accounts:register'</span><span class="t-dtl"> %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-outline-secondary"</span><span class="t-tag">&gt;</span>Criar conta<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+<span class="hl"><span class="t-dtl">{% endblock %}</span></span></code></pre>
       </div>
 
       <h4 class="substep"><span>2</span> A página de cadastro</h4>
 
       <div class="terminal" data-title="accounts/templates/accounts/user_form_create.html">
-        <pre><code><span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Criar conta<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
-<span class="hl"><span class="t-tag">&lt;form</span> <span class="t-attr">method</span>=<span class="t-val">"post"</span><span class="t-tag">&gt;</span></span>
-<span class="hl">    <span class="t-dtl">{% csrf_token %}</span></span>
-<span class="hl">    <span class="t-var">{{ form.as_p }}</span></span>
-    <span class="t-tag">&lt;button</span> <span class="t-attr">type</span>=<span class="t-val">"submit"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-primary"</span><span class="t-tag">&gt;</span>Cadastrar<span class="t-tag">&lt;/button</span><span class="t-tag">&gt;</span>
-<span class="hl"><span class="t-tag">&lt;/form</span><span class="t-tag">&gt;</span></span>
-<span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'accounts:login'</span><span class="t-dtl"> %}</span><span class="t-val">"</span><span class="t-tag">&gt;</span>Já tenho conta<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span></code></pre>
-      </div>
+        <pre><code><span class="hl"><span class="t-dtl">{% extends "base.html" %}</span></span>
 
-      <h4 class="substep"><span>3</span> Entrar e sair na lista</h4>
-      <p>No <code>person_list.html</code>, logo abaixo do <code>&lt;h1&gt;</code>:</p>
+<span class="hl"><span class="t-dtl">{% block title %}</span>Criar conta<span class="t-dtl">{% endblock %}</span></span>
 
-      <div class="terminal" data-title="nome_do_seu_app/templates/nome_do_seu_app/person_list.html">
-        <pre><code><span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Pessoas<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
-<span class="hl"><span class="t-dtl">{% if user.is_authenticated %}</span></span>
-<span class="hl">    <span class="t-tag">&lt;span</span><span class="t-tag">&gt;</span>Olá, <span class="t-var">{{ user.username }}</span><span class="t-tag">&lt;/span</span><span class="t-tag">&gt;</span></span>
-<span class="hl">    <span class="t-tag">&lt;form</span> <span class="t-attr">method</span>=<span class="t-val">"post"</span> <span class="t-attr">action</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'accounts:logout'</span><span class="t-dtl"> %}</span><span class="t-val">"</span><span class="t-tag">&gt;</span></span>
+<span class="hl"><span class="t-dtl">{% block content %}</span></span>
+    <span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Criar conta<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
+<span class="hl">    <span class="t-tag">&lt;form</span> <span class="t-attr">method</span>=<span class="t-val">"post"</span><span class="t-tag">&gt;</span></span>
 <span class="hl">        <span class="t-dtl">{% csrf_token %}</span></span>
-<span class="hl">        <span class="t-tag">&lt;button</span> <span class="t-attr">type</span>=<span class="t-val">"submit"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-outline-secondary"</span><span class="t-tag">&gt;</span>Sair<span class="t-tag">&lt;/button</span><span class="t-tag">&gt;</span></span>
+<span class="hl">        <span class="t-var">{{ form.as_p }}</span></span>
+        <span class="t-tag">&lt;button</span> <span class="t-attr">type</span>=<span class="t-val">"submit"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-primary"</span><span class="t-tag">&gt;</span>Cadastrar<span class="t-tag">&lt;/button</span><span class="t-tag">&gt;</span>
 <span class="hl">    <span class="t-tag">&lt;/form</span><span class="t-tag">&gt;</span></span>
-<span class="hl"><span class="t-dtl">{% else %}</span></span>
-<span class="hl">    <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'accounts:login'</span><span class="t-dtl"> %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-outline-primary"</span><span class="t-tag">&gt;</span>Entrar<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span></span>
-<span class="hl"><span class="t-dtl">{% endif %}</span></span>
-<span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_create'</span><span class="t-dtl"> %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-warning"</span><span class="t-tag">&gt;</span>Nova pessoa<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span></code></pre>
+    <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'accounts:login'</span><span class="t-dtl"> %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-outline-secondary"</span><span class="t-tag">&gt;</span>Já tenho conta<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+<span class="hl"><span class="t-dtl">{% endblock %}</span></span></code></pre>
       </div>
-
-      <h4 class="substep"><span>?</span> Entendendo o código</h4>
-
-      <dl class="files">
-        <dt><code>{{ user }}</code></dt>
-        <dd>O usuário logado. O Django manda ele para todo template, sem precisar passar na view.</dd>
-
-        <dt><code>user.is_authenticated</code></dt>
-        <dd>Verdadeiro se alguém está logado. Mostra "Sair" para quem entrou e "Entrar" para quem não entrou.</dd>
-
-        <dt>Logout com <code>&lt;form method="post"&gt;</code></dt>
-        <dd>Desde o Django 5 o logout só aceita <code>post</code>. Um link comum (<code>&lt;a&gt;</code>) dá erro 405, por isso o botão Sair fica num formulário.</dd>
-
-        <dt><code>action</code></dt>
-        <dd>Para onde o formulário envia. Aqui o form está na lista, mas envia para a rota de logout.</dd>
-      </dl>
 
       <h4 class="substep"><span>✓</span> Resultado esperado</h4>
-      <p class="center">Acesse <code>http://127.0.0.1:8000/contas/cadastro/</code>, crie uma conta e entre com ela. Você cai na lista de pessoas com "Olá, seu_usuario" e o botão Sair.</p>
+      <p class="center">Acesse <code>http://127.0.0.1:8000/contas/cadastro/</code>, crie uma conta e entre com ela. Você cai na lista de pessoas. O botão Sair entra na próxima parte, junto com a proteção das views.</p>
 
       <aside class="note">
         <p class="note__title">Senha recusada no cadastro?</p>

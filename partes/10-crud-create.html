@@ -107,12 +107,18 @@ urlpatterns = [
       <h4 class="substep"><span>1</span> A página de cadastro</h4>
 
       <div class="terminal" data-title="nome_do_seu_app/templates/nome_do_seu_app/person_form_create.html">
-        <pre><code><span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Nova pessoa<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
-<span class="hl"><span class="t-tag">&lt;form</span> <span class="t-attr">method</span>=<span class="t-val">"post"</span> <span class="t-attr">enctype</span>=<span class="t-val">"multipart/form-data"</span><span class="t-tag">&gt;</span></span>
-<span class="hl">    <span class="t-dtl">{% csrf_token %}</span></span>
-<span class="hl">    <span class="t-var">{{ form.as_p }}</span></span>
-    <span class="t-tag">&lt;button</span> <span class="t-attr">type</span>=<span class="t-val">"submit"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-primary"</span><span class="t-tag">&gt;</span>Salvar<span class="t-tag">&lt;/button</span><span class="t-tag">&gt;</span>
-<span class="hl"><span class="t-tag">&lt;/form</span><span class="t-tag">&gt;</span></span></code></pre>
+        <pre><code><span class="hl"><span class="t-dtl">{% extends "base.html" %}</span></span>
+
+<span class="hl"><span class="t-dtl">{% block title %}</span>Nova pessoa<span class="t-dtl">{% endblock %}</span></span>
+
+<span class="hl"><span class="t-dtl">{% block content %}</span></span>
+    <span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Nova pessoa<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
+<span class="hl">    <span class="t-tag">&lt;form</span> <span class="t-attr">method</span>=<span class="t-val">"post"</span> <span class="t-attr">enctype</span>=<span class="t-val">"multipart/form-data"</span><span class="t-tag">&gt;</span></span>
+<span class="hl">        <span class="t-dtl">{% csrf_token %}</span></span>
+<span class="hl">        <span class="t-var">{{ form.as_p }}</span></span>
+        <span class="t-tag">&lt;button</span> <span class="t-attr">type</span>=<span class="t-val">"submit"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-primary"</span><span class="t-tag">&gt;</span>Salvar<span class="t-tag">&lt;/button</span><span class="t-tag">&gt;</span>
+<span class="hl">    <span class="t-tag">&lt;/form</span><span class="t-tag">&gt;</span></span>
+<span class="hl"><span class="t-dtl">{% endblock %}</span></span></code></pre>
       </div>
 
       <h4 class="substep"><span>2</span> Link de cadastro na lista</h4>
@@ -144,7 +150,7 @@ urlpatterns = [
 
       <aside class="note note--tip">
         <p class="note__title">Sem &lt;html&gt; e &lt;head&gt;?</p>
-        <p>O navegador monta a página assim mesmo, então para começar basta o conteúdo. Como só a lista importa o Bootstrap, aqui o botão aparece sem estilo. Depois, com um <code>base.html</code>, todas as páginas ganham o Bootstrap de uma vez.</p>
+        <p>Vêm do <code>base.html</code>, pelo <code>{% extends %}</code>. Por isso esta página já tem o Bootstrap, o menu e o rodapé, como a lista.</p>
       </aside>
 
       <h4 class="substep"><span>✓</span> Resultado esperado</h4>

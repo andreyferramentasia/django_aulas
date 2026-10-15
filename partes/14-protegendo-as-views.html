@@ -1,6 +1,6 @@
 <section class="part" id="parte-14" data-title="Protegendo as Views">
 
-  <details class="step" id="passo-33" data-title="Exigir login e permissão nas views">
+  <details class="step" id="passo-34" data-title="Exigir login e permissão nas views">
 
     <div class="step__body">
       <p>Agora que existem contas, dá para proteger as views do CRUD. São dois mixins, cada um responde uma pergunta:</p>
@@ -28,17 +28,43 @@
         </table>
       </div>
 
-      <h4 class="substep"><span>1</span> Atualizar as views</h4>
+      <h4 class="substep"><span>1</span> Configurar os redirecionamentos de login</h4>
+      <p>No fim do <code>settings.py</code>:</p>
+
+      <div class="terminal" data-title="app/settings.py">
+        <pre><code><span class="hl">LOGIN_URL = <span class="str">"accounts:login"</span></span>
+<span class="hl">LOGIN_REDIRECT_URL = <span class="str">"<span class="input">nome_do_seu_app</span>:person_list"</span></span>
+<span class="hl">LOGOUT_REDIRECT_URL = <span class="str">"accounts:login"</span></span></code></pre>
+      </div>
+
+      <dl class="files">
+        <dt><code>LOGIN_URL</code></dt>
+        <dd>Para onde vai quem tenta abrir uma página protegida sem estar logado.</dd>
+
+        <dt><code>LOGIN_REDIRECT_URL</code></dt>
+        <dd>Para onde o usuário vai depois de fazer login.</dd>
+
+        <dt><code>LOGOUT_REDIRECT_URL</code></dt>
+        <dd>Para onde o usuário vai depois de sair.</dd>
+      </dl>
+
+      <h4 class="substep"><span>2</span> Atualizar as views</h4>
 
       <div class="terminal" data-title="nome_do_seu_app/views.py">
         <pre><code><span class="hl"><span class="kw">from</span> django.contrib.auth.mixins <span class="kw">import</span> LoginRequiredMixin, PermissionRequiredMixin</span>
 <span class="kw">from</span> django.urls <span class="kw">import</span> reverse_lazy
-<span class="kw">from</span> django.views.generic <span class="kw">import</span> ListView, CreateView, UpdateView, DeleteView
+<span class="kw">from</span> django.views.generic <span class="kw">import</span> ListView, DetailView, CreateView, UpdateView, DeleteView
 <span class="kw">from</span> <span class="input">nome_do_seu_app</span>.forms <span class="kw">import</span> PersonForm
 <span class="kw">from</span> <span class="input">nome_do_seu_app</span>.models <span class="kw">import</span> Person
 
 
 <span class="kw">class</span> <span class="cls">PersonListView</span>(<span class="hl">LoginRequiredMixin, PermissionRequiredMixin, </span>ListView):
+<span class="hl">    login_url = reverse_lazy(<span class="str">"accounts:login"</span>)</span>
+<span class="hl">    permission_required = <span class="str">"<span class="input">nome_do_seu_app</span>.view_person"</span></span>
+    ...
+
+
+<span class="kw">class</span> <span class="cls">PersonDetailView</span>(<span class="hl">LoginRequiredMixin, PermissionRequiredMixin, </span>DetailView):
 <span class="hl">    login_url = reverse_lazy(<span class="str">"accounts:login"</span>)</span>
 <span class="hl">    permission_required = <span class="str">"<span class="input">nome_do_seu_app</span>.view_person"</span></span>
     ...
@@ -67,37 +93,95 @@
         <dd>Os mixins vêm <strong>antes</strong> da view genérica (<code>CreateView</code>, <code>UpdateView</code>...). Senão a página abre antes da verificação.</dd>
 
         <dt><code>login_url</code></dt>
-        <dd>Para onde vai quem não está logado. O <code>reverse_lazy</code> transforma o nome da rota <code>"accounts:login"</code> no endereço da página de login.</dd>
+        <dd>Para onde vai quem não está logado. O <code>reverse_lazy</code> transforma o nome da rota <code>"accounts:login"</code> no endereço da página de login. Na view, ele vale só para ela e tem prioridade sobre o <code>LOGIN_URL</code> do <code>settings.py</code>.</dd>
 
         <dt><code>permission_required</code></dt>
         <dd>A permissão exigida, no formato <code>app.acao_model</code>. O Django cria quatro para cada model, sozinho, no <code>migrate</code>: <code>add_person</code>, <code>change_person</code>, <code>delete_person</code> e <code>view_person</code>.</dd>
+
+        <dt><code>PersonDetailView</code></dt>
+        <dd>Só existe se você fez o extra da <code>DetailView</code> na parte <strong>CRUD · Read</strong>. Ela usa a mesma permissão da lista, <code>view_person</code>, porque as duas só mostram dados. Se não fez o extra, pule essa classe e tire o <code>DetailView</code> do import.</dd>
 
         <dt>Os dois juntos</dt>
         <dd>O <code>LoginRequiredMixin</code> vem primeiro: quem não está logado vai para o login. Depois o <code>PermissionRequiredMixin</code> confere a permissão de quem já entrou.</dd>
       </dl>
 
-      <h4 class="substep"><span>2</span> Dar permissão a um usuário</h4>
+      <h4 class="substep"><span>3</span> Dar permissão a um usuário</h4>
       <p>No admin (<code>/admin</code>), abra <strong>Usuários</strong>, escolha o usuário e, em <strong>Permissões do usuário</strong>, adicione por exemplo <em>Can view person</em> e <em>Can add person</em>. Para vários usuários de uma vez, crie um <strong>Grupo</strong> com as permissões e coloque os usuários nele.</p>
 
-      <h4 class="substep"><span>3</span> Esconder os botões de quem não pode</h4>
-      <p>Opcional, mas evita botão que leva a um 403. O template recebe as permissões em <code>{{ perms }}</code>:</p>
+      <h4 class="substep"><span>4</span> Botão Sair e botões por permissão</h4>
+      <p>No <code>person_list.html</code>, logo abaixo do <code>&lt;h1&gt;</code>, entra o botão Sair. E os botões do CRUD só aparecem para quem tem a permissão, o que evita botão que leva a um 403. O template recebe as permissões em <code>{{ perms }}</code>:</p>
 
       <div class="terminal" data-title="nome_do_seu_app/templates/nome_do_seu_app/person_list.html">
-        <pre><code><span class="t-dtl">{% for person in people %}</span>
-    <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span>
-        <span class="t-var">{{ person.first_name }}</span> <span class="t-var">{{ person.last_name }}</span>
-<span class="hl">        <span class="t-dtl">{% if perms.<span class="input">nome_do_seu_app</span>.change_person %}</span></span>
-            <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_update'</span><span class="t-dtl"> person.pk %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-primary"</span><span class="t-tag">&gt;</span>Editar<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
-<span class="hl">        <span class="t-dtl">{% endif %}</span></span>
-<span class="hl">        <span class="t-dtl">{% if perms.<span class="input">nome_do_seu_app</span>.delete_person %}</span></span>
-            <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_delete'</span><span class="t-dtl"> person.pk %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-danger"</span><span class="t-tag">&gt;</span>Excluir<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
-<span class="hl">        <span class="t-dtl">{% endif %}</span></span>
-    <span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
-<span class="t-dtl">{% endfor %}</span></code></pre>
+        <pre><code><span class="t-dtl">{% extends "base.html" %}</span>
+
+<span class="t-dtl">{% block title %}</span>Pessoas<span class="t-dtl">{% endblock %}</span>
+
+<span class="t-dtl">{% block content %}</span>
+    <span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Pessoas<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
+<span class="hl">    <span class="t-tag">&lt;span</span><span class="t-tag">&gt;</span>Olá, <span class="t-var">{{ user.username }}</span><span class="t-tag">&lt;/span</span><span class="t-tag">&gt;</span></span>
+<span class="hl">    <span class="t-tag">&lt;form</span> <span class="t-attr">method</span>=<span class="t-val">"post"</span> <span class="t-attr">action</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'accounts:logout'</span><span class="t-dtl"> %}</span><span class="t-val">"</span><span class="t-tag">&gt;</span></span>
+<span class="hl">        <span class="t-dtl">{% csrf_token %}</span></span>
+<span class="hl">        <span class="t-tag">&lt;button</span> <span class="t-attr">type</span>=<span class="t-val">"submit"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-outline-secondary"</span><span class="t-tag">&gt;</span>Sair<span class="t-tag">&lt;/button</span><span class="t-tag">&gt;</span></span>
+<span class="hl">    <span class="t-tag">&lt;/form</span><span class="t-tag">&gt;</span></span>
+<span class="hl">    <span class="t-dtl">{% if perms.<span class="input">nome_do_seu_app</span>.add_person %}</span></span>
+        <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_create'</span><span class="t-dtl"> %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-warning"</span><span class="t-tag">&gt;</span>Nova pessoa<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+<span class="hl">    <span class="t-dtl">{% endif %}</span></span>
+
+    <span class="t-tag">&lt;ul</span><span class="t-tag">&gt;</span>
+        <span class="t-dtl">{% for person in people %}</span>
+            <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span>
+                <span class="t-var">{{ person.first_name }}</span> <span class="t-var">{{ person.last_name }}</span>
+<span class="hl">                <span class="t-dtl">{% if perms.<span class="input">nome_do_seu_app</span>.view_person %}</span></span>
+                    <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_detail'</span><span class="t-dtl"> person.pk %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-secondary"</span><span class="t-tag">&gt;</span>Ver<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+<span class="hl">                <span class="t-dtl">{% endif %}</span></span>
+<span class="hl">                <span class="t-dtl">{% if perms.<span class="input">nome_do_seu_app</span>.change_person %}</span></span>
+                    <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_update'</span><span class="t-dtl"> person.pk %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-primary"</span><span class="t-tag">&gt;</span>Editar<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+<span class="hl">                <span class="t-dtl">{% endif %}</span></span>
+<span class="hl">                <span class="t-dtl">{% if perms.<span class="input">nome_do_seu_app</span>.delete_person %}</span></span>
+                    <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_delete'</span><span class="t-dtl"> person.pk %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-danger"</span><span class="t-tag">&gt;</span>Excluir<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+<span class="hl">                <span class="t-dtl">{% endif %}</span></span>
+            <span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
+        <span class="t-dtl">{% empty %}</span>
+            <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span>Nenhuma pessoa cadastrada.<span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
+        <span class="t-dtl">{% endfor %}</span>
+    <span class="t-tag">&lt;/ul</span><span class="t-tag">&gt;</span>
+
+    <span class="t-dtl">{% if is_paginated %}</span>
+        <span class="t-tag">&lt;nav</span> <span class="t-attr">class</span>=<span class="t-val">"d-flex align-items-center gap-2"</span><span class="t-tag">&gt;</span>
+            <span class="t-dtl">{% if page_obj.has_previous %}</span>
+                <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% querystring page=page_obj.previous_page_number %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-outline-primary"</span><span class="t-tag">&gt;</span>Anterior<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+            <span class="t-dtl">{% endif %}</span>
+            <span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-val">"text-muted small"</span><span class="t-tag">&gt;</span>Página <span class="t-var">{{ page_obj.number }}</span> de <span class="t-var">{{ page_obj.paginator.num_pages }}</span><span class="t-tag">&lt;/span</span><span class="t-tag">&gt;</span>
+            <span class="t-dtl">{% if page_obj.has_next %}</span>
+                <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% querystring page=page_obj.next_page_number %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-outline-primary"</span><span class="t-tag">&gt;</span>Próxima<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+            <span class="t-dtl">{% endif %}</span>
+        <span class="t-tag">&lt;/nav</span><span class="t-tag">&gt;</span>
+    <span class="t-dtl">{% endif %}</span>
+<span class="t-dtl">{% endblock %}</span></code></pre>
       </div>
 
+      <dl class="files">
+        <dt><code>{{ user }}</code></dt>
+        <dd>O usuário logado. O Django manda ele para todo template, sem precisar passar na view.</dd>
+
+        <dt>"Olá" e Sair sempre visíveis</dt>
+        <dd>A view só monta a página para quem está logado. Quem não está vai direto para o login. Então o "Olá" e o botão Sair aparecem sempre.</dd>
+
+        <dt>Logout com <code>&lt;form method="post"&gt;</code></dt>
+        <dd>Desde o Django 5 o logout só aceita <code>post</code>. Um link comum (<code>&lt;a&gt;</code>) dá erro 405, por isso o botão Sair fica num formulário.</dd>
+
+        <dt><code>action</code></dt>
+        <dd>Para onde o formulário envia. Aqui o form está na lista, mas envia para a rota de logout.</dd>
+
+        <dt><code>Ver</code></dt>
+        <dd>Só se você fez o extra da <code>DetailView</code>. Fica dentro de <code>{% if perms.<span class="input">nome_do_seu_app</span>.view_person %}</code>, a mesma permissão da <code>PersonDetailView</code>. Como a lista também exige <code>view_person</code>, quem vê a lista sempre vê esse botão: o <code>if</code> deixa claro qual permissão a página do botão pede.</dd>
+
+        <dt><code>Nova pessoa</code></dt>
+        <dd>Fica fora do <code>for</code>, como antes, mas dentro de <code>{% if perms.<span class="input">nome_do_seu_app</span>.add_person %}</code>. Só aparece para quem pode cadastrar.</dd>
+      </dl>
+
       <h4 class="substep"><span>✓</span> Resultado esperado</h4>
-      <p class="center">Sem login, <code>/pessoas/</code> manda para a tela de login. Logado com uma conta nova, sem permissões, <code>/pessoas/</code> dá 403. Com só <em>Can view person</em>, a lista aparece, mas sem os botões Editar e Excluir, e abrir <code>/pessoas/nova/</code> dá 403. Com o superusuário, tudo funciona.</p>
+      <p class="center">Sem login, <code>/pessoas/</code> manda para a tela de login. Logado com uma conta nova, sem permissões, <code>/pessoas/</code> dá 403. Com só <em>Can view person</em>, a lista aparece, mas sem os botões Nova pessoa, Editar e Excluir, e abrir <code>/pessoas/nova/</code> dá 403. Com o superusuário, tudo funciona.</p>
 
       <aside class="note note--tip">
         <p class="note__title">Superusuário</p>

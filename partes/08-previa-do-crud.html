@@ -129,7 +129,7 @@
       </aside>
 
       <h4 class="substep"><span>2</span> Onde colocar</h4>
-      <p>Ainda não temos um template base (<code>base.html</code>), então cada template carrega o que precisa. Vamos colocar o Bootstrap no <strong>template da lista</strong> (<code>person_list.html</code>, passo 22), porque é nele que ficam os botões do CRUD: <strong>Cadastrar</strong>, <strong>Editar</strong> e <strong>Excluir</strong>.</p>
+      <p>Essas linhas vão no <code>&lt;head&gt;</code> de toda página. Para não repetir em cada template, elas ficam no <code>base.html</code>, criado no próximo extra.</p>
 
       <aside class="note">
         <p class="note__title">Sem internet?</p>
@@ -139,6 +139,169 @@
       <aside class="note">
         <p class="note__title">Documentação</p>
         <p><a href="https://getbootstrap.com/docs/5.3/getting-started/introduction/" target="_blank" rel="noopener">getbootstrap.com/docs/5.3</a></p>
+      </aside>
+    </div>
+  </details>
+
+  <!-- Antes de codar: template base -->
+  <details class="step step--extra" id="extra-base" data-label="Antes de codar" data-title="Criar o template base">
+
+    <div class="step__body">
+      <p>Toda página do site repete o mesmo começo (o <code>&lt;head&gt;</code> com o Bootstrap), o mesmo menu e o mesmo rodapé. Em vez de copiar isso em cada template, tudo fica num arquivo só, o <code>base.html</code>, e cada página preenche só o miolo.</p>
+
+      <h4 class="substep"><span>1</span> A pasta de templates do projeto</h4>
+      <p>O <code>base.html</code> é usado por todos os apps (<code><span class="input">nome_do_seu_app</span></code> e, depois, <code>accounts</code>), então ele fica numa pasta <code>templates/</code> na raiz do projeto, ao lado do <code>manage.py</code>. O menu, a barra lateral e o rodapé ficam separados em <code>partials/</code>:</p>
+
+      <div class="terminal" data-title="Pasta do projeto">
+        <pre><code>meu_projeto/
+├── app/
+├── <span class="input">nome_do_seu_app</span>/
+<span class="hl">├── templates/</span>
+<span class="hl">│   ├── base.html</span>
+<span class="hl">│   └── partials/</span>
+<span class="hl">│       ├── _navbar.html</span>
+<span class="hl">│       ├── _sidebar.html</span>
+<span class="hl">│       └── _footer.html</span>
+└── manage.py</code></pre>
+      </div>
+
+      <p>O Django só procura templates dentro dos apps. Para ele achar essa pasta, coloque o caminho no <code>"DIRS"</code>:</p>
+
+      <div class="terminal" data-title="app/settings.py">
+        <pre><code>TEMPLATES = [
+    {
+        <span class="str">"BACKEND"</span>: <span class="str">"django.template.backends.django.DjangoTemplates"</span>,
+<span class="hl">        <span class="str">"DIRS"</span>: [BASE_DIR / <span class="str">"templates"</span>],</span>
+        <span class="str">"APP_DIRS"</span>: <span class="kw">True</span>,
+        ...
+    },
+]</code></pre>
+      </div>
+
+      <h4 class="substep"><span>2</span> O base.html</h4>
+      <p>É aqui que entram as linhas do Bootstrap do extra anterior, uma vez só para o site todo:</p>
+
+      <div class="terminal" data-title="templates/base.html">
+        <pre><code><span class="hl"><span class="t-dtl">{% load static %}</span></span>
+<span class="t-tag">&lt;!DOCTYPE</span> <span class="t-attr">html</span><span class="t-tag">&gt;</span>
+<span class="t-tag">&lt;html</span> <span class="t-attr">lang</span>=<span class="t-val">"pt-br"</span><span class="t-tag">&gt;</span>
+<span class="t-tag">&lt;head</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;meta</span> <span class="t-attr">charset</span>=<span class="t-val">"UTF-8"</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;meta</span> <span class="t-attr">name</span>=<span class="t-val">"viewport"</span> <span class="t-attr">content</span>=<span class="t-val">"width=device-width, initial-scale=1.0"</span><span class="t-tag">&gt;</span>
+<span class="hl">    <span class="t-tag">&lt;title</span><span class="t-tag">&gt;</span><span class="t-dtl">{% block title %}</span>Meu projeto<span class="t-dtl">{% endblock %}</span><span class="t-tag">&lt;/title</span><span class="t-tag">&gt;</span></span>
+<span class="hl">    <span class="t-tag">&lt;link</span> <span class="t-attr">href</span>=<span class="t-val">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"</span> <span class="t-attr">rel</span>=<span class="t-val">"stylesheet"</span></span>
+<span class="hl">        <span class="t-attr">integrity</span>=<span class="t-val">"sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"</span> <span class="t-attr">crossorigin</span>=<span class="t-val">"anonymous"</span><span class="t-tag">&gt;</span></span>
+    <span class="t-tag">&lt;link</span> <span class="t-attr">rel</span>=<span class="t-val">"stylesheet"</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% static </span><span class="t-val">'<span class="input">nome_do_seu_app</span>/css/style.css'</span><span class="t-dtl"> %}</span><span class="t-val">"</span><span class="t-tag">&gt;</span>
+<span class="hl">    <span class="t-tag">&lt;script</span> <span class="t-attr">src</span>=<span class="t-val">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"</span></span>
+<span class="hl">        <span class="t-attr">integrity</span>=<span class="t-val">"sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"</span> <span class="t-attr">crossorigin</span>=<span class="t-val">"anonymous"</span></span>
+<span class="hl">        <span class="t-attr">defer</span><span class="t-tag">&gt;</span><span class="t-tag">&lt;/script</span><span class="t-tag">&gt;</span></span>
+<span class="t-tag">&lt;/head</span><span class="t-tag">&gt;</span>
+<span class="t-tag">&lt;body</span> <span class="t-attr">class</span>=<span class="t-val">"d-flex flex-column min-vh-100"</span><span class="t-tag">&gt;</span>
+<span class="hl">    <span class="t-dtl">{% include "partials/_navbar.html" %}</span></span>
+
+    <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-val">"container-fluid flex-grow-1 d-flex flex-column"</span><span class="t-tag">&gt;</span>
+        <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-val">"row flex-grow-1"</span><span class="t-tag">&gt;</span>
+<span class="hl">            <span class="t-dtl">{% include "partials/_sidebar.html" %}</span></span>
+            <span class="t-tag">&lt;main</span> <span class="t-attr">class</span>=<span class="t-val">"col-md-9 col-lg-10 py-4"</span><span class="t-tag">&gt;</span>
+<span class="hl">                <span class="t-dtl">{% block content %}{% endblock %}</span></span>
+            <span class="t-tag">&lt;/main</span><span class="t-tag">&gt;</span>
+        <span class="t-tag">&lt;/div</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;/div</span><span class="t-tag">&gt;</span>
+
+<span class="hl">    <span class="t-dtl">{% include "partials/_footer.html" %}</span></span>
+<span class="t-tag">&lt;/body</span><span class="t-tag">&gt;</span>
+<span class="t-tag">&lt;/html</span><span class="t-tag">&gt;</span></code></pre>
+      </div>
+
+      <h4 class="substep"><span>3</span> Os pedaços: navbar, sidebar e footer</h4>
+
+      <div class="terminal" data-title="templates/partials/_navbar.html">
+        <pre><code><span class="t-tag">&lt;nav</span> <span class="t-attr">class</span>=<span class="t-val">"navbar navbar-dark bg-dark"</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-val">"container-fluid"</span><span class="t-tag">&gt;</span>
+        <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_list'</span><span class="t-dtl"> %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"navbar-brand"</span><span class="t-tag">&gt;</span>Meu projeto<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+<span class="hl">        <span class="t-dtl">{% if user.is_authenticated %}</span></span>
+<span class="hl">            <span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-val">"navbar-text text-white"</span><span class="t-tag">&gt;</span>Olá, <span class="t-var">{{ user.username }}</span><span class="t-tag">&lt;/span</span><span class="t-tag">&gt;</span></span>
+<span class="hl">        <span class="t-dtl">{% endif %}</span></span>
+    <span class="t-tag">&lt;/div</span><span class="t-tag">&gt;</span>
+<span class="t-tag">&lt;/nav</span><span class="t-tag">&gt;</span></code></pre>
+      </div>
+
+      <div class="terminal" data-title="templates/partials/_sidebar.html">
+        <pre><code><span class="t-tag">&lt;aside</span> <span class="t-attr">class</span>=<span class="t-val">"col-md-3 col-lg-2 bg-light border-end py-4"</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;ul</span> <span class="t-attr">class</span>=<span class="t-val">"nav flex-column"</span><span class="t-tag">&gt;</span>
+        <span class="t-tag">&lt;li</span> <span class="t-attr">class</span>=<span class="t-val">"nav-item"</span><span class="t-tag">&gt;</span>
+            <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_list'</span><span class="t-dtl"> %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"nav-link"</span><span class="t-tag">&gt;</span>Pessoas<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+        <span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
+        <span class="t-tag">&lt;li</span> <span class="t-attr">class</span>=<span class="t-val">"nav-item"</span><span class="t-tag">&gt;</span>
+            <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'admin:index'</span><span class="t-dtl"> %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"nav-link"</span><span class="t-tag">&gt;</span>Admin<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+        <span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;/ul</span><span class="t-tag">&gt;</span>
+<span class="t-tag">&lt;/aside</span><span class="t-tag">&gt;</span></code></pre>
+      </div>
+
+      <div class="terminal" data-title="templates/partials/_footer.html">
+        <pre><code><span class="t-tag">&lt;footer</span> <span class="t-attr">class</span>=<span class="t-val">"bg-dark text-white-50 text-center py-3"</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;small</span><span class="t-tag">&gt;</span>&amp;copy; <span class="t-dtl">{% now "Y" %}</span> Meu projeto<span class="t-tag">&lt;/small</span><span class="t-tag">&gt;</span>
+<span class="t-tag">&lt;/footer</span><span class="t-tag">&gt;</span></code></pre>
+      </div>
+
+      <h4 class="substep"><span>?</span> Entendendo o código</h4>
+
+      <dl class="files">
+        <dt><code>"DIRS"</code></dt>
+        <dd>Pastas extras onde o Django procura templates, além das pastas <code>templates/</code> dos apps (<code>APP_DIRS</code>). O <code>BASE_DIR</code> já existe no topo do <code>settings.py</code> e aponta para a raiz do projeto.</dd>
+
+        <dt><code>{% load static %}</code> e <code>{% static '...' %}</code></dt>
+        <dd>O <code>load</code> libera a tag <code>{% static %}</code>, que monta o caminho do arquivo, ex.: <code>/static/<span class="input">nome_do_seu_app</span>/css/style.css</code>. Como o CSS é carregado no <code>base.html</code>, as outras páginas não precisam disso.</dd>
+
+        <dt><code>{% block title %}</code> e <code>{% block content %}</code></dt>
+        <dd>Espaços que cada página preenche. O texto dentro do <code>block title</code> (<em>Meu projeto</em>) é o padrão, usado quando a página não troca.</dd>
+
+        <dt><code>{% include %}</code></dt>
+        <dd>Cola o conteúdo de outro template naquele lugar. Assim o <code>base.html</code> fica curto, e mudar o menu é mexer num arquivo só.</dd>
+
+        <dt><code>_</code> no nome</dt>
+        <dd>Só um costume: o <code>_</code> avisa que o arquivo é um pedaço de página, e não uma página inteira.</dd>
+
+        <dt>Classes do Bootstrap</dt>
+        <dd><code>navbar</code> monta a barra do topo. <code>row</code> com <code>col-md-3</code> e <code>col-md-9</code> divide a tela em sidebar e conteúdo (o Bootstrap divide a linha em 12 partes). <code>d-flex flex-column min-vh-100</code> no <code>&lt;body&gt;</code> e <code>flex-grow-1</code> no meio empurram o footer para o fim da tela, mesmo com pouco conteúdo. O <code>d-flex flex-column</code> no <code>container-fluid</code> e o <code>flex-grow-1</code> na <code>row</code> fazem a sidebar ir até o footer, em vez de parar onde o menu acaba.</dd>
+
+        <dt><code>{% if user.is_authenticated %}</code></dt>
+        <dd>A navbar aparece em todas as páginas, inclusive nas que não pedem login (como a tela de login, mais adiante). O <code>if</code> mostra o "Olá" só para quem entrou. O <code>{{ user }}</code> chega sozinho em todo template, sem passar pela view.</dd>
+
+        <dt><code>{% now "Y" %}</code></dt>
+        <dd>O ano atual. Assim o rodapé não precisa ser trocado todo ano.</dd>
+      </dl>
+
+      <h4 class="substep"><span>4</span> Usar o base numa página</h4>
+      <p>Cada página começa com <code>{% extends %}</code> e coloca o conteúdo dentro do <code>block content</code>. A partir da parte <strong>CRUD · Read</strong>, todos os templates seguem este formato:</p>
+
+      <div class="terminal" data-title="<span class="input">nome_do_seu_app</span>/templates/<span class="input">nome_do_seu_app</span>/qualquer_pagina.html">
+        <pre><code><span class="hl"><span class="t-dtl">{% extends "base.html" %}</span></span>
+
+<span class="hl"><span class="t-dtl">{% block title %}</span>Título da aba<span class="t-dtl">{% endblock %}</span></span>
+
+<span class="hl"><span class="t-dtl">{% block content %}</span></span>
+    <span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Título da página<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
+<span class="hl"><span class="t-dtl">{% endblock %}</span></span></code></pre>
+      </div>
+
+      <dl class="files">
+        <dt><code>{% extends "base.html" %}</code></dt>
+        <dd>Usa o <code>base.html</code> como molde. Precisa ser a <strong>primeira</strong> linha do template.</dd>
+
+        <dt>Fora dos blocks</dt>
+        <dd>Num template com <code>extends</code>, o que fica fora de um <code>{% block %}</code> não aparece.</dd>
+      </dl>
+
+      <aside class="note">
+        <p class="note__title">Ainda não dá para testar</p>
+        <p>O menu aponta para <code><span class="input">nome_do_seu_app</span>:person_list</code>, rota criada na próxima parte. O <code>base.html</code> só é usado quando uma página faz <code>extends</code> dele, então ele começa a funcionar no passo 22.</p>
+      </aside>
+
+      <aside class="note">
+        <p class="note__title">Documentação</p>
+        <p><a href="https://docs.djangoproject.com/pt-br/stable/ref/templates/language/#template-inheritance" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/ref/templates/language</a></p>
       </aside>
     </div>
   </details>

@@ -63,11 +63,17 @@ urlpatterns = [
       <h4 class="substep"><span>1</span> A página de confirmação</h4>
 
       <div class="terminal" data-title="nome_do_seu_app/templates/nome_do_seu_app/person_confirm_delete.html">
-        <pre><code><span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Excluir <span class="t-var">{{ person }}</span>?<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
-<span class="hl"><span class="t-tag">&lt;form</span> <span class="t-attr">method</span>=<span class="t-val">"post"</span><span class="t-tag">&gt;</span></span>
-<span class="hl">    <span class="t-dtl">{% csrf_token %}</span></span>
-    <span class="t-tag">&lt;button</span> <span class="t-attr">type</span>=<span class="t-val">"submit"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-danger"</span><span class="t-tag">&gt;</span>Excluir<span class="t-tag">&lt;/button</span><span class="t-tag">&gt;</span>
-<span class="hl"><span class="t-tag">&lt;/form</span><span class="t-tag">&gt;</span></span></code></pre>
+        <pre><code><span class="hl"><span class="t-dtl">{% extends "base.html" %}</span></span>
+
+<span class="hl"><span class="t-dtl">{% block title %}</span>Excluir pessoa<span class="t-dtl">{% endblock %}</span></span>
+
+<span class="hl"><span class="t-dtl">{% block content %}</span></span>
+    <span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Excluir <span class="t-var">{{ person }}</span>?<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
+<span class="hl">    <span class="t-tag">&lt;form</span> <span class="t-attr">method</span>=<span class="t-val">"post"</span><span class="t-tag">&gt;</span></span>
+<span class="hl">        <span class="t-dtl">{% csrf_token %}</span></span>
+        <span class="t-tag">&lt;button</span> <span class="t-attr">type</span>=<span class="t-val">"submit"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-danger"</span><span class="t-tag">&gt;</span>Excluir<span class="t-tag">&lt;/button</span><span class="t-tag">&gt;</span>
+<span class="hl">    <span class="t-tag">&lt;/form</span><span class="t-tag">&gt;</span></span>
+<span class="hl"><span class="t-dtl">{% endblock %}</span></span></code></pre>
       </div>
 
       <h4 class="substep"><span>2</span> Link de exclusão na lista</h4>
