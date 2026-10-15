@@ -21,21 +21,14 @@
             <tr><th>Situação</th><th>Use</th><th>Exemplo</th></tr>
           </thead>
           <tbody>
-            <tr><td>Todo usuário logado pode ver ou fazer</td><td><code>LoginRequiredMixin</code></td><td>Ver a lista de pessoas. Se for o único mixin do CRUD, qualquer usuário logado também cadastra, edita e exclui.</td></tr>
-            <tr><td>Só alguns usuários podem fazer</td><td><code>PermissionRequiredMixin</code></td><td>Cadastrar, editar, excluir</td></tr>
+            <tr><td>Todo usuário logado pode ver ou fazer</td><td><code>LoginRequiredMixin</code></td><td>Uma página de perfil. Se for o único mixin do CRUD, qualquer usuário logado vê, cadastra, edita e exclui.</td></tr>
+            <tr><td>Só alguns usuários podem fazer</td><td><code>PermissionRequiredMixin</code></td><td>Ver, cadastrar, editar, excluir</td></tr>
             <tr><td>Qualquer um, mesmo sem conta</td><td>Nenhum</td><td>Login e cadastro de conta</td></tr>
           </tbody>
         </table>
       </div>
 
-      <h4 class="substep"><span>1</span> Dizer onde fica o login</h4>
-      <p>No fim do <code>settings.py</code>. Assim não precisa repetir o <code>login_url</code> em cada view:</p>
-
-      <div class="terminal" data-title="app/settings.py">
-        <pre><code><span class="hl">LOGIN_URL = <span class="str">"accounts:login"</span></span></code></pre>
-      </div>
-
-      <h4 class="substep"><span>2</span> Atualizar as views</h4>
+      <h4 class="substep"><span>1</span> Atualizar as views</h4>
 
       <div class="terminal" data-title="nome_do_seu_app/views.py">
         <pre><code><span class="hl"><span class="kw">from</span> django.contrib.auth.mixins <span class="kw">import</span> LoginRequiredMixin, PermissionRequiredMixin</span>
@@ -45,21 +38,26 @@
 <span class="kw">from</span> <span class="input">nome_do_seu_app</span>.models <span class="kw">import</span> Person
 
 
-<span class="kw">class</span> <span class="cls">PersonListView</span>(<span class="hl">LoginRequiredMixin, </span>ListView):
+<span class="kw">class</span> <span class="cls">PersonListView</span>(<span class="hl">LoginRequiredMixin, PermissionRequiredMixin, </span>ListView):
+<span class="hl">    login_url = reverse_lazy(<span class="str">"accounts:login"</span>)</span>
+<span class="hl">    permission_required = <span class="str">"<span class="input">nome_do_seu_app</span>.view_person"</span></span>
     ...
 
 
 <span class="kw">class</span> <span class="cls">PersonCreateView</span>(<span class="hl">LoginRequiredMixin, PermissionRequiredMixin, </span>CreateView):
+<span class="hl">    login_url = reverse_lazy(<span class="str">"accounts:login"</span>)</span>
 <span class="hl">    permission_required = <span class="str">"<span class="input">nome_do_seu_app</span>.add_person"</span></span>
     ...
 
 
 <span class="kw">class</span> <span class="cls">PersonUpdateView</span>(<span class="hl">LoginRequiredMixin, PermissionRequiredMixin, </span>UpdateView):
+<span class="hl">    login_url = reverse_lazy(<span class="str">"accounts:login"</span>)</span>
 <span class="hl">    permission_required = <span class="str">"<span class="input">nome_do_seu_app</span>.change_person"</span></span>
     ...
 
 
 <span class="kw">class</span> <span class="cls">PersonDeleteView</span>(<span class="hl">LoginRequiredMixin, PermissionRequiredMixin, </span>DeleteView):
+<span class="hl">    login_url = reverse_lazy(<span class="str">"accounts:login"</span>)</span>
 <span class="hl">    permission_required = <span class="str">"<span class="input">nome_do_seu_app</span>.delete_person"</span></span>
     ...</code></pre>
       </div>
@@ -68,6 +66,9 @@
         <dt>Ordem das classes</dt>
         <dd>Os mixins vêm <strong>antes</strong> da view genérica (<code>CreateView</code>, <code>UpdateView</code>...). Senão a página abre antes da verificação.</dd>
 
+        <dt><code>login_url</code></dt>
+        <dd>Para onde vai quem não está logado. O <code>reverse_lazy</code> transforma o nome da rota <code>"accounts:login"</code> no endereço da página de login.</dd>
+
         <dt><code>permission_required</code></dt>
         <dd>A permissão exigida, no formato <code>app.acao_model</code>. O Django cria quatro para cada model, sozinho, no <code>migrate</code>: <code>add_person</code>, <code>change_person</code>, <code>delete_person</code> e <code>view_person</code>.</dd>
 
@@ -75,10 +76,10 @@
         <dd>O <code>LoginRequiredMixin</code> vem primeiro: quem não está logado vai para o login. Depois o <code>PermissionRequiredMixin</code> confere a permissão de quem já entrou.</dd>
       </dl>
 
-      <h4 class="substep"><span>3</span> Dar permissão a um usuário</h4>
-      <p>No admin (<code>/admin</code>), abra <strong>Usuários</strong>, escolha o usuário e, em <strong>Permissões do usuário</strong>, adicione por exemplo <em>Can add person</em>. Para vários usuários de uma vez, crie um <strong>Grupo</strong> com as permissões e coloque os usuários nele.</p>
+      <h4 class="substep"><span>2</span> Dar permissão a um usuário</h4>
+      <p>No admin (<code>/admin</code>), abra <strong>Usuários</strong>, escolha o usuário e, em <strong>Permissões do usuário</strong>, adicione por exemplo <em>Can view person</em> e <em>Can add person</em>. Para vários usuários de uma vez, crie um <strong>Grupo</strong> com as permissões e coloque os usuários nele.</p>
 
-      <h4 class="substep"><span>4</span> Esconder os botões de quem não pode</h4>
+      <h4 class="substep"><span>3</span> Esconder os botões de quem não pode</h4>
       <p>Opcional, mas evita botão que leva a um 403. O template recebe as permissões em <code>{{ perms }}</code>:</p>
 
       <div class="terminal" data-title="nome_do_seu_app/templates/nome_do_seu_app/person_list.html">
@@ -96,7 +97,7 @@
       </div>
 
       <h4 class="substep"><span>✓</span> Resultado esperado</h4>
-      <p class="center">Sem login, <code>/pessoas/</code> manda para a tela de login. Logado com uma conta nova, a lista aparece, mas sem os botões Editar e Excluir, e abrir <code>/pessoas/nova/</code> dá 403. Com o superusuário, tudo funciona.</p>
+      <p class="center">Sem login, <code>/pessoas/</code> manda para a tela de login. Logado com uma conta nova, sem permissões, <code>/pessoas/</code> dá 403. Com só <em>Can view person</em>, a lista aparece, mas sem os botões Editar e Excluir, e abrir <code>/pessoas/nova/</code> dá 403. Com o superusuário, tudo funciona.</p>
 
       <aside class="note note--tip">
         <p class="note__title">Superusuário</p>
