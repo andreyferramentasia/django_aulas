@@ -2,6 +2,7 @@
    Dentro de um <details class="step step--video">:
    <figure class="video" data-src="partes/01_video/arquivo.mp4"></figure>
    data-title (texto do botão) e <figcaption> são opcionais.
+   data-target="id" (opcional) muda a seção do botão do feed (js/feed.js).
    O <video> só é criado ao clicar (js/components.js). */
 .video {
   width: min(100%, 300px, calc(80vh * 9 / 16));

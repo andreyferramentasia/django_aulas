@@ -8,6 +8,7 @@
    ========================================================= */
 
 import { buildParts, buildSteps, buildVideos, buildWindowBars } from './components.js';
+import { buildFeed } from './feed.js';
 import { buildToc } from './toc.js';
 
 const content = document.querySelector('#content');
@@ -47,6 +48,7 @@ try {
   buildSteps(content);
   buildWindowBars(content);
   buildVideos(content);
+  buildFeed(content);
   buildToc(toc, content);
   await document.fonts.ready; // fontes mudam a altura do texto, espera antes de rolar
   scrollToHash();

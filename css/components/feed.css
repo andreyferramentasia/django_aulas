@@ -1,0 +1,245 @@
+/* ---------- Feed de vídeos (estilo TikTok) ----------
+   Montado inteiro por js/feed.js a partir dos .video da página:
+   <button class="feed-open">                 botão flutuante
+   <dialog class="feed">
+     <div class="feed__track">                rolagem com encaixe
+       <section class="feed__slide">          uma tela por vídeo
+         <div class="feed__frame"> video + .feed__info
+     .feed__close, .feed__navs > .feed__nav  */
+
+/* ---------- Botão flutuante ---------- */
+.feed-open {
+  --accent: var(--video);
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .55rem 1rem .55rem .55rem;
+  border: 0;
+  border-radius: var(--pill);
+  background: var(--accent);
+  color: var(--surface);
+  font: 600 .95rem var(--sans);
+  box-shadow: 0 0 0 4px var(--video-pale), var(--shadow);
+  cursor: pointer;
+  transition: transform .15s;
+}
+
+.feed-open:hover,
+.feed-open:focus-visible { transform: translateY(-2px); }
+
+.feed-open__icon {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--surface);
+}
+
+/* triângulo deslocado para o centro visual */
+.feed-open__icon::before {
+  content: "";
+  margin-left: .15rem;
+  border-style: solid;
+  border-width: .4rem 0 .4rem .65rem;
+  border-color: transparent transparent transparent var(--accent);
+}
+
+.feed-open__count {
+  min-width: 1.4rem;
+  padding: 0 .35rem;
+  border-radius: var(--pill);
+  background: rgba(255, 255, 255, .2);
+  font-size: .8rem;
+  text-align: center;
+}
+
+.feed-is-open { overflow: hidden; }
+
+/* ---------- Tela cheia ---------- */
+.feed {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: #000;
+  color: var(--on-dark);
+}
+
+.feed::backdrop { background: #000; }
+
+.feed__track {
+  height: 100%;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+
+.feed__track::-webkit-scrollbar { display: none; }
+
+.feed__slide {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  scroll-snap-align: start;
+  scroll-snap-stop: always; /* um vídeo por gesto, como no TikTok */
+}
+
+/* 9:16 na altura da tela, sem passar da largura */
+.feed__frame {
+  position: relative;
+  height: min(100vh - 2rem, (100vw - 2rem) * 16 / 9);
+  height: min(100dvh - 2rem, (100vw - 2rem) * 16 / 9);
+  aspect-ratio: 9 / 16;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #111;
+}
+
+.feed__frame video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Título no topo, longe dos controles do player */
+.feed__info {
+  position: absolute;
+  inset: 0 0 auto;
+  padding: 1rem 1.25rem 3rem;
+  background: linear-gradient(rgba(0, 0, 0, .7), transparent);
+  pointer-events: none;
+}
+
+.feed__part {
+  margin: 0;
+  font-size: .7rem;
+  color: var(--video-pale);
+}
+
+.feed__title {
+  margin: .2rem 0 0;
+  font-size: 1.4rem;
+  line-height: 1.2;
+  color: var(--on-dark);
+}
+
+/* Botão que fecha o feed e leva à seção do vídeo.
+   Embaixo à direita, acima da barra de controles do player. */
+.feed__section {
+  position: absolute;
+  right: 1rem;
+  bottom: 4.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: .1rem;
+  max-width: calc(100% - 2rem);
+  padding: .45rem .9rem .5rem;
+  border: 1px solid rgba(255, 255, 255, .35);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, .12);
+  color: var(--on-dark);
+  font: 600 .9rem/1.25 var(--sans);
+  text-align: right;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: background .2s;
+}
+
+.feed__section:hover,
+.feed__section:focus-visible { background: rgba(255, 255, 255, .25); }
+
+.feed__section-label {
+  font: 400 .7rem var(--mono);
+  color: var(--video-pale);
+}
+
+.feed__section-label::after { content: " →"; }
+
+/* ---------- Botões ---------- */
+.feed__button {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .15);
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.feed__button:hover,
+.feed__button:focus-visible { background: rgba(255, 255, 255, .3); }
+
+.feed__button:disabled { opacity: .3; cursor: default; }
+
+.feed__close {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+}
+
+/* X feito com duas barras */
+.feed__close::before,
+.feed__close::after {
+  content: "";
+  grid-area: 1 / 1;
+  width: 1.2rem;
+  height: 2px;
+  background: var(--on-dark);
+  rotate: 45deg;
+}
+
+.feed__close::after { rotate: -45deg; }
+
+.feed__navs {
+  position: fixed;
+  right: 1.5rem;
+  top: 50%;
+  translate: 0 -50%;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+/* seta feita com duas bordas */
+.feed__nav::before {
+  content: "";
+  width: .7rem;
+  height: .7rem;
+  border-right: 2px solid var(--on-dark);
+  border-bottom: 2px solid var(--on-dark);
+}
+
+.feed__nav--up::before   { rotate: -135deg; margin-top: .3rem; }
+.feed__nav--down::before { rotate: 45deg; margin-bottom: .3rem; }
+
+/* Celular: vídeo ocupa a tela toda e a navegação é por gesto */
+@media (max-width: 600px) {
+  .feed__frame {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    border-radius: 0;
+  }
+
+  .feed__navs { display: none; }
+
+  .feed__info { padding-left: 4.5rem; } /* espaço para o botão fechar */
+
+  .feed-open { right: 1rem; bottom: 1rem; }
+}

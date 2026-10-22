@@ -9,7 +9,7 @@
    ========================================================= */
 
 /** Cria um elemento com classe e texto opcionais. */
-function el(tag, className, text) {
+export function el(tag, className, text) {
   const node = document.createElement(tag);
   if (className) node.className = className;
   if (text !== undefined) node.textContent = text;
@@ -89,6 +89,11 @@ function stopVideo(box) {
   }
   box.classList.remove('is-playing');
   if (playing === box) playing = null;
+}
+
+/** Para o vídeo da página que estiver tocando (usado ao abrir o feed). */
+export function stopPlaying() {
+  if (playing) stopVideo(playing);
 }
 
 function playVideo(box) {
