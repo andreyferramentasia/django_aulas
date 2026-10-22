@@ -123,4 +123,179 @@
     </div>
   </details>
 
+  <details class="step step--extra" id="extra-uv" data-label="Alternativa" data-title="Ambiente com o uv">
+
+    <div class="step__body">
+      <p>O <strong>uv</strong> substitui os passos <a href="#passo-2">2</a>, <a href="#passo-3">3</a> e <a href="#passo-4">4</a>: cria a <code>.venv</code>, instala as bibliotecas e anota tudo em arquivos, com poucos comandos.</p>
+
+      <aside class="note note--tip">
+        <p class="note__title">Site oficial</p>
+        <p><a href="https://docs.astral.sh/uv/" target="_blank" rel="noopener">docs.astral.sh/uv</a></p>
+      </aside>
+
+      <h4 class="substep"><span>1</span> Instalar o uv</h4>
+
+      <div class="terminal" data-title="PowerShell">
+        <pre><code><span class="prompt">&gt;</span> powershell -ExecutionPolicy ByPass -c <span class="str">"irm https://astral.sh/uv/install.ps1 | iex"</span></code></pre>
+      </div>
+
+      <p>Feche e abra o terminal, depois confira:</p>
+
+      <div class="terminal" data-title="Terminal">
+        <pre><code><span class="prompt">&gt;</span> uv --version</code></pre>
+      </div>
+
+      <h4 class="substep"><span>2</span> Iniciar o projeto</h4>
+      <p>Dentro da pasta do projeto, execute:</p>
+
+      <div class="terminal" data-title="Terminal">
+        <pre><code><span class="prompt">&gt;</span> uv init</code></pre>
+      </div>
+
+      <div class="terminal" data-title="Pasta do projeto">
+        <pre><code>meu_projeto/
+├── .git/
+├── .gitignore
+├── .python-version
+├── main.py
+├── pyproject.toml
+└── README.md</code></pre>
+      </div>
+
+      <dl class="files">
+        <dt><code>.git/</code></dt>
+        <dd>O <code>uv init</code> já roda o <code>git init</code>, não precisa fazer o <a href="#passo-12">passo 12</a>.</dd>
+
+        <dt><code>.gitignore</code></dt>
+        <dd>Já vem ignorando a <code>.venv</code>. Complete com o conteúdo do <a href="#passo-11">passo 11</a>.</dd>
+
+        <dt><code>.python-version</code></dt>
+        <dd>Versão do Python que o projeto usa.</dd>
+
+        <dt><code>main.py</code></dt>
+        <dd>Arquivo de exemplo, pode apagar.</dd>
+
+        <dt><code>pyproject.toml</code></dt>
+        <dd>Ficha do projeto: nome, versão do Python e bibliotecas.</dd>
+
+        <dt><code>README.md</code></dt>
+        <dd>Descrição do projeto, aparece na página do GitHub.</dd>
+      </dl>
+
+      <h4 class="substep"><span>3</span> Adicionar as bibliotecas</h4>
+
+      <div class="terminal" data-title="Terminal">
+        <pre><code><span class="prompt">&gt;</span> uv add django pillow
+<span class="prompt">&gt;</span> uv add django-jazzmin==3.0.1</code></pre>
+      </div>
+
+      <p>O primeiro comando instala <strong>duas</strong> bibliotecas de uma vez, o <code>django</code> e o <code>pillow</code>. Basta separar os nomes com espaço.</p>
+
+      <aside class="note note--tip">
+        <p class="note__title">Sem uv venv</p>
+        <p>O <code>uv add</code> cria a <code>.venv</code> sozinho e instala as bibliotecas. Não precisa rodar <code>uv venv</code>, <code>uv lock</code> nem <code>uv sync</code>.</p>
+      </aside>
+
+      <h4 class="substep"><span>✓</span> Arquivos novos</h4>
+      <p>Depois do primeiro <code>uv add</code>, aparecem dois itens na pasta:</p>
+
+      <div class="terminal" data-title="Pasta do projeto">
+        <pre><code>meu_projeto/
+├── .git/
+<span class="hl">├── .venv/</span>
+├── .gitignore
+├── .python-version
+├── main.py
+├── pyproject.toml
+├── README.md
+<span class="hl">└── uv.lock</span></code></pre>
+      </div>
+
+      <dl class="files">
+        <dt><code>.venv/</code></dt>
+        <dd>O ambiente virtual, igual ao do <a href="#passo-2">passo 2</a>. Fica fora do Git.</dd>
+
+        <dt><code>uv.lock</code></dt>
+        <dd>Anota a versão <strong>exata</strong> de cada biblioteca instalada, inclusive as que o Django puxa junto (<code>asgiref</code>, <code>sqlparse</code>, <code>tzdata</code>). É ele que permite recriar a mesma <code>.venv</code> em outro computador.</dd>
+      </dl>
+
+      <aside class="note">
+        <p class="note__title">Atenção</p>
+        <p>O <code>uv.lock</code> <strong>vai para o Git</strong>, mas não edite à mão. O <code>uv add</code> e o <code>uv remove</code> atualizam ele sozinhos.</p>
+      </aside>
+
+      <h4 class="substep"><span>4</span> Entendendo o pyproject.toml</h4>
+
+      <div class="terminal" data-title="pyproject.toml">
+        <pre><code>[project]
+name = <span class="str">"meu-projeto"</span>
+version = <span class="str">"0.1.0"</span>
+description = <span class="str">"Add your description here"</span>
+readme = <span class="str">"README.md"</span>
+<span class="hl">requires-python = <span class="str">"&gt;=3.13"</span></span>
+<span class="hl">dependencies = [</span>
+<span class="hl">    <span class="str">"django&gt;=6.1.2"</span>,</span>
+<span class="hl">    <span class="str">"django-jazzmin==3.0.1"</span>,</span>
+<span class="hl">    <span class="str">"pillow&gt;=13.0.0"</span>,</span>
+<span class="hl">]</span></code></pre>
+      </div>
+
+      <dl class="files">
+        <dt><code>requires-python</code></dt>
+        <dd><code>&gt;=3.13</code> quer dizer Python 3.13 <strong>ou mais novo</strong>.</dd>
+
+        <dt><code>dependencies</code></dt>
+        <dd>Lista das bibliotecas do projeto, o <code>uv add</code> escreve aqui. Você não edita à mão.</dd>
+
+        <dt><code>&gt;=6.1.2</code></dt>
+        <dd>Versão mínima. Aceita a 6.1.2 ou qualquer uma mais nova.</dd>
+
+        <dt><code>==3.0.1</code></dt>
+        <dd>Versão exata. Só aceita a 3.0.1.</dd>
+
+        <dt><code>pillow</code></dt>
+        <dd>Biblioteca de imagens, exigida pelo Django para usar <code>ImageField</code>.</dd>
+      </dl>
+
+      <aside class="note note--tip">
+        <p class="note__title">pyproject.toml x uv.lock</p>
+        <p>O <code>pyproject.toml</code> diz o que o projeto <strong>aceita</strong> (<code>django&gt;=6.1.2</code>). O <code>uv.lock</code> diz o que foi <strong>instalado</strong> (exatamente <code>django==6.1.2</code>).</p>
+      </aside>
+
+      <h4 class="substep"><span>5</span> Rodar comandos</h4>
+      <p>Coloque <code>uv run</code> na frente do comando e ele roda direto com a <code>.venv</code> do projeto, <strong>sem precisar ativar</strong>:</p>
+
+      <div class="terminal" data-title="Terminal">
+        <pre><code><span class="prompt">&gt;</span> uv run django-admin startproject app .
+<span class="prompt">&gt;</span> uv run python manage.py runserver</code></pre>
+      </div>
+
+      <aside class="note note--tip">
+        <p class="note__title">Adeus erro de permissão</p>
+        <p>Como não roda o <code>Activate.ps1</code>, o PowerShell não bloqueia nada. Não precisa mexer no <code>Set-ExecutionPolicy</code> do <a href="#passo-3">passo 3</a>.</p>
+      </aside>
+
+      <aside class="note note--tip">
+        <p class="note__title">Prefere ativar?</p>
+        <p>A ativação do <a href="#passo-3">passo 3</a> funciona igual. Com a <code>(.venv)</code> ativa, use os comandos do tutorial normalmente, sem o <code>uv run</code>.</p>
+      </aside>
+
+      <h4 class="substep"><span>6</span> Outros comandos</h4>
+
+      <dl class="files">
+        <dt><code>uv sync</code></dt>
+        <dd>Recria a <code>.venv</code> a partir do <code>uv.lock</code>. Use depois de clonar em outro computador, no lugar dos passos 2 a 4.</dd>
+
+        <dt><code>uv lock</code></dt>
+        <dd>Regera o <code>uv.lock</code>. Só é preciso se você editou o <code>pyproject.toml</code> à mão.</dd>
+
+        <dt><code>uv remove nome</code></dt>
+        <dd>Desinstala a biblioteca e tira do <code>pyproject.toml</code>.</dd>
+
+        <dt><code>uv tree</code></dt>
+        <dd>Mostra as bibliotecas instaladas e do que cada uma depende.</dd>
+      </dl>
+    </div>
+  </details>
+
 </section>
