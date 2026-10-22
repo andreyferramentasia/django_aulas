@@ -7,7 +7,7 @@
    python -m http.server
    ========================================================= */
 
-import { buildParts, buildSteps, buildWindowBars } from './components.js';
+import { buildParts, buildSteps, buildVideos, buildWindowBars } from './components.js';
 import { buildToc } from './toc.js';
 
 const content = document.querySelector('#content');
@@ -46,6 +46,7 @@ try {
   buildParts(content);
   buildSteps(content);
   buildWindowBars(content);
+  buildVideos(content);
   buildToc(toc, content);
   await document.fonts.ready; // fontes mudam a altura do texto, espera antes de rolar
   scrollToHash();

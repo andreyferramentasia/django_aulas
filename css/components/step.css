@@ -69,6 +69,16 @@
   box-shadow: 0 0 0 4px var(--accent-pale);
 }
 
+/* Triângulo de play em CSS; o glifo ▶ fica torto conforme a fonte.
+   O deslocamento à direita compensa o centro visual do triângulo. */
+.step--video .step__number::before {
+  content: "";
+  margin-left: .25rem;
+  border-style: solid;
+  border-width: .6rem 0 .6rem 1rem;
+  border-color: transparent transparent transparent var(--surface);
+}
+
 .step__label {
   font-size: .72rem;
   color: var(--gold);

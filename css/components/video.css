@@ -1,0 +1,96 @@
+/* ---------- Vídeo vertical (formato TikTok, 9:16) ----------
+   Dentro de um <details class="step step--video">:
+   <figure class="video" data-src="partes/01_video/arquivo.mp4"></figure>
+   data-title (texto do botão) e <figcaption> são opcionais.
+   O <video> só é criado ao clicar (js/components.js). */
+.video {
+  width: min(100%, 300px, calc(80vh * 9 / 16));
+  margin: 1.5rem auto;
+}
+
+.video__frame {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  border: 1px solid var(--term-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 40%, var(--accent), var(--term-bg) 70%);
+  box-shadow: var(--shadow);
+}
+
+/* cover corta o que sobrar e preenche o quadro 9:16 */
+.video__frame video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+}
+
+/* Tela cheia como TikTok e Shorts: vídeo inteiro na altura da tela,
+   centralizado, fundo escuro dos lados. Regras separadas porque um
+   seletor desconhecido invalida a regra inteira. */
+.video__frame video:fullscreen {
+  object-fit: contain;
+  background: #000;
+}
+
+.video__frame video:-webkit-full-screen {
+  object-fit: contain;
+  background: #000;
+}
+
+.video__play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  border: 0;
+  background: none;
+  color: var(--on-dark);
+  font: 600 1rem/1.3 var(--sans);
+  text-align: center;
+  cursor: pointer;
+}
+
+.video__icon {
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  background: var(--on-dark);
+  transition: transform .15s;
+}
+
+/* triângulo de play */
+.video__icon::before {
+  content: "";
+  margin-left: .3rem;
+  border-style: solid;
+  border-width: .8rem 0 .8rem 1.3rem;
+  border-color: transparent transparent transparent var(--accent);
+}
+
+.video__play:hover .video__icon,
+.video__play:focus-visible .video__icon { transform: scale(1.08); }
+
+.video__hint {
+  font: 400 .8rem var(--mono);
+  color: var(--term-muted);
+}
+
+.video.is-playing .video__play { display: none; }
+
+.video figcaption {
+  margin-top: .6rem;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--ink-soft);
+  text-align: center;
+}

@@ -3,7 +3,7 @@
    Nada para manter à mão, basta criar o passo em partes/*.html.
    ========================================================= */
 
-const VARIANTS = ['front', 'extra'];
+const VARIANTS = ['front', 'extra', 'video'];
 
 function tocItem(step) {
   const li = document.createElement('li');

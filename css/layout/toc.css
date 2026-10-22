@@ -87,6 +87,11 @@
 
 .toc__item--extra a { font-style: italic; }
 
+/* Vídeo também fica fora da numeração */
+.toc__item--video { counter-increment: none; }
+
+.toc__item--video::before { content: "▶ "; }
+
 .toc__list a {
   color: var(--ink);
   text-decoration: none;

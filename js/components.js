@@ -42,17 +42,24 @@ export function buildParts(root) {
   });
 }
 
+/** Número e rótulo padrão dos passos que não entram na contagem. */
+const UNCOUNTED = {
+  'step--extra': ['+', 'Extra'],
+  'step--video': ['', 'Vídeo'], // o triângulo é desenhado em CSS
+};
+
 /**
- * Cabeçalho clicável de cada passo. Extras não entram na contagem.
+ * Cabeçalho clicável de cada passo. Extras e vídeos não entram na contagem.
  * data-number e data-label (opcionais) trocam o número e o rótulo padrão.
  */
 export function buildSteps(root) {
   let count = 0;
 
   root.querySelectorAll('.step').forEach((step) => {
-    const isExtra = step.classList.contains('step--extra');
-    const number = step.dataset.number ?? (isExtra ? '+' : String(++count));
-    const label = step.dataset.label ?? (isExtra ? 'Extra' : `Passo ${number}`);
+    const variant = Object.keys(UNCOUNTED).find((name) => step.classList.contains(name));
+    const [defaultNumber, defaultLabel] = variant ? UNCOUNTED[variant] : [];
+    const number = step.dataset.number ?? defaultNumber ?? String(++count);
+    const label = step.dataset.label ?? defaultLabel ?? `Passo ${number}`;
 
     const text = el('div');
     text.append(
@@ -64,6 +71,59 @@ export function buildSteps(root) {
     summary.append(el('span', 'step__number', number), text);
     step.prepend(summary);
   });
+}
+
+/**
+ * Vídeo que só baixa ao clicar. Antes disso é só um botão de play,
+ * e apenas um vídeo toca por vez.
+ */
+let playing = null;
+
+function stopVideo(box) {
+  const video = box.querySelector('video');
+  if (video) {
+    video.pause();
+    video.removeAttribute('src');
+    video.load(); // encerra o download em andamento
+    video.remove();
+  }
+  box.classList.remove('is-playing');
+  if (playing === box) playing = null;
+}
+
+function playVideo(box) {
+  if (playing) stopVideo(playing);
+
+  const video = document.createElement('video');
+  video.src = box.dataset.src;
+  video.controls = true;
+  video.playsInline = true;
+  video.autoplay = true;
+  box.querySelector('.video__frame').append(video);
+  box.classList.add('is-playing');
+  playing = box;
+}
+
+export function buildVideos(root) {
+  root.querySelectorAll('.video[data-src]').forEach((box) => {
+    const button = el('button', 'video__play');
+    button.type = 'button';
+    button.append(
+      el('span', 'video__icon'),
+      el('span', '', box.dataset.title ?? 'Assistir'),
+      el('span', 'video__hint', 'clique para carregar'),
+    );
+    button.addEventListener('click', () => playVideo(box));
+
+    const frame = el('div', 'video__frame');
+    frame.append(button);
+    box.prepend(frame);
+  });
+
+  // fechar o passo para o vídeo que está dentro dele (toggle não sobe, por isso a captura)
+  root.addEventListener('toggle', (event) => {
+    if (!event.target.open && playing && event.target.contains(playing)) stopVideo(playing);
+  }, true);
 }
 
 /** Barra de janela (três bolinhas + título) em terminais e capturas. */

@@ -28,6 +28,10 @@
   --gold-pale:    #f7eed8;
   --danger:       #c0392b;
 
+  /* Vídeo */
+  --video:        #8a3557;
+  --video-pale:   #f5e4eb;
+
   /* Cor de destaque: componentes usam --accent, os modificadores trocam o valor */
   --accent:       var(--django);
   --accent-pale:  var(--django-pale);
@@ -67,4 +71,11 @@
 .color-legend__dot--extra {
   --accent:      var(--gold);
   --accent-pale: var(--gold-pale);
+}
+
+.step--video,
+.toc__item--video,
+.color-legend__dot--video {
+  --accent:      var(--video);
+  --accent-pale: var(--video-pale);
 }
