@@ -8,6 +8,7 @@
    ========================================================= */
 
 import { el, stopPlaying } from './components.js';
+import { reveal } from './search.js';
 
 /**
  * Seção que o vídeo explica: data-target da figure, ou o primeiro passo
@@ -37,6 +38,7 @@ function collectVideos(root) {
 
 /** Abre o passo (se for <details>) e rola até ele. */
 function goToSection(target) {
+  reveal(target); // pode estar escondido pela busca
   if (target.tagName === 'DETAILS') target.open = true;
   history.replaceState(null, '', `#${target.id}`);
   target.scrollIntoView({ behavior: 'smooth', block: 'start' });

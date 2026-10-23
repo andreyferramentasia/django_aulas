@@ -7,27 +7,27 @@
 
       <h4 class="substep"><span>1</span> A view</h4>
 
-      <div class="terminal" data-title="nome_do_seu_app/views.py">
+      <div class="terminal" data-title="courses/views.py">
         <pre><code><span class="kw">from</span> django.views.generic <span class="kw">import</span> ListView
-<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.models <span class="kw">import</span> Person
+<span class="kw">from</span> <span class="input">courses</span>.models <span class="kw">import</span> Course  <span class="cm"># troque courses pelo nome do seu app</span>
 
 
-<span class="kw">class</span> <span class="cls">PersonListView</span>(ListView):
-    model = Person
-<span class="hl">    template_name = <span class="str">"<span class="input">nome_do_seu_app</span>/person_list.html"</span></span>
-<span class="hl">    context_object_name = <span class="str">"people"</span></span>
+<span class="kw">class</span> <span class="cls">CourseListView</span>(ListView):
+    model = Course
+<span class="hl">    template_name = <span class="str">"<span class="input">courses</span>/course_list.html"</span></span>
+<span class="hl">    context_object_name = <span class="str">"courses"</span></span>
     paginate_by = <span class="num">10</span></code></pre>
       </div>
 
       <dl class="files">
         <dt><code>model</code></dt>
-        <dd>Model listado. A view faz <code>Person.objects.all()</code>, respeitando o <code>ordering</code> do <code>Meta</code>.</dd>
+        <dd>Model listado. A view faz <code>Course.objects.all()</code>, respeitando o <code>ordering</code> do <code>Meta</code>.</dd>
 
         <dt><code>template_name</code></dt>
-        <dd>Template usado. Opcional, o padrão já é <code><span class="input">nome_do_seu_app</span>/person_list.html</code>, mas deixar escrito fica mais claro.</dd>
+        <dd>Template usado. Opcional, o padrão já é <code><span class="input">courses</span>/course_list.html</code>, mas deixar escrito fica mais claro.</dd>
 
         <dt><code>context_object_name</code></dt>
-        <dd>Nome da lista no template. Sem ele, use <code>person_list</code> ou <code>object_list</code>.</dd>
+        <dd>Nome da lista no template. Sem ele, use <code>course_list</code> ou <code>object_list</code>.</dd>
 
         <dt><code>paginate_by</code></dt>
         <dd>Quantos registros por página. Opcional.</dd>
@@ -35,27 +35,31 @@
 
       <h4 class="substep"><span>2</span> As rotas do app</h4>
 
-      <div class="terminal" data-title="nome_do_seu_app/urls.py">
+      <div class="terminal" data-title="courses/urls.py">
         <pre><code><span class="kw">from</span> django.urls <span class="kw">import</span> path
-<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.views <span class="kw">import</span> PersonListView
+<span class="kw">from</span> <span class="input">courses</span>.views <span class="kw">import</span> CourseListView  <span class="cm"># troque courses pelo nome do seu app</span>
 
-app_name = <span class="str">"<span class="input">nome_do_seu_app</span>"</span>
+app_name = <span class="str">"<span class="input">courses</span>"</span>
 
 urlpatterns = [
-<span class="hl">    path(<span class="str">"pessoas/"</span>, PersonListView.as_view(), name=<span class="str">"person_list"</span>),</span>
+<span class="hl">    path(<span class="str">"listar/"</span>, CourseListView.as_view(), name=<span class="str">"course_list"</span>),</span>
 ]</code></pre>
       </div>
 
       <h4 class="substep"><span>3</span> Incluir no projeto</h4>
 
       <div class="terminal" data-title="app/urls.py">
-        <pre><code><span class="kw">from</span> django.contrib <span class="kw">import</span> admin
+        <pre><code><span class="kw">from</span> django.conf <span class="kw">import</span> settings
+<span class="kw">from</span> django.conf.urls.static <span class="kw">import</span> static
+<span class="kw">from</span> django.contrib <span class="kw">import</span> admin
 <span class="kw">from</span> django.urls <span class="kw">import</span> path, include
 
 urlpatterns = [
     path(<span class="str">'admin/'</span>, admin.site.urls),
-<span class="hl">    path(<span class="str">''</span>, include(<span class="str">'<span class="input">nome_do_seu_app</span>.urls'</span>)),</span>
-]</code></pre>
+<span class="hl">    path(<span class="str">'courses/'</span>, include(<span class="str">'<span class="input">courses</span>.urls'</span>)),</span>  <span class="cm"># troque courses pelo nome do seu app</span>
+]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)</code></pre>
       </div>
 
       <dl class="files">
@@ -63,14 +67,22 @@ urlpatterns = [
         <dd>Transforma a classe em uma view que o <code>path</code> entende. Sempre necessário em views de classe.</dd>
 
         <dt><code>name</code></dt>
-        <dd>Apelido da rota, usado nos links: <code>{% url '<span class="input">nome_do_seu_app</span>:person_list' %}</code>.</dd>
+        <dd>Apelido da rota, usado nos links: <code>{% url '<span class="input">courses</span>:course_list' %}</code>.</dd>
 
         <dt><code>app_name</code></dt>
         <dd>Namespace do app, evita conflito se outro app tiver uma rota com o mesmo <code>name</code>.</dd>
 
         <dt><code>include</code></dt>
         <dd>Liga as rotas do app às rotas do projeto.</dd>
+
+        <dt><code>'courses/'</code></dt>
+        <dd>Prefixo de todas as rotas do app. O <code>"listar/"</code> do app vira <code>/courses/listar/</code>, e as próximas seguem o mesmo padrão: <code>/courses/criar/</code>, <code>/courses/3/editar/</code>, <code>/courses/3/deletar/</code>.</dd>
       </dl>
+
+      <aside class="note note--tip">
+        <p class="note__title">E a página inicial?</p>
+        <p>Com o prefixo, nenhuma rota responde em <code>http://127.0.0.1:8000/</code>, então ela mostra <em>Page not found (404)</em>. É normal: a lista fica em <code>/courses/listar/</code>.</p>
+      </aside>
 
       <aside class="note">
         <p class="note__title">Documentação</p>
@@ -84,19 +96,19 @@ urlpatterns = [
     <div class="step__body">
       <h4 class="substep"><span>1</span> A página da lista</h4>
 
-      <div class="terminal" data-title="nome_do_seu_app/templates/nome_do_seu_app/person_list.html">
+      <div class="terminal" data-title="courses/templates/courses/course_list.html">
         <pre><code><span class="hl"><span class="t-dtl">{% extends "base.html" %}</span></span>
 
-<span class="hl"><span class="t-dtl">{% block title %}</span>Pessoas<span class="t-dtl">{% endblock %}</span></span>
+<span class="hl"><span class="t-dtl">{% block title %}</span>Cursos<span class="t-dtl">{% endblock %}</span></span>
 
 <span class="hl"><span class="t-dtl">{% block content %}</span></span>
-    <span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Pessoas<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Cursos<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
 
     <span class="t-tag">&lt;ul</span><span class="t-tag">&gt;</span>
-<span class="hl">        <span class="t-dtl">{% for person in people %}</span></span>
-            <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span><span class="t-var">{{ person.first_name }}</span> <span class="t-var">{{ person.last_name }}</span><span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
+<span class="hl">        <span class="t-dtl">{% for course in courses %}</span></span>
+            <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span><span class="t-var">{{ course.name }}</span><span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
 <span class="hl">        <span class="t-dtl">{% empty %}</span></span>
-            <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span>Nenhuma pessoa cadastrada.<span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
+            <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span>Nenhum curso cadastrado.<span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
 <span class="hl">        <span class="t-dtl">{% endfor %}</span></span>
     <span class="t-tag">&lt;/ul</span><span class="t-tag">&gt;</span>
 
@@ -116,7 +128,7 @@ urlpatterns = [
 
       <h4 class="substep"><span>2</span> O CSS</h4>
 
-      <div class="terminal" data-title="nome_do_seu_app/static/nome_do_seu_app/css/style.css">
+      <div class="terminal" data-title="courses/static/courses/css/style.css">
         <pre><code>main h1 {
     margin-bottom: <span class="num">24px</span>;
 }</code></pre>
@@ -150,11 +162,11 @@ urlpatterns = [
         <pre><code><span class="prompt">&gt;</span> python manage.py runserver</code></pre>
       </div>
 
-      <p class="center">Acesse <code>http://127.0.0.1:8000/pessoas/</code> e veja as pessoas cadastradas no admin.</p>
+      <p class="center">Acesse <code>http://127.0.0.1:8000/courses/listar/</code> e veja os cursos cadastrados no admin.</p>
 
       <aside class="note">
         <p class="note__title">TemplateDoesNotExist?</p>
-        <p>Confira o caminho: <code>templates/<span class="input">nome_do_seu_app</span>/person_list.html</code>, dentro do app, e se o app está no <code>INSTALLED_APPS</code>. Se o erro falar do <code>base.html</code>, confira o <code>"DIRS"</code> no <code>settings.py</code> e se a pasta <code>templates/</code> está na raiz do projeto.</p>
+        <p>Confira o caminho: <code>templates/<span class="input">courses</span>/course_list.html</code>, dentro do app, e se o app está no <code>INSTALLED_APPS</code>. Se o erro falar do <code>base.html</code>, confira o <code>"DIRS"</code> no <code>settings.py</code> e se a pasta <code>templates/</code> está na raiz do projeto.</p>
       </aside>
 
       <aside class="note note--tip">
@@ -164,90 +176,114 @@ urlpatterns = [
     </div>
   </details>
 
-  <details class="step step--extra" id="extra-detailview" data-title="Ver uma pessoa com a DetailView">
+  <details class="step step--extra" id="extra-detailview" data-title="Ver um curso com a DetailView">
 
     <div class="step__body">
-      <p>A <code>ListView</code> mostra várias pessoas. A <code>DetailView</code> mostra <strong>uma</strong>, buscada pelo <code>pk</code> que vem na URL.</p>
+      <p>A <code>ListView</code> mostra vários cursos. A <code>DetailView</code> mostra <strong>um</strong>, buscada pelo <code>pk</code> que vem na URL.</p>
 
       <h4 class="substep"><span>1</span> A view</h4>
 
-      <div class="terminal" data-title="nome_do_seu_app/views.py">
+      <div class="terminal" data-title="courses/views.py">
         <pre><code><span class="kw">from</span> django.views.generic <span class="kw">import</span> ListView<span class="hl">, DetailView</span>
-<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.models <span class="kw">import</span> Person
+<span class="kw">from</span> <span class="input">courses</span>.models <span class="kw">import</span> Course  <span class="cm"># troque courses pelo nome do seu app</span>
 
 
-<span class="kw">class</span> <span class="cls">PersonListView</span>(ListView):
+<span class="kw">class</span> <span class="cls">CourseListView</span>(ListView):
     ...
 
 
-<span class="hl"><span class="kw">class</span> <span class="cls">PersonDetailView</span>(DetailView):</span>
-<span class="hl">    model = Person</span>
-<span class="hl">    template_name = <span class="str">"<span class="input">nome_do_seu_app</span>/person_detail.html"</span></span>
-<span class="hl">    context_object_name = <span class="str">"person"</span></span></code></pre>
+<span class="hl"><span class="kw">class</span> <span class="cls">CourseDetailView</span>(DetailView):</span>
+<span class="hl">    model = Course</span>
+<span class="hl">    template_name = <span class="str">"<span class="input">courses</span>/course_detail.html"</span></span>
+<span class="hl">    context_object_name = <span class="str">"course"</span></span></code></pre>
       </div>
 
       <dl class="files">
         <dt><code>model</code></dt>
-        <dd>Model buscado. A view faz <code>Person.objects.get(pk=...)</code> com o <code>pk</code> da URL. Se não existir, dá erro <strong>404</strong>.</dd>
+        <dd>Model buscado. A view faz <code>Course.objects.get(pk=...)</code> com o <code>pk</code> da URL. Se não existir, dá erro <strong>404</strong>.</dd>
 
         <dt><code>context_object_name</code></dt>
-        <dd>Nome da pessoa no template. Sem ele, use <code>person</code> ou <code>object</code>.</dd>
+        <dd>Nome do curso no template. Sem ele, use <code>course</code> ou <code>object</code>.</dd>
       </dl>
 
       <h4 class="substep"><span>2</span> A rota</h4>
 
-      <div class="terminal" data-title="nome_do_seu_app/urls.py">
+      <div class="terminal" data-title="courses/urls.py">
         <pre><code><span class="kw">from</span> django.urls <span class="kw">import</span> path
-<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.views <span class="kw">import</span> PersonListView<span class="hl">, PersonDetailView</span>
+<span class="kw">from</span> <span class="input">courses</span>.views <span class="kw">import</span> CourseListView<span class="hl">, CourseDetailView</span>  <span class="cm"># troque courses pelo nome do seu app</span>
 
-app_name = <span class="str">"<span class="input">nome_do_seu_app</span>"</span>
+app_name = <span class="str">"<span class="input">courses</span>"</span>
 
 urlpatterns = [
-    path(<span class="str">"pessoas/"</span>, PersonListView.as_view(), name=<span class="str">"person_list"</span>),
-<span class="hl">    path(<span class="str">"pessoas/&lt;int:pk&gt;/"</span>, PersonDetailView.as_view(), name=<span class="str">"person_detail"</span>),</span>
+    path(<span class="str">"listar/"</span>, CourseListView.as_view(), name=<span class="str">"course_list"</span>),
+<span class="hl">    path(<span class="str">"&lt;int:pk&gt;/ver/"</span>, CourseDetailView.as_view(), name=<span class="str">"course_detail"</span>),</span>
 ]</code></pre>
       </div>
 
       <dl class="files">
         <dt><code>&lt;int:pk&gt;</code></dt>
-        <dd>Pega o número da URL e entrega para a view como <code>pk</code>. Em <code>/pessoas/3/</code>, o <code>pk</code> é <code>3</code>.</dd>
+        <dd>Pega o número da URL e entrega para a view como <code>pk</code>. Em <code>/courses/3/ver/</code>, o <code>pk</code> é <code>3</code>.</dd>
       </dl>
 
       <h4 class="substep"><span>3</span> O template</h4>
 
-      <div class="terminal" data-title="nome_do_seu_app/templates/nome_do_seu_app/person_detail.html">
+      <div class="terminal" data-title="courses/templates/courses/course_detail.html">
         <pre><code><span class="hl"><span class="t-dtl">{% extends "base.html" %}</span></span>
 
-<span class="hl"><span class="t-dtl">{% block title %}</span>Pessoa<span class="t-dtl">{% endblock %}</span></span>
+<span class="hl"><span class="t-dtl">{% block title %}</span>Curso<span class="t-dtl">{% endblock %}</span></span>
 
 <span class="hl"><span class="t-dtl">{% block content %}</span></span>
-    <span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span><span class="t-var">{{ person.first_name }}</span> <span class="t-var">{{ person.last_name }}</span><span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
-    <span class="t-tag">&lt;p</span><span class="t-tag">&gt;</span>Nome: <span class="t-var">{{ person.first_name }}</span><span class="t-tag">&lt;/p</span><span class="t-tag">&gt;</span>
-    <span class="t-tag">&lt;p</span><span class="t-tag">&gt;</span>Sobrenome: <span class="t-var">{{ person.last_name }}</span><span class="t-tag">&lt;/p</span><span class="t-tag">&gt;</span>
-    <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_list'</span><span class="t-dtl"> %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-secondary"</span><span class="t-tag">&gt;</span>Voltar<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span><span class="t-var">{{ course.name }}</span><span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
+<span class="hl">    <span class="t-dtl">{% if course.image %}</span></span>
+<span class="hl">        <span class="t-tag">&lt;img</span> <span class="t-attr">src</span>=<span class="t-val">"</span><span class="t-var">{{ course.image.url }}</span><span class="t-val">"</span> <span class="t-attr">alt</span>=<span class="t-val">"</span><span class="t-var">{{ course.name }}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"img-fluid rounded mb-3"</span><span class="t-tag">&gt;</span></span>
+<span class="hl">    <span class="t-dtl">{% endif %}</span></span>
+    <span class="t-tag">&lt;p</span><span class="t-tag">&gt;</span>Professor: <span class="t-var">{{ course.teacher }}</span><span class="t-tag">&lt;/p</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;p</span><span class="t-tag">&gt;</span>Período: <span class="t-var">{{ course.get_period_display }}</span><span class="t-tag">&lt;/p</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;p</span><span class="t-tag">&gt;</span>Carga horária: <span class="t-var">{{ course.workload }}</span> h<span class="t-tag">&lt;/p</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;p</span><span class="t-tag">&gt;</span><span class="t-var">{{ course.description }}</span><span class="t-tag">&lt;/p</span><span class="t-tag">&gt;</span>
+<span class="hl">    <span class="t-dtl">{% if course.material %}</span></span>
+<span class="hl">        <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-var">{{ course.material.url }}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-outline-primary"</span> <span class="t-attr">target</span>=<span class="t-val">"_blank"</span><span class="t-tag">&gt;</span>Baixar material<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span></span>
+<span class="hl">    <span class="t-dtl">{% endif %}</span></span>
+    <span class="t-cm">{# troque courses pelo nome do seu app #}</span>
+    <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">courses</span>:course_list'</span><span class="t-dtl"> %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-secondary"</span><span class="t-tag">&gt;</span>Voltar<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
 <span class="hl"><span class="t-dtl">{% endblock %}</span></span></code></pre>
       </div>
 
-      <h4 class="substep"><span>4</span> O botão na lista</h4>
-      <p>No <code>person_list.html</code>, cada pessoa ganha um botão <strong>Ver</strong>, com as classes do Bootstrap:</p>
+      <dl class="files">
+        <dt><code>{{ course.teacher }}</code></dt>
+        <dd>O professor ligado pela <code>ForeignKey</code>. Aparece o texto do <code>__str__</code> do <code>Person</code>: nome e sobrenome.</dd>
 
-      <div class="terminal" data-title="nome_do_seu_app/templates/nome_do_seu_app/person_list.html">
-        <pre><code><span class="t-dtl">{% for person in people %}</span>
+        <dt><code>{{ course.get_period_display }}</code></dt>
+        <dd>Mostra "Matutino" em vez de "M", como visto no <a href="#passo-17">passo 17</a>. No template vai sem os parênteses.</dd>
+
+        <dt><code>{{ course.image.url }}</code></dt>
+        <dd>O endereço do arquivo em <code>/media/</code>. O <code>.url</code> só funciona por causa da configuração do media na parte <strong>Templates, Static e Media</strong>.</dd>
+
+        <dt><code>{% if course.image %}</code></dt>
+        <dd>A imagem e o material são opcionais (<code>blank=True</code>). Sem o <code>if</code>, um curso sem arquivo dá erro ao pedir o <code>.url</code>.</dd>
+      </dl>
+
+      <h4 class="substep"><span>4</span> O botão na lista</h4>
+      <p>No <code>course_list.html</code>, cada curso ganha um botão <strong>Ver</strong>, com as classes do Bootstrap:</p>
+
+      <div class="terminal" data-title="courses/templates/courses/course_list.html">
+        <pre><code><span class="t-dtl">{% for course in courses %}</span>
     <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span>
-        <span class="t-var">{{ person.first_name }}</span> <span class="t-var">{{ person.last_name }}</span>
-<span class="hl">        <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_detail'</span><span class="t-dtl"> person.pk %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-secondary"</span><span class="t-tag">&gt;</span>Ver<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span></span>
+        <span class="t-var">{{ course.name }}</span>
+        <span class="t-cm">{# troque courses pelo nome do seu app #}</span>
+<span class="hl">        <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">courses</span>:course_detail'</span><span class="t-dtl"> course.pk %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-secondary"</span><span class="t-tag">&gt;</span>Ver<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span></span>
     <span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
 <span class="t-dtl">{% empty %}</span>
-    <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span>Nenhuma pessoa cadastrada.<span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span>Nenhum curso cadastrado.<span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
 <span class="t-dtl">{% endfor %}</span></code></pre>
       </div>
 
       <h4 class="substep"><span>✓</span> Resultado esperado</h4>
-      <p class="center">Na lista, clique em <strong>Ver</strong> ao lado de uma pessoa e veja a página dela em <code>http://127.0.0.1:8000/pessoas/1/</code>. Um <code>pk</code> que não existe dá 404.</p>
+      <p class="center">Na lista, clique em <strong>Ver</strong> ao lado de um curso e veja a página dele em <code>http://127.0.0.1:8000/courses/1/ver/</code>. Um <code>pk</code> que não existe dá 404.</p>
 
       <aside class="note note--tip">
         <p class="note__title">E a permissão?</p>
-        <p>Ainda não existem contas de usuário, então a página fica aberta. Na parte <strong>Protegendo as Views</strong>, ela recebe a mesma permissão da lista: <code>view_person</code>.</p>
+        <p>Ainda não existem contas de usuário, então a página fica aberta. Na parte <strong>Protegendo as Views</strong>, ela recebe a mesma permissão da lista: <code>view_course</code>.</p>
       </aside>
 
       <aside class="note">

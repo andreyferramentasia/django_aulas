@@ -1,4 +1,4 @@
-<section class="part" id="parte-7" data-title="Templates e Static">
+<section class="part" id="parte-7" data-title="Templates, Static e Media">
 
   <details class="step step--front" id="passo-20" data-title="Criar as pastas templates e static">
 
@@ -8,15 +8,15 @@
       <div class="terminal" data-title="Pasta do projeto">
         <pre><code>meu_projeto/
 ├── app/
-├── <span class="input">nome_do_seu_app</span>/
+├── <span class="input">courses</span>/  <span class="comment"># troque pelo nome do seu app</span>
 │   ├── migrations/
 <span class="hl">│   ├── static/</span>
-<span class="hl">│   │   └── <span class="input">nome_do_seu_app</span>/</span>
+<span class="hl">│   │   └── <span class="input">courses</span>/</span>
 <span class="hl">│   │       └── css/</span>
 <span class="hl">│   │           └── style.css</span>
 <span class="hl">│   ├── templates/</span>
-<span class="hl">│   │   └── <span class="input">nome_do_seu_app</span>/</span>
-<span class="hl">│   │       └── person_list.html</span>
+<span class="hl">│   │   └── <span class="input">courses</span>/</span>
+<span class="hl">│   │       └── course_list.html</span>
 <span class="hl">│   ├── urls.py</span>
 │   ├── models.py
 │   └── views.py
@@ -24,10 +24,10 @@
       </div>
 
       <dl class="files">
-        <dt><code><span class="input">nome_do_seu_app</span>/templates/<span class="input">nome_do_seu_app</span>/</code></dt>
+        <dt><code><span class="input">courses</span>/templates/<span class="input">courses</span>/</code></dt>
         <dd>Templates do app. O Django encontra essa pasta sozinho (<code>APP_DIRS = True</code>).</dd>
 
-        <dt><code><span class="input">nome_do_seu_app</span>/static/<span class="input">nome_do_seu_app</span>/</code></dt>
+        <dt><code><span class="input">courses</span>/static/<span class="input">courses</span>/</code></dt>
         <dd>CSS, JS e imagens do app. Também é encontrada sozinha, sem configurar nada.</dd>
 
         <dt><code>urls.py</code></dt>
@@ -36,7 +36,7 @@
 
       <aside class="note">
         <p class="note__title">Por que repetir o nome do app?</p>
-        <p>O Django junta os templates e statics de todos os apps num lugar só. Se dois apps tiverem um <code>style.css</code>, um sobrescreve o outro. A subpasta com o nome do app evita isso: <code>templates/<span class="input">nome_do_seu_app</span>/</code> e <code>static/<span class="input">nome_do_seu_app</span>/</code>.</p>
+        <p>O Django junta os templates e statics de todos os apps num lugar só. Se dois apps tiverem um <code>style.css</code>, um sobrescreve o outro. A subpasta com o nome do app evita isso: <code>templates/<span class="input">courses</span>/</code> e <code>static/<span class="input">courses</span>/</code>.</p>
       </aside>
 
       <h4 class="substep"><span>✓</span> Conferir o static</h4>
@@ -55,6 +55,114 @@
         <p class="note__title">Documentação</p>
         <p><a href="https://docs.djangoproject.com/pt-br/stable/howto/static-files/" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/howto/static-files</a></p>
         <p><a href="https://docs.djangoproject.com/pt-br/stable/topics/templates/" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/topics/templates</a></p>
+      </aside>
+    </div>
+  </details>
+
+  <details class="step" id="passo-media" data-title="Configurar os arquivos enviados (media)">
+
+    <div class="step__body">
+      <p>O <strong>static</strong> é o arquivo que <strong>você</strong> coloca no projeto. O <strong>media</strong> é o arquivo que o <strong>usuário</strong> envia pelo site ou pelo admin: fotos, PDFs, modelos 3D.</p>
+
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr><th></th><th>Static</th><th>Media</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Quem coloca o arquivo</td><td>Você, no código</td><td>O usuário, por upload</td></tr>
+            <tr><td>Exemplos</td><td>CSS, JS, logo</td><td>Foto de perfil, PDF de material</td></tr>
+            <tr><td>Pasta</td><td><code><span class="input">courses</span>/static/</code></td><td><code>media/</code></td></tr>
+            <tr><td>Setting</td><td><code>STATIC_URL</code></td><td><code>MEDIA_URL</code> e <code>MEDIA_ROOT</code></td></tr>
+            <tr><td>Vai para o Git?</td><td>Sim</td><td>Não</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4 class="substep"><span>1</span> Configurar o settings.py</h4>
+      <p>Abaixo do <code>STATIC_URL</code>, adicione:</p>
+
+      <div class="terminal" data-title="app/settings.py">
+        <pre><code>STATIC_URL = <span class="str">'static/'</span>
+
+<span class="hl">MEDIA_URL = <span class="str">'media/'</span></span>
+<span class="hl">MEDIA_ROOT = BASE_DIR / <span class="str">'media'</span></span></code></pre>
+      </div>
+
+      <dl class="files">
+        <dt><code>MEDIA_URL</code></dt>
+        <dd>Endereço dos arquivos no navegador: <code>127.0.0.1:8000/media/...</code></dd>
+
+        <dt><code>MEDIA_ROOT</code></dt>
+        <dd>Pasta do computador onde os arquivos são salvos. <code>BASE_DIR</code> é a pasta do projeto, a mesma do <code>manage.py</code>.</dd>
+      </dl>
+
+      <h4 class="substep"><span>2</span> Liberar a pasta media nas rotas</h4>
+      <p>Diferente do static, o <code>runserver</code> não entrega o media sozinho. Adicione no <code>urls.py</code> do <strong>projeto</strong>:</p>
+
+      <div class="terminal" data-title="app/urls.py">
+        <pre><code><span class="hl"><span class="kw">from</span> django.conf <span class="kw">import</span> settings</span>
+<span class="hl"><span class="kw">from</span> django.conf.urls.static <span class="kw">import</span> static</span>
+<span class="kw">from</span> django.contrib <span class="kw">import</span> admin
+<span class="kw">from</span> django.urls <span class="kw">import</span> path
+
+urlpatterns = [
+    path(<span class="str">'admin/'</span>, admin.site.urls),
+]
+
+<span class="hl">urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)</span></code></pre>
+      </div>
+
+      <dl class="files">
+        <dt><code>static(...)</code></dt>
+        <dd>Cria a rota que entrega os arquivos de <code>MEDIA_ROOT</code> no endereço <code>MEDIA_URL</code>.</dd>
+
+        <dt><code>+=</code></dt>
+        <dd>Junta essa rota à lista <code>urlpatterns</code> que já existe, sem apagar as outras.</dd>
+      </dl>
+
+      <aside class="note">
+        <p class="note__title">Só no desenvolvimento</p>
+        <p>O <code>static(...)</code> só funciona com <code>DEBUG = True</code>. Em produção, quem entrega o media é o servidor web, veremos depois.</p>
+      </aside>
+
+      <h4 class="substep"><span>?</span> Onde entram os campos de arquivo</h4>
+      <p>O <code>material</code> e a <code>image</code> do <code>Course</code>, criados no <a href="#passo-17">passo 17</a>, guardam os arquivos em <code>MEDIA_ROOT</code>, na subpasta do <code>upload_to</code>. No banco fica só o caminho do arquivo.</p>
+
+      <h4 class="substep"><span>✓</span> Testar no admin</h4>
+      <ol class="instructions">
+        <li>Rode o servidor e abra um curso no <code>/admin</code>.</li>
+        <li>Em <strong>Material</strong>, envie um PDF. Em <strong>Imagem</strong>, envie uma imagem. Salve.</li>
+        <li>Abra o curso de novo e clique no link do arquivo, ele abre em <code>127.0.0.1:8000/media/courses/materials/...</code></li>
+      </ol>
+
+      <div class="terminal" data-title="Pasta do projeto">
+        <pre><code>meu_projeto/
+├── app/
+<span class="hl">├── media/</span>
+<span class="hl">│   └── courses/</span>
+<span class="hl">│       ├── images/</span>
+<span class="hl">│       │   └── capa.png</span>
+<span class="hl">│       └── materials/</span>
+<span class="hl">│           └── apostila.pdf</span>
+├── <span class="input">courses</span>/  <span class="comment"># troque pelo nome do seu app</span>
+└── manage.py</code></pre>
+      </div>
+
+      <aside class="note">
+        <p class="note__title">Fora do Git</p>
+        <p>O <code>.gitignore</code> do <a href="#passo-11">passo 11</a> já ignora a pasta <code>media/</code>. Os arquivos dos usuários não vão para o repositório.</p>
+      </aside>
+
+      <aside class="note note--tip">
+        <p class="note__title">Nos formulários</p>
+        <p>Para enviar arquivo por um formulário do site, o <code>&lt;form&gt;</code> precisa de <code>enctype="multipart/form-data"</code>. Veremos no <a href="#passo-25">passo 26</a>.</p>
+      </aside>
+
+      <aside class="note">
+        <p class="note__title">Documentação</p>
+        <p><a href="https://docs.djangoproject.com/pt-br/stable/topics/files/" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/topics/files</a></p>
+        <p><a href="https://docs.djangoproject.com/pt-br/stable/howto/static-files/#serving-files-uploaded-by-a-user-during-development" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/howto/static-files, arquivos enviados</a></p>
       </aside>
     </div>
   </details>

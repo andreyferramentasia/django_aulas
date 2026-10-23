@@ -5,9 +5,9 @@
     <div class="step__body">
       <p>Para os models aparecerem no <code>/admin</code>, registre-os no <code>admin.py</code> do app:</p>
 
-      <div class="terminal" data-title="nome_do_seu_app/admin.py">
+      <div class="terminal" data-title="courses/admin.py">
         <pre><code><span class="kw">from</span> django.contrib <span class="kw">import</span> admin
-<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.models <span class="kw">import</span> Person, Course
+<span class="kw">from</span> <span class="input">courses</span>.models <span class="kw">import</span> Person, Course  <span class="cm"># troque courses pelo nome do seu app</span>
 
 
 <span class="kw">class</span> <span class="cls">PersonAdmin</span>(admin.ModelAdmin):
@@ -51,7 +51,7 @@
 
       <aside class="note note--tip">
         <p class="note__title">Import absoluto</p>
-        <p>Use o nome do app, o mesmo do <code>name</code> em <code>apps.py</code>: <code>from nome_do_seu_app.models import ...</code>. Fica claro de onde vem cada classe.</p>
+        <p>Use o nome do app, o mesmo do <code>name</code> em <code>apps.py</code>: <code>from <span class="input">courses</span>.models import ...</code>. Fica claro de onde vem cada classe.</p>
       </aside>
     </div>
   </details>

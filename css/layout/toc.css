@@ -9,7 +9,6 @@
   border-left: 2px solid var(--rule);
   padding-left: 1.25rem;
   padding-right: .5rem;
-  counter-reset: toc; /* numeração contínua entre as partes */
 }
 
 .toc__title {
@@ -64,13 +63,13 @@
 }
 
 .toc__item {
-  counter-increment: toc;
   margin-bottom: .6rem;
   font-size: 1.05rem;
 }
 
+/* data-number vem do js/toc.js, igual ao número do passo */
 .toc__item::before {
-  content: counter(toc, decimal-leading-zero) " ";
+  content: attr(data-number) " ";
   font-family: var(--mono);
   font-size: .8rem;
   color: var(--accent);
@@ -78,8 +77,6 @@
 }
 
 /* Extra não entra na numeração */
-.toc__item--extra { counter-increment: none; }
-
 .toc__item--extra::before {
   content: "+ ";
   font-weight: 600;
@@ -88,8 +85,6 @@
 .toc__item--extra a { font-style: italic; }
 
 /* Vídeo também fica fora da numeração */
-.toc__item--video { counter-increment: none; }
-
 .toc__item--video::before { content: "▶ "; }
 
 .toc__list a {

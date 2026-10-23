@@ -5,7 +5,7 @@
     <div class="step__body">
       <p>Cada <strong>model</strong> é uma classe Python que vira uma <strong>tabela</strong> no banco. Cada atributo vira uma <strong>coluna</strong>.</p>
 
-      <div class="terminal" data-title="nome_do_seu_app/models.py">
+      <div class="terminal" data-title="courses/models.py">
         <pre><code><span class="kw">from</span> django.db <span class="kw">import</span> models
 
 
@@ -43,6 +43,16 @@
 <span class="hl">        on_delete=models.CASCADE,</span>
 <span class="hl">        verbose_name=<span class="str">"Professor"</span>,</span>
 <span class="hl">    )</span>
+<span class="hl">    material = models.FileField(</span>
+<span class="hl">        verbose_name=<span class="str">"Material"</span>,</span>
+<span class="hl">        upload_to=<span class="str">"courses/materials/"</span>,</span>
+<span class="hl">        blank=<span class="kw">True</span>,</span>
+<span class="hl">    )</span>
+<span class="hl">    image = models.ImageField(</span>
+<span class="hl">        verbose_name=<span class="str">"Imagem"</span>,</span>
+<span class="hl">        upload_to=<span class="str">"courses/images/"</span>,</span>
+<span class="hl">        blank=<span class="kw">True</span>,</span>
+<span class="hl">    )</span>
 
     <span class="kw">class</span> <span class="cls">Meta</span>:
         verbose_name = <span class="str">"Curso"</span>
@@ -76,6 +86,18 @@
 
         <dt><code>on_delete</code></dt>
         <dd><code>CASCADE</code> apaga os cursos se a pessoa for apagada.</dd>
+
+        <dt><code>FileField</code></dt>
+        <dd>Arquivo de qualquer tipo, aqui o material do curso (um PDF, por exemplo). No banco só fica o <strong>caminho</strong>, o arquivo vai para uma pasta.</dd>
+
+        <dt><code>ImageField</code></dt>
+        <dd>Igual ao <code>FileField</code>, mas só aceita imagens. Precisa do <code>pillow</code>, instalado na <a href="#parte-1">Parte I</a>. Sem ele, o <code>makemigrations</code> dá erro pedindo para instalar.</dd>
+
+        <dt><code>upload_to</code></dt>
+        <dd>Subpasta onde os arquivos são salvos: <code>media/courses/materials/</code> e <code>media/courses/images/</code>. O Django cria as pastas sozinho. É só um nome de pasta, não precisa ser o nome do app.</dd>
+
+        <dt><code>blank=True</code></dt>
+        <dd>Deixa o campo opcional: o curso pode ser salvo sem descrição, sem material e sem imagem.</dd>
 
         <dt><code>verbose_name</code> (no campo)</dt>
         <dd>Rótulo do campo exibido no admin e nos formulários, ex.: <code>verbose_name="Nome"</code>.</dd>
@@ -119,6 +141,11 @@
 course.get_period_display()  <span class="cm"># "Matutino"</span></code></pre>
       </div>
 
+      <aside class="note">
+        <p class="note__title">Arquivos só depois do media</p>
+        <p>Os campos já ficam prontos, mas a pasta <code>media/</code> só é configurada no <a href="#passo-media">passo 21</a>. Até lá, deixe <strong>Material</strong> e <strong>Imagem</strong> vazios no admin, senão os arquivos vão parar soltos na pasta do projeto.</p>
+      </aside>
+
       <aside class="note note--tip">
         <p class="note__title">Relação</p>
         <p>Uma pessoa pode ter <strong>vários</strong> cursos, cada curso tem <strong>um</strong> professor.</p>
@@ -143,7 +170,7 @@ course.get_period_display()  <span class="cm"># "Matutino"</span></code></pre>
     <span class="str">'django.contrib.admin'</span>,
     ...
     <span class="str">'django.contrib.staticfiles'</span>,
-<span class="hl">    <span class="str">'nome_do_seu_app'</span>,</span>
+<span class="hl">    <span class="str">'courses'</span>,</span>  <span class="cm"># troque courses pelo nome do seu app</span>
 ]</code></pre>
       </div>
 
@@ -158,8 +185,8 @@ System check identified no issues (0 silenced).</code></pre>
 
       <div class="terminal" data-title="Terminal">
         <pre><code><span class="prompt">&gt;</span> python manage.py makemigrations
-Migrations for '<span class="input">nome_do_seu_app</span>':
-  <span class="input">nome_do_seu_app</span>\migrations\0001_initial.py
+Migrations for '<span class="input">courses</span>':
+  <span class="input">courses</span>\migrations\0001_initial.py
     + Create model Person
     + Create model Course</code></pre>
       </div>
@@ -168,7 +195,7 @@ Migrations for '<span class="input">nome_do_seu_app</span>':
 
       <div class="terminal" data-title="Terminal">
         <pre><code><span class="prompt">&gt;</span> python manage.py migrate
-Applying <span class="input">nome_do_seu_app</span>.0001_initial... OK</code></pre>
+Applying <span class="input">courses</span>.0001_initial... OK</code></pre>
       </div>
 
       <dl class="files">

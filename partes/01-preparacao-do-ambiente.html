@@ -106,8 +106,20 @@
       <div class="terminal" data-title="Terminal">
         <pre><code><span class="prompt">&gt;</span> python.exe -m pip install --upgrade pip
 <span class="prompt">&gt;</span> pip install django
-<span class="prompt">&gt;</span> pip install django-jazzmin==3.0.1</code></pre>
+<span class="prompt">&gt;</span> pip install django-jazzmin==3.0.1
+<span class="prompt">&gt;</span> pip install pillow</code></pre>
       </div>
+
+      <dl class="files">
+        <dt><code>django</code></dt>
+        <dd>O framework.</dd>
+
+        <dt><code>django-jazzmin</code></dt>
+        <dd>Tema visual para o painel admin.</dd>
+
+        <dt><code>pillow</code></dt>
+        <dd>Biblioteca de imagens, exigida pelo Django para usar <code>ImageField</code> (a imagem do curso, no <a href="#passo-17">passo 17</a>). Site oficial: <a href="https://python-pillow.github.io/" target="_blank" rel="noopener">python-pillow.github.io</a></dd>
+      </dl>
 
       <aside class="note">
         <p class="note__title">Atenção</p>
@@ -125,6 +137,9 @@
 
 <span class="comment"># Versão do Jazzmin</span>
 <span class="prompt">&gt;</span> pip show django-jazzmin
+
+<span class="comment"># Versão do Pillow</span>
+<span class="prompt">&gt;</span> pip show pillow
 
 <span class="comment"># Todas as bibliotecas instaladas</span>
 <span class="prompt">&gt;</span> pip list</code></pre>

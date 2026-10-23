@@ -6,7 +6,7 @@
       <p>Um <strong>app</strong> é uma parte do projeto com uma função específica (cursos, usuários, pagamentos...). Um projeto pode ter vários apps.</p>
 
       <div class="terminal" data-title="Terminal">
-        <pre><code><span class="prompt">&gt;</span> python manage.py startapp <span class="input">nome_do_seu_app</span></code></pre>
+        <pre><code><span class="prompt">&gt;</span> python manage.py startapp <span class="input">courses</span>  <span class="comment"># troque courses pelo nome do seu app</span></code></pre>
       </div>
 
       <aside class="note note--tip">
@@ -14,12 +14,17 @@
         <p>Minúsculas, sem espaços ou acentos, de preferência no plural: <code>courses</code>, <code>students</code>.</p>
       </aside>
 
+      <aside class="note">
+        <p class="note__title">O app do tutorial</p>
+        <p>Daqui em diante o exemplo é um cadastro de cursos, num app chamado <code>courses</code>. Se o seu app tiver outro nome, troque <code>courses</code> pelo nome dele onde o código mostrar o comentário <code># troque courses pelo nome do seu app</code>. Nos blocos de código, o nome do app aparece em amarelo.</p>
+      </aside>
+
       <h4 class="substep"><span>✓</span> Estrutura gerada</h4>
 
       <div class="terminal" data-title="Pasta do projeto">
         <pre><code>meu_projeto/
 ├── app/
-├── <span class="input">nome_do_seu_app</span>/
+├── <span class="input">courses</span>/  <span class="comment"># troque pelo nome do seu app</span>
 │   ├── migrations/
 │   │   └── __init__.py
 │   ├── __init__.py

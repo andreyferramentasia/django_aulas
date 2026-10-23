@@ -4,7 +4,7 @@
   <details class="step step--extra" id="fluxo-requisicao" data-number="?" data-label="Antes de codar" data-title="O caminho de uma requisição">
 
     <div class="step__body">
-      <p>Antes do código, veja como as peças se ligam. Siga os números: é o caminho de um acesso a <code>/pessoas/</code>. As cores das linhas mostram o que cada parte do CRUD usa.</p>
+      <p>Antes do código, veja como as peças se ligam. Siga os números: é o caminho de um acesso a <code>/courses/listar/</code>. As cores das linhas mostram o que cada parte do CRUD usa.</p>
 
       <figure class="diagram">
         <div class="diagram__scroll">
@@ -44,7 +44,7 @@
               <text class="d-sub" x="300" y="236">o centro de tudo</text>
 
               <ellipse cx="510" cy="80" rx="95" ry="34"/>
-              <text class="d-name" x="510" y="78">nome_do_seu_app/urls.py</text>
+              <text class="d-name" x="510" y="78">courses/urls.py</text>
               <text class="d-sub" x="510" y="96">url do meu app</text>
 
               <ellipse class="d-edge-node" cx="640" cy="230" rx="78" ry="34"/>
@@ -75,7 +75,7 @@
           <li><span class="legend-line legend-line--back"></span><span><strong>Resposta:</strong> a página pronta volta para o navegador.</span></li>
         </ul>
         <figcaption>
-          <strong>1</strong> o navegador pede <code>/pessoas/</code> e a URL geral passa para o app pelo <code>include</code> ·
+          <strong>1</strong> o navegador pede <code>/courses/listar/</code> e a URL geral passa para o app pelo <code>include</code> ·
           <strong>2</strong> a URL do app escolhe a view ·
           <strong>3</strong> a view entra em ação ·
           <strong>4</strong> busca dados no model e, se tiver formulário, usa o form ·
@@ -150,12 +150,12 @@
       <p>Toda página do site repete o mesmo começo (o <code>&lt;head&gt;</code> com o Bootstrap), o mesmo menu e o mesmo rodapé. Em vez de copiar isso em cada template, tudo fica num arquivo só, o <code>base.html</code>, e cada página preenche só o miolo.</p>
 
       <h4 class="substep"><span>1</span> A pasta de templates do projeto</h4>
-      <p>O <code>base.html</code> é usado por todos os apps (<code><span class="input">nome_do_seu_app</span></code> e, depois, <code>accounts</code>), então ele fica numa pasta <code>templates/</code> na raiz do projeto, ao lado do <code>manage.py</code>. O menu, a barra lateral e o rodapé ficam separados em <code>partials/</code>:</p>
+      <p>O <code>base.html</code> é usado por todos os apps (<code><span class="input">courses</span></code> e, depois, <code>accounts</code>), então ele fica numa pasta <code>templates/</code> na raiz do projeto, ao lado do <code>manage.py</code>. O menu, a barra lateral e o rodapé ficam separados em <code>partials/</code>:</p>
 
       <div class="terminal" data-title="Pasta do projeto">
         <pre><code>meu_projeto/
 ├── app/
-├── <span class="input">nome_do_seu_app</span>/
+├── <span class="input">courses</span>/  <span class="comment"># troque pelo nome do seu app</span>
 <span class="hl">├── templates/</span>
 <span class="hl">│   ├── base.html</span>
 <span class="hl">│   └── partials/</span>
@@ -191,7 +191,8 @@
 <span class="hl">    <span class="t-tag">&lt;title</span><span class="t-tag">&gt;</span><span class="t-dtl">{% block title %}</span>Meu projeto<span class="t-dtl">{% endblock %}</span><span class="t-tag">&lt;/title</span><span class="t-tag">&gt;</span></span>
 <span class="hl">    <span class="t-tag">&lt;link</span> <span class="t-attr">href</span>=<span class="t-val">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"</span> <span class="t-attr">rel</span>=<span class="t-val">"stylesheet"</span></span>
 <span class="hl">        <span class="t-attr">integrity</span>=<span class="t-val">"sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"</span> <span class="t-attr">crossorigin</span>=<span class="t-val">"anonymous"</span><span class="t-tag">&gt;</span></span>
-    <span class="t-tag">&lt;link</span> <span class="t-attr">rel</span>=<span class="t-val">"stylesheet"</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% static </span><span class="t-val">'<span class="input">nome_do_seu_app</span>/css/style.css'</span><span class="t-dtl"> %}</span><span class="t-val">"</span><span class="t-tag">&gt;</span>
+    <span class="t-cm">{# troque courses pelo nome do seu app #}</span>
+    <span class="t-tag">&lt;link</span> <span class="t-attr">rel</span>=<span class="t-val">"stylesheet"</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% static </span><span class="t-val">'<span class="input">courses</span>/css/style.css'</span><span class="t-dtl"> %}</span><span class="t-val">"</span><span class="t-tag">&gt;</span>
 <span class="hl">    <span class="t-tag">&lt;script</span> <span class="t-attr">src</span>=<span class="t-val">"https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"</span></span>
 <span class="hl">        <span class="t-attr">integrity</span>=<span class="t-val">"sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"</span> <span class="t-attr">crossorigin</span>=<span class="t-val">"anonymous"</span></span>
 <span class="hl">        <span class="t-attr">defer</span><span class="t-tag">&gt;</span><span class="t-tag">&lt;/script</span><span class="t-tag">&gt;</span></span>
@@ -218,7 +219,8 @@
       <div class="terminal" data-title="templates/partials/_navbar.html">
         <pre><code><span class="t-tag">&lt;nav</span> <span class="t-attr">class</span>=<span class="t-val">"navbar navbar-dark bg-dark"</span><span class="t-tag">&gt;</span>
     <span class="t-tag">&lt;div</span> <span class="t-attr">class</span>=<span class="t-val">"container-fluid"</span><span class="t-tag">&gt;</span>
-        <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_list'</span><span class="t-dtl"> %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"navbar-brand"</span><span class="t-tag">&gt;</span>Meu projeto<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+        <span class="t-cm">{# troque courses pelo nome do seu app #}</span>
+        <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">courses</span>:course_list'</span><span class="t-dtl"> %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"navbar-brand"</span><span class="t-tag">&gt;</span>Meu projeto<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
 <span class="hl">        <span class="t-dtl">{% if user.is_authenticated %}</span></span>
 <span class="hl">            <span class="t-tag">&lt;span</span> <span class="t-attr">class</span>=<span class="t-val">"navbar-text text-white"</span><span class="t-tag">&gt;</span>Olá, <span class="t-var">{{ user.username }}</span><span class="t-tag">&lt;/span</span><span class="t-tag">&gt;</span></span>
 <span class="hl">        <span class="t-dtl">{% endif %}</span></span>
@@ -230,7 +232,8 @@
         <pre><code><span class="t-tag">&lt;aside</span> <span class="t-attr">class</span>=<span class="t-val">"col-md-3 col-lg-2 bg-light border-end py-4"</span><span class="t-tag">&gt;</span>
     <span class="t-tag">&lt;ul</span> <span class="t-attr">class</span>=<span class="t-val">"nav flex-column"</span><span class="t-tag">&gt;</span>
         <span class="t-tag">&lt;li</span> <span class="t-attr">class</span>=<span class="t-val">"nav-item"</span><span class="t-tag">&gt;</span>
-            <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_list'</span><span class="t-dtl"> %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"nav-link"</span><span class="t-tag">&gt;</span>Pessoas<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+            <span class="t-cm">{# troque courses pelo nome do seu app #}</span>
+            <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">courses</span>:course_list'</span><span class="t-dtl"> %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"nav-link"</span><span class="t-tag">&gt;</span>Cursos<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
         <span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
         <span class="t-tag">&lt;li</span> <span class="t-attr">class</span>=<span class="t-val">"nav-item"</span><span class="t-tag">&gt;</span>
             <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'admin:index'</span><span class="t-dtl"> %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"nav-link"</span><span class="t-tag">&gt;</span>Admin<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
@@ -252,7 +255,7 @@
         <dd>Pastas extras onde o Django procura templates, além das pastas <code>templates/</code> dos apps (<code>APP_DIRS</code>). O <code>BASE_DIR</code> já existe no topo do <code>settings.py</code> e aponta para a raiz do projeto.</dd>
 
         <dt><code>{% load static %}</code> e <code>{% static '...' %}</code></dt>
-        <dd>O <code>load</code> libera a tag <code>{% static %}</code>, que monta o caminho do arquivo, ex.: <code>/static/<span class="input">nome_do_seu_app</span>/css/style.css</code>. Como o CSS é carregado no <code>base.html</code>, as outras páginas não precisam disso.</dd>
+        <dd>O <code>load</code> libera a tag <code>{% static %}</code>, que monta o caminho do arquivo, ex.: <code>/static/<span class="input">courses</span>/css/style.css</code>. Como o CSS é carregado no <code>base.html</code>, as outras páginas não precisam disso.</dd>
 
         <dt><code>{% block title %}</code> e <code>{% block content %}</code></dt>
         <dd>Espaços que cada página preenche. O texto dentro do <code>block title</code> (<em>Meu projeto</em>) é o padrão, usado quando a página não troca.</dd>
@@ -276,7 +279,7 @@
       <h4 class="substep"><span>4</span> Usar o base numa página</h4>
       <p>Cada página começa com <code>{% extends %}</code> e coloca o conteúdo dentro do <code>block content</code>. A partir da parte <strong>CRUD · Read</strong>, todos os templates seguem este formato:</p>
 
-      <div class="terminal" data-title="<span class="input">nome_do_seu_app</span>/templates/<span class="input">nome_do_seu_app</span>/qualquer_pagina.html">
+      <div class="terminal" data-title="courses/templates/courses/qualquer_pagina.html">
         <pre><code><span class="hl"><span class="t-dtl">{% extends "base.html" %}</span></span>
 
 <span class="hl"><span class="t-dtl">{% block title %}</span>Título da aba<span class="t-dtl">{% endblock %}</span></span>
@@ -296,7 +299,7 @@
 
       <aside class="note">
         <p class="note__title">Ainda não dá para testar</p>
-        <p>O menu aponta para <code><span class="input">nome_do_seu_app</span>:person_list</code>, rota criada na próxima parte. O <code>base.html</code> só é usado quando uma página faz <code>extends</code> dele, então ele começa a funcionar no passo 22.</p>
+        <p>O menu aponta para <code><span class="input">courses</span>:course_list</code>, rota criada na próxima parte. O <code>base.html</code> só é usado quando uma página faz <code>extends</code> dele, então ele começa a funcionar no passo 23.</p>
       </aside>
 
       <aside class="note">

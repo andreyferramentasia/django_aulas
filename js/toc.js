@@ -13,6 +13,10 @@ function tocItem(step) {
     if (step.classList.contains(`step--${variant}`)) li.classList.add(`toc__item--${variant}`);
   }
 
+  // número do próprio passo, assim a busca pode esconder itens sem mudar a numeração
+  const number = step.querySelector('.step__number')?.textContent ?? '';
+  if (/^\d+$/.test(number)) li.dataset.number = number.padStart(2, '0');
+
   const link = document.createElement('a');
   link.href = `#${step.id}`;
   link.textContent = step.dataset.title;

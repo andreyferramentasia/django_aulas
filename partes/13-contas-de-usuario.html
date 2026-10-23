@@ -12,7 +12,7 @@
       <div class="terminal" data-title="app/settings.py">
         <pre><code>INSTALLED_APPS = [
     ...
-    <span class="str">'nome_do_seu_app'</span>,
+    <span class="str">'courses'</span>,  <span class="cm"># troque courses pelo nome do seu app</span>
 <span class="hl">    <span class="str">'accounts'</span>,</span>
 ]</code></pre>
       </div>
@@ -28,7 +28,7 @@
 <span class="hl">│   ├── urls.py</span>
 │   └── views.py
 ├── app/
-├── <span class="input">nome_do_seu_app</span>/
+├── <span class="input">courses</span>/  <span class="comment"># troque pelo nome do seu app</span>
 └── manage.py</code></pre>
       </div>
 
@@ -85,7 +85,7 @@
 <span class="hl"><span class="kw">class</span> <span class="cls">UserLoginView</span>(LoginView):</span>
     template_name = <span class="str">"accounts/user_login.html"</span>
     redirect_authenticated_user = <span class="kw">True</span>
-    next_page = <span class="str">"<span class="input">nome_do_seu_app</span>:person_list"</span>
+    next_page = <span class="str">"<span class="input">courses</span>:course_list"</span>  <span class="cm"># troque courses pelo nome do seu app</span>
 
 
 <span class="hl"><span class="kw">class</span> <span class="cls">UserLogoutView</span>(LogoutView):</span>
@@ -106,7 +106,7 @@
         <dd>Quem já está logado e abre a página de login vai direto para o <code>next_page</code>.</dd>
 
         <dt><code>next_page</code></dt>
-        <dd>Para onde ir depois de entrar (a lista de pessoas) ou depois de sair (a tela de login).</dd>
+        <dd>Para onde ir depois de entrar (a lista de cursos) ou depois de sair (a tela de login).</dd>
 
         <dt><code>LogoutView</code></dt>
         <dd>Faz o logout. Não tem template: sai e redireciona.</dd>
@@ -115,7 +115,7 @@
         <dd>O formulário da página de cadastro, o <code>CustomUserCreationForm</code> do passo anterior.</dd>
 
         <dt><code>CreateView</code></dt>
-        <dd>A mesma do passo 24, agora criando um usuário em vez de uma pessoa.</dd>
+        <dd>A mesma do passo 25, agora criando um usuário em vez de um curso.</dd>
       </dl>
 
       <h4 class="substep"><span>2</span> As rotas do accounts</h4>
@@ -136,14 +136,18 @@ urlpatterns = [
       <h4 class="substep"><span>3</span> Incluir no projeto</h4>
 
       <div class="terminal" data-title="app/urls.py">
-        <pre><code><span class="kw">from</span> django.contrib <span class="kw">import</span> admin
+        <pre><code><span class="kw">from</span> django.conf <span class="kw">import</span> settings
+<span class="kw">from</span> django.conf.urls.static <span class="kw">import</span> static
+<span class="kw">from</span> django.contrib <span class="kw">import</span> admin
 <span class="kw">from</span> django.urls <span class="kw">import</span> path, include
 
 urlpatterns = [
     path(<span class="str">'admin/'</span>, admin.site.urls),
 <span class="hl">    path(<span class="str">'contas/'</span>, include(<span class="str">'accounts.urls'</span>)),</span>
-    path(<span class="str">''</span>, include(<span class="str">'<span class="input">nome_do_seu_app</span>.urls'</span>)),
-]</code></pre>
+    path(<span class="str">'courses/'</span>, include(<span class="str">'<span class="input">courses</span>.urls'</span>)),  <span class="cm"># troque courses pelo nome do seu app</span>
+]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)</code></pre>
       </div>
 
       <dl class="files">
@@ -200,7 +204,7 @@ urlpatterns = [
       </div>
 
       <h4 class="substep"><span>✓</span> Resultado esperado</h4>
-      <p class="center">Acesse <code>http://127.0.0.1:8000/contas/cadastro/</code>, crie uma conta e entre com ela. Você cai na lista de pessoas. O botão Sair entra na próxima parte, junto com a proteção das views.</p>
+      <p class="center">Acesse <code>http://127.0.0.1:8000/contas/cadastro/</code>, crie uma conta e entre com ela. Você cai na lista de cursos. O botão Sair entra na próxima parte, junto com a proteção das views.</p>
 
       <aside class="note">
         <p class="note__title">Senha recusada no cadastro?</p>

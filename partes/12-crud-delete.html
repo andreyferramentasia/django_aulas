@@ -7,45 +7,52 @@
 
       <h4 class="substep"><span>1</span> A view</h4>
 
-      <div class="terminal" data-title="nome_do_seu_app/views.py">
+      <div class="terminal" data-title="courses/views.py">
         <pre><code><span class="kw">from</span> django.views.generic <span class="kw">import</span> ListView, CreateView, UpdateView<span class="hl">, DeleteView</span>
 ...
 
 
-<span class="hl"><span class="kw">class</span> <span class="cls">PersonDeleteView</span>(DeleteView):</span>
-<span class="hl">    model = Person</span>
-<span class="hl">    template_name = <span class="str">"<span class="input">nome_do_seu_app</span>/person_confirm_delete.html"</span></span>
-<span class="hl">    context_object_name = <span class="str">"person"</span></span>
-<span class="hl">    success_url = reverse_lazy(<span class="str">"<span class="input">nome_do_seu_app</span>:person_list"</span>)</span></code></pre>
+<span class="hl"><span class="kw">class</span> <span class="cls">CourseDeleteView</span>(DeleteView):</span>
+<span class="hl">    model = Course</span>
+<span class="hl">    <span class="cm"># troque courses pelo nome do seu app</span></span>
+<span class="hl">    template_name = <span class="str">"<span class="input">courses</span>/course_confirm_delete.html"</span></span>
+<span class="hl">    context_object_name = <span class="str">"course"</span></span>
+<span class="hl">    success_url = reverse_lazy(<span class="str">"<span class="input">courses</span>:course_list"</span>)</span></code></pre>
       </div>
 
       <dl class="files">
         <dt>Sem <code>form_class</code></dt>
         <dd>Excluir não tem campos para preencher, então não usa formulário.</dd>
 
-        <dt><code>person_confirm_delete.html</code></dt>
+        <dt><code>course_confirm_delete.html</code></dt>
         <dd>Página que pergunta "tem certeza?". Abrir o link não apaga nada, só o <code>post</code> do botão apaga.</dd>
       </dl>
 
       <h4 class="substep"><span>2</span> A rota</h4>
 
-      <div class="terminal" data-title="nome_do_seu_app/urls.py">
+      <div class="terminal" data-title="courses/urls.py">
         <pre><code><span class="kw">from</span> django.urls <span class="kw">import</span> path
-<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.views <span class="kw">import</span> PersonListView, PersonCreateView, PersonUpdateView<span class="hl">, PersonDeleteView</span>
+<span class="cm"># troque courses pelo nome do seu app</span>
+<span class="kw">from</span> <span class="input">courses</span>.views <span class="kw">import</span> CourseListView, CourseCreateView, CourseUpdateView<span class="hl">, CourseDeleteView</span>
 
-app_name = <span class="str">"<span class="input">nome_do_seu_app</span>"</span>
+app_name = <span class="str">"<span class="input">courses</span>"</span>
 
 urlpatterns = [
-    path(<span class="str">"pessoas/"</span>, PersonListView.as_view(), name=<span class="str">"person_list"</span>),
-    path(<span class="str">"pessoas/nova/"</span>, PersonCreateView.as_view(), name=<span class="str">"person_create"</span>),
-    path(<span class="str">"pessoas/&lt;int:pk&gt;/editar/"</span>, PersonUpdateView.as_view(), name=<span class="str">"person_update"</span>),
-<span class="hl">    path(<span class="str">"pessoas/&lt;int:pk&gt;/excluir/"</span>, PersonDeleteView.as_view(), name=<span class="str">"person_delete"</span>),</span>
+    path(<span class="str">"listar/"</span>, CourseListView.as_view(), name=<span class="str">"course_list"</span>),
+    path(<span class="str">"criar/"</span>, CourseCreateView.as_view(), name=<span class="str">"course_create"</span>),
+    path(<span class="str">"&lt;int:pk&gt;/editar/"</span>, CourseUpdateView.as_view(), name=<span class="str">"course_update"</span>),
+<span class="hl">    path(<span class="str">"&lt;int:pk&gt;/deletar/"</span>, CourseDeleteView.as_view(), name=<span class="str">"course_delete"</span>),</span>
 ]</code></pre>
       </div>
 
       <aside class="note">
         <p class="note__title">Atenção</p>
-        <p>O <code>Course</code> aponta para <code>Person</code> com <code>on_delete=models.CASCADE</code>: excluir um professor apaga também os cursos dele. Se trocar para <code>PROTECT</code>, o Django não deixa excluir quem tem cursos.</p>
+        <p>Excluir um curso não apaga o professor. O contrário apaga: o <code>Course</code> aponta para <code>Person</code> com <code>on_delete=models.CASCADE</code>, então excluir uma pessoa no admin apaga também os cursos dela. Se trocar para <code>PROTECT</code>, o Django não deixa excluir quem tem cursos.</p>
+      </aside>
+
+      <aside class="note note--tip">
+        <p class="note__title">E os arquivos?</p>
+        <p>Excluir o curso apaga o registro do banco, mas o material e a imagem continuam na pasta <code>media/</code>. O Django não apaga arquivos sozinho.</p>
       </aside>
 
       <aside class="note">
@@ -62,13 +69,13 @@ urlpatterns = [
 
       <h4 class="substep"><span>1</span> A página de confirmação</h4>
 
-      <div class="terminal" data-title="nome_do_seu_app/templates/nome_do_seu_app/person_confirm_delete.html">
+      <div class="terminal" data-title="courses/templates/courses/course_confirm_delete.html">
         <pre><code><span class="hl"><span class="t-dtl">{% extends "base.html" %}</span></span>
 
-<span class="hl"><span class="t-dtl">{% block title %}</span>Excluir pessoa<span class="t-dtl">{% endblock %}</span></span>
+<span class="hl"><span class="t-dtl">{% block title %}</span>Excluir curso<span class="t-dtl">{% endblock %}</span></span>
 
 <span class="hl"><span class="t-dtl">{% block content %}</span></span>
-    <span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Excluir <span class="t-var">{{ person }}</span>?<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Excluir <span class="t-var">{{ course }}</span>?<span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
 <span class="hl">    <span class="t-tag">&lt;form</span> <span class="t-attr">method</span>=<span class="t-val">"post"</span><span class="t-tag">&gt;</span></span>
 <span class="hl">        <span class="t-dtl">{% csrf_token %}</span></span>
         <span class="t-tag">&lt;button</span> <span class="t-attr">type</span>=<span class="t-val">"submit"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-danger"</span><span class="t-tag">&gt;</span>Excluir<span class="t-tag">&lt;/button</span><span class="t-tag">&gt;</span>
@@ -77,17 +84,18 @@ urlpatterns = [
       </div>
 
       <h4 class="substep"><span>2</span> Link de exclusão na lista</h4>
-      <p>No <code>person_list.html</code>, ao lado do <strong>Editar</strong>:</p>
+      <p>No <code>course_list.html</code>, ao lado do <strong>Editar</strong>:</p>
 
-      <div class="terminal" data-title="nome_do_seu_app/templates/nome_do_seu_app/person_list.html">
-        <pre><code><span class="t-dtl">{% for person in people %}</span>
+      <div class="terminal" data-title="courses/templates/courses/course_list.html">
+        <pre><code><span class="t-dtl">{% for course in courses %}</span>
     <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span>
-        <span class="t-var">{{ person.first_name }}</span> <span class="t-var">{{ person.last_name }}</span>
-        <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_update'</span><span class="t-dtl"> person.pk %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-primary"</span><span class="t-tag">&gt;</span>Editar<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
-<span class="hl">        <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_delete'</span><span class="t-dtl"> person.pk %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-danger"</span><span class="t-tag">&gt;</span>Excluir<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span></span>
+        <span class="t-var">{{ course.name }}</span>
+        <span class="t-cm">{# troque courses pelo nome do seu app #}</span>
+        <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">courses</span>:course_update'</span><span class="t-dtl"> course.pk %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-primary"</span><span class="t-tag">&gt;</span>Editar<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span>
+<span class="hl">        <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">courses</span>:course_delete'</span><span class="t-dtl"> course.pk %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-danger"</span><span class="t-tag">&gt;</span>Excluir<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span></span>
     <span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
 <span class="t-dtl">{% empty %}</span>
-    <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span>Nenhuma pessoa cadastrada.<span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span>Nenhum curso cadastrado.<span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
 <span class="t-dtl">{% endfor %}</span></code></pre>
       </div>
 
@@ -98,12 +106,12 @@ urlpatterns = [
         <dt><code>{% csrf_token %}</code></dt>
         <dd>Obrigatório aqui também, mesmo sem campos: sem ele o Django responde 403.</dd>
 
-        <dt><code>person.pk</code></dt>
-        <dd>Mesma ideia do Editar: dentro do <code>for</code>, cada linha gera o link da sua própria pessoa.</dd>
+        <dt><code>course.pk</code></dt>
+        <dd>Mesma ideia do Editar: dentro do <code>for</code>, cada linha gera o link do seu próprio curso.</dd>
       </dl>
 
       <h4 class="substep"><span>✓</span> Resultado esperado</h4>
-      <p class="center">Na lista, clique em <strong>Excluir</strong>, confirme em <strong>Excluir</strong> e volte para a lista sem aquela pessoa.</p>
+      <p class="center">Na lista, clique em <strong>Excluir</strong>, confirme em <strong>Excluir</strong> e volte para a lista sem aquele curso.</p>
 
     </div>
   </details>

@@ -9,6 +9,7 @@
 
 import { buildParts, buildSteps, buildVideos, buildWindowBars } from './components.js';
 import { buildFeed } from './feed.js';
+import { buildSearch, reveal } from './search.js';
 import { buildToc } from './toc.js';
 
 const content = document.querySelector('#content');
@@ -30,7 +31,9 @@ async function loadIncludes(root) {
 /** O conteúdo chega depois do carregamento, então a âncora da URL é aplicada à mão. */
 function scrollToHash() {
   const target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
-  if (target) target.scrollIntoView({ behavior: 'instant' });
+  if (!target) return;
+  reveal(target); // a busca salva pode ter escondido o passo da âncora
+  target.scrollIntoView({ behavior: 'instant' });
 }
 
 function showError(error) {
@@ -50,6 +53,7 @@ try {
   buildVideos(content);
   buildFeed(content);
   buildToc(toc, content);
+  buildSearch(document.querySelector('#search'), content, toc);
   await document.fonts.ready; // fontes mudam a altura do texto, espera antes de rolar
   scrollToHash();
 } catch (error) {

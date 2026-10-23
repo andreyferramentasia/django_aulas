@@ -7,45 +7,47 @@
 
       <h4 class="substep"><span>1</span> A view</h4>
 
-      <div class="terminal" data-title="nome_do_seu_app/views.py">
+      <div class="terminal" data-title="courses/views.py">
         <pre><code><span class="kw">from</span> django.views.generic <span class="kw">import</span> ListView, CreateView<span class="hl">, UpdateView</span>
 ...
 
 
-<span class="hl"><span class="kw">class</span> <span class="cls">PersonUpdateView</span>(UpdateView):</span>
-<span class="hl">    model = Person</span>
-<span class="hl">    form_class = PersonForm</span>
-<span class="hl">    template_name = <span class="str">"<span class="input">nome_do_seu_app</span>/person_form_update.html"</span></span>
-<span class="hl">    context_object_name = <span class="str">"person"</span></span>
-<span class="hl">    success_url = reverse_lazy(<span class="str">"<span class="input">nome_do_seu_app</span>:person_list"</span>)</span></code></pre>
+<span class="hl"><span class="kw">class</span> <span class="cls">CourseUpdateView</span>(UpdateView):</span>
+<span class="hl">    model = Course</span>
+<span class="hl">    form_class = CourseForm</span>
+<span class="hl">    <span class="cm"># troque courses pelo nome do seu app</span></span>
+<span class="hl">    template_name = <span class="str">"<span class="input">courses</span>/course_form_update.html"</span></span>
+<span class="hl">    context_object_name = <span class="str">"course"</span></span>
+<span class="hl">    success_url = reverse_lazy(<span class="str">"<span class="input">courses</span>:course_list"</span>)</span></code></pre>
       </div>
 
       <dl class="files">
         <dt><code>template_name</code></dt>
-        <dd>Página da edição, <code>person_form_update.html</code>, criada no próximo passo.</dd>
+        <dd>Página da edição, <code>course_form_update.html</code>, criada no próximo passo.</dd>
 
         <dt><code>context_object_name</code></dt>
-        <dd>Nome do registro no template: <code>{{ person }}</code>, usado no título "Editar Fulano".</dd>
+        <dd>Nome do registro no template: <code>{{ course }}</code>, usado no título "Editar Python Básico".</dd>
       </dl>
 
       <h4 class="substep"><span>2</span> A rota</h4>
 
-      <div class="terminal" data-title="nome_do_seu_app/urls.py">
+      <div class="terminal" data-title="courses/urls.py">
         <pre><code><span class="kw">from</span> django.urls <span class="kw">import</span> path
-<span class="kw">from</span> <span class="input">nome_do_seu_app</span>.views <span class="kw">import</span> PersonListView, PersonCreateView<span class="hl">, PersonUpdateView</span>
+<span class="cm"># troque courses pelo nome do seu app</span>
+<span class="kw">from</span> <span class="input">courses</span>.views <span class="kw">import</span> CourseListView, CourseCreateView<span class="hl">, CourseUpdateView</span>
 
-app_name = <span class="str">"<span class="input">nome_do_seu_app</span>"</span>
+app_name = <span class="str">"<span class="input">courses</span>"</span>
 
 urlpatterns = [
-    path(<span class="str">"pessoas/"</span>, PersonListView.as_view(), name=<span class="str">"person_list"</span>),
-    path(<span class="str">"pessoas/nova/"</span>, PersonCreateView.as_view(), name=<span class="str">"person_create"</span>),
-<span class="hl">    path(<span class="str">"pessoas/&lt;int:pk&gt;/editar/"</span>, PersonUpdateView.as_view(), name=<span class="str">"person_update"</span>),</span>
+    path(<span class="str">"listar/"</span>, CourseListView.as_view(), name=<span class="str">"course_list"</span>),
+    path(<span class="str">"criar/"</span>, CourseCreateView.as_view(), name=<span class="str">"course_create"</span>),
+<span class="hl">    path(<span class="str">"&lt;int:pk&gt;/editar/"</span>, CourseUpdateView.as_view(), name=<span class="str">"course_update"</span>),</span>
 ]</code></pre>
       </div>
 
       <dl class="files">
         <dt><code>&lt;int:pk&gt;</code></dt>
-        <dd>Parte variável da URL: o id da pessoa. Em <code>/pessoas/3/editar/</code> a view edita a pessoa de id 3.</dd>
+        <dd>Parte variável da URL: o id do curso. Em <code>/courses/3/editar/</code> a view edita o curso de id 3.</dd>
       </dl>
 
       <aside class="note">
@@ -58,17 +60,17 @@ urlpatterns = [
   <details class="step step--front" id="passo-27" data-title="Criar o template de edição">
 
     <div class="step__body">
-      <p>Igual ao cadastro, mas o formulário já abre preenchido com os dados da pessoa.</p>
+      <p>Igual ao cadastro, mas o formulário já abre preenchido com os dados do curso.</p>
 
       <h4 class="substep"><span>1</span> A página de edição</h4>
 
-      <div class="terminal" data-title="nome_do_seu_app/templates/nome_do_seu_app/person_form_update.html">
+      <div class="terminal" data-title="courses/templates/courses/course_form_update.html">
         <pre><code><span class="hl"><span class="t-dtl">{% extends "base.html" %}</span></span>
 
-<span class="hl"><span class="t-dtl">{% block title %}</span>Editar pessoa<span class="t-dtl">{% endblock %}</span></span>
+<span class="hl"><span class="t-dtl">{% block title %}</span>Editar curso<span class="t-dtl">{% endblock %}</span></span>
 
 <span class="hl"><span class="t-dtl">{% block content %}</span></span>
-    <span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Editar <span class="t-var">{{ person }}</span><span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;h1</span><span class="t-tag">&gt;</span>Editar <span class="t-var">{{ course }}</span><span class="t-tag">&lt;/h1</span><span class="t-tag">&gt;</span>
 <span class="hl">    <span class="t-tag">&lt;form</span> <span class="t-attr">method</span>=<span class="t-val">"post"</span> <span class="t-attr">enctype</span>=<span class="t-val">"multipart/form-data"</span><span class="t-tag">&gt;</span></span>
 <span class="hl">        <span class="t-dtl">{% csrf_token %}</span></span>
 <span class="hl">        <span class="t-var">{{ form.as_p }}</span></span>
@@ -78,33 +80,39 @@ urlpatterns = [
       </div>
 
       <h4 class="substep"><span>2</span> Link de edição na lista</h4>
-      <p>No <code>person_list.html</code>, adicione um link em cada pessoa:</p>
+      <p>No <code>course_list.html</code>, adicione um link em cada curso:</p>
 
-      <div class="terminal" data-title="nome_do_seu_app/templates/nome_do_seu_app/person_list.html">
-        <pre><code><span class="t-dtl">{% for person in people %}</span>
+      <div class="terminal" data-title="courses/templates/courses/course_list.html">
+        <pre><code><span class="t-dtl">{% for course in courses %}</span>
     <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span>
-        <span class="t-var">{{ person.first_name }}</span> <span class="t-var">{{ person.last_name }}</span>
-<span class="hl">        <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">nome_do_seu_app</span>:person_update'</span><span class="t-dtl"> person.pk %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-primary"</span><span class="t-tag">&gt;</span>Editar<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span></span>
+        <span class="t-var">{{ course.name }}</span>
+        <span class="t-cm">{# troque courses pelo nome do seu app #}</span>
+<span class="hl">        <span class="t-tag">&lt;a</span> <span class="t-attr">href</span>=<span class="t-val">"</span><span class="t-dtl">{% url </span><span class="t-val">'<span class="input">courses</span>:course_update'</span><span class="t-dtl"> course.pk %}</span><span class="t-val">"</span> <span class="t-attr">class</span>=<span class="t-val">"btn btn-sm btn-primary"</span><span class="t-tag">&gt;</span>Editar<span class="t-tag">&lt;/a</span><span class="t-tag">&gt;</span></span>
     <span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
 <span class="t-dtl">{% empty %}</span>
-    <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span>Nenhuma pessoa cadastrada.<span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
+    <span class="t-tag">&lt;li</span><span class="t-tag">&gt;</span>Nenhum curso cadastrado.<span class="t-tag">&lt;/li</span><span class="t-tag">&gt;</span>
 <span class="t-dtl">{% endfor %}</span></code></pre>
       </div>
 
       <dl class="files">
-        <dt><code>{% url '...' person.pk %}</code></dt>
-        <dd>Monta a URL da rota passando o id, ex.: <code>/pessoas/3/editar/</code>.</dd>
+        <dt><code>{% url '...' course.pk %}</code></dt>
+        <dd>Monta a URL da rota passando o id, ex.: <code>/courses/3/editar/</code>.</dd>
 
         <dt>Por que pega o id certo?</dt>
-        <dd>O link está <strong>dentro do <code>{% for person in people %}</code></strong>. A cada volta do for, <code>person</code> é uma pessoa diferente, então <code>person.pk</code> muda junto: na pessoa de id 1 o link vira <code>/pessoas/1/editar/</code>, na de id 2 vira <code>/pessoas/2/editar/</code>, e assim por diante. Cada linha da lista ganha o link da sua própria pessoa. Fora do for, <code>person</code> não existe e o link não funciona.</dd>
+        <dd>O link está <strong>dentro do <code>{% for course in courses %}</code></strong>. A cada volta do for, <code>course</code> é um curso diferente, então <code>course.pk</code> muda junto: no curso de id 1 o link vira <code>/courses/1/editar/</code>, no de id 2 vira <code>/courses/2/editar/</code>, e assim por diante. Cada linha da lista ganha o link do seu próprio curso. Fora do for, <code>course</code> não existe e o link não funciona.</dd>
       </dl>
 
       <h4 class="substep"><span>✓</span> Resultado esperado</h4>
       <p class="center">Na lista, clique em <strong>Editar</strong>. O formulário abre preenchido e com o título "Editar". Altere o nome, salve e volte para a lista atualizada.</p>
 
+      <aside class="note note--tip">
+        <p class="note__title">Arquivos na edição</p>
+        <p>Nos campos <strong>Material</strong> e <strong>Imagem</strong>, o formulário mostra <em>Atualmente: ...</em> com o arquivo salvo. Deixe vazio para manter o arquivo, envie outro para trocar, ou marque <em>Limpar</em> para remover.</p>
+      </aside>
+
       <aside class="note">
         <p class="note__title">Erro 404?</p>
-        <p>Não existe pessoa com aquele id. Confira o número na URL ou cadastre pessoas antes.</p>
+        <p>Não existe curso com aquele id. Confira o número na URL ou cadastre cursos antes.</p>
       </aside>
 
     </div>
