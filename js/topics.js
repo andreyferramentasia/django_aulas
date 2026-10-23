@@ -16,6 +16,7 @@ export const TOPICS = [
       ['passo-4', 'Instalar o Pillow, exigido pelo ImageField'],
       ['passo-11', 'A pasta media/ fica fora do Git'],
       ['passo-17', 'Campos material (FileField) e image (ImageField) no model'],
+      ['video-10', 'Vídeo: configurar o media'],
       ['passo-media', 'MEDIA_URL, MEDIA_ROOT e a rota que entrega os arquivos'],
       ['extra-detailview', 'Mostrar a imagem e o link do material com .url'],
       ['passo-23', 'Material e imagem entram no formulário'],
@@ -29,6 +30,7 @@ export const TOPICS = [
     keywords: ['listview', 'lista', 'listar', 'read'],
     highlight: ['ListView', 'course_list', 'listar', 'paginate_by', 'context_object_name', 'is_paginated', 'page_obj'],
     steps: [
+      ['video-11', 'Vídeo: o caminho de uma requisição'],
       ['fluxo-requisicao', 'O caminho da lista: url, view, model e template'],
       ['passo-21', 'A ListView, a rota listar/ e o include no projeto'],
       ['passo-22', 'O template course_list.html e a paginação'],
@@ -93,8 +95,11 @@ export const TOPICS = [
     keywords: ['template', 'templates', 'static', 'css', 'bootstrap', 'base', 'extends'],
     highlight: ['templates', 'template', 'static', 'style.css', 'Bootstrap', 'base.html', 'extends', 'block', 'include'],
     steps: [
+      ['video-9', 'Vídeo: templates e static'],
       ['passo-20', 'As pastas templates e static do app'],
+      ['video-11', 'Vídeo: prévia do CRUD e Bootstrap'],
       ['extra-bootstrap', 'O Bootstrap pelo CDN'],
+      ['video-12', 'Vídeo: o template base'],
       ['extra-base', 'O base.html, com menu, sidebar e rodapé'],
       ['passo-22', 'A primeira página que usa o base.html e o CSS'],
     ],
@@ -106,7 +111,9 @@ export const TOPICS = [
     steps: [
       ['passo-7', 'A primeira migração, com as tabelas do Django'],
       ['passo-16', 'O app onde ficam os models'],
+      ['video-6', 'Vídeo: criar os models'],
       ['passo-17', 'Os models Person e Course'],
+      ['video-7', 'Vídeo: enviar os models para o banco'],
       ['passo-18', 'makemigrations e migrate'],
       ['passo-19', 'Os models no admin'],
     ],
@@ -118,6 +125,7 @@ export const TOPICS = [
     steps: [
       ['passo-8', 'Criar o superusuário'],
       ['extra-jazzmin', 'Ajustar o tema Jazzmin'],
+      ['video-8', 'Vídeo: o painel admin'],
       ['passo-19', 'Registrar os models no admin'],
     ],
   },
@@ -126,6 +134,7 @@ export const TOPICS = [
     keywords: ['git', 'github', 'commit', 'push', 'gitignore', 'versionamento'],
     highlight: ['git', 'GitHub', 'commit', 'push', '.gitignore'],
     steps: [
+      ['video-4', 'Vídeo: versionamento com Git'],
       ['passo-9', 'Instalar o Git'],
       ['passo-10', 'Criar o repositório no GitHub'],
       ['passo-11', 'O .gitignore'],
@@ -140,9 +149,11 @@ export const TOPICS = [
     keywords: ['venv', 'ambiente', 'virtual', 'pip', 'uv', 'instalar'],
     highlight: ['.venv', 'venv', 'pip', 'uv', 'Activate.ps1', 'activate'],
     steps: [
+      ['video-1', 'Vídeo: ambiente sem o uv'],
       ['passo-2', 'Criar a .venv'],
       ['passo-3', 'Ativar a .venv'],
       ['passo-4', 'Instalar as bibliotecas com pip'],
+      ['video-2', 'Vídeo: ambiente com o uv'],
       ['extra-uv', 'A alternativa com o uv'],
     ],
   },
