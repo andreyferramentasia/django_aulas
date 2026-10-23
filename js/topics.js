@@ -32,7 +32,9 @@ export const TOPICS = [
     steps: [
       ['video-11', 'Vídeo: o caminho de uma requisição'],
       ['fluxo-requisicao', 'O caminho da lista: url, view, model e template'],
+      ['video-13', 'Vídeo: ListView e rotas'],
       ['passo-21', 'A ListView, a rota listar/ e o include no projeto'],
+      ['video-14', 'Vídeo: o template da lista'],
       ['passo-22', 'O template course_list.html e a paginação'],
       ['passo-34', 'Exigir login e a permissão view_course'],
     ],
@@ -42,6 +44,7 @@ export const TOPICS = [
     keywords: ['detailview', 'detalhe', 'detalhes', 'ver'],
     highlight: ['DetailView', 'course_detail', 'ver/', 'pk'],
     steps: [
+      ['video-15', 'Vídeo: a DetailView'],
       ['extra-detailview', 'A DetailView, a rota ver/ e o template do curso'],
       ['passo-34', 'Proteger com a permissão view_course e o botão Ver'],
     ],
@@ -51,8 +54,10 @@ export const TOPICS = [
     keywords: ['createview', 'criar', 'cadastro', 'cadastrar', 'create', 'modelform', 'formulario', 'form'],
     highlight: ['CreateView', 'ModelForm', 'CourseForm', 'course_create', 'criar/', 'form_class', 'success_url', 'csrf_token', 'form.as_p'],
     steps: [
+      ['video-16', 'Vídeo: ModelForm e CreateView'],
       ['passo-23', 'O CourseForm, formulário feito a partir do model'],
       ['passo-24', 'A CreateView e a rota criar/'],
+      ['video-17', 'Vídeo: o template de cadastro'],
       ['passo-25', 'O template de cadastro e o botão Novo curso'],
       ['passo-34', 'Exigir a permissão add_course'],
     ],
@@ -63,6 +68,7 @@ export const TOPICS = [
     highlight: ['UpdateView', 'course_update', 'editar/', 'CourseForm', 'pk'],
     steps: [
       ['passo-23', 'O mesmo CourseForm serve para editar'],
+      ['video-18', 'Vídeo: o Update'],
       ['passo-26', 'A UpdateView e a rota editar/'],
       ['passo-27', 'O template de edição e o botão Editar'],
       ['passo-34', 'Exigir a permissão change_course'],
@@ -73,6 +79,7 @@ export const TOPICS = [
     keywords: ['deleteview', 'deletar', 'excluir', 'exclusao', 'delete', 'apagar'],
     highlight: ['DeleteView', 'course_delete', 'deletar/', 'confirm_delete', 'CASCADE'],
     steps: [
+      ['video-19', 'Vídeo: o Delete'],
       ['passo-28', 'A DeleteView e a rota deletar/'],
       ['passo-29', 'A página de confirmação e o botão Excluir'],
       ['passo-34', 'Exigir a permissão delete_course'],
@@ -83,10 +90,13 @@ export const TOPICS = [
     keywords: ['login', 'logout', 'conta', 'contas', 'accounts', 'usuario', 'usuarios', 'permissao', 'permissoes', 'auth'],
     highlight: ['LoginView', 'LogoutView', 'LoginRequiredMixin', 'PermissionRequiredMixin', 'permission_required', 'login', 'logout', 'accounts', 'perms'],
     steps: [
+      ['video-20', 'Vídeo: contas de usuário'],
       ['passo-30', 'O app accounts'],
       ['passo-31', 'O formulário de cadastro de usuário'],
       ['passo-32', 'As views de login, logout e cadastro'],
       ['passo-33', 'Os templates de login e cadastro'],
+      ['video-21', 'Vídeo: protegendo as views'],
+      ['video-22', 'Vídeo: botões por permissão'],
       ['passo-34', 'Exigir login e permissão nas views do CRUD'],
     ],
   },
