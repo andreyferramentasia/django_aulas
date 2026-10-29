@@ -88,12 +88,12 @@ export const TOPICS = [
   {
     title: 'Login e permissões',
     keywords: ['login', 'logout', 'conta', 'contas', 'accounts', 'usuario', 'usuarios', 'permissao', 'permissoes', 'auth'],
-    highlight: ['LoginView', 'LogoutView', 'LoginRequiredMixin', 'PermissionRequiredMixin', 'permission_required', 'login', 'logout', 'accounts', 'perms'],
+    highlight: ['LOGIN_REDIRECT_URL', 'LOGOUT_REDIRECT_URL', 'LOGIN_URL', 'LoginView', 'LogoutView', 'LoginRequiredMixin', 'PermissionRequiredMixin', 'permission_required', 'login', 'logout', 'accounts', 'perms'],
     steps: [
       ['video-20', 'Vídeo: contas de usuário'],
       ['passo-30', 'O app accounts'],
       ['passo-31', 'O formulário de cadastro de usuário'],
-      ['passo-32', 'As views de login, logout e cadastro'],
+      ['passo-32', 'As views de login, logout e cadastro, e os destinos no settings.py'],
       ['passo-33', 'Os templates de login e cadastro'],
       ['video-21', 'Vídeo: protegendo as views'],
       ['video-22', 'Vídeo: botões por permissão'],
@@ -112,6 +112,16 @@ export const TOPICS = [
       ['video-12', 'Vídeo: o template base'],
       ['extra-base', 'O base.html, com menu, sidebar e rodapé'],
       ['passo-22', 'A primeira página que usa o base.html e o CSS'],
+    ],
+  },
+  {
+    title: 'Idioma e fuso horário',
+    keywords: ['idioma', 'fuso', 'timezone', 'language', 'ptbr', 'horario', 'traducao', 'portugues'],
+    highlight: ['LANGUAGE_CODE', 'TIME_ZONE', 'USE_I18N', 'USE_TZ', 'pt-br', 'America/Campo_Grande', 'America/Sao_Paulo'],
+    steps: [
+      ['passo-5', 'LANGUAGE_CODE e TIME_ZONE no settings.py'],
+      ['passo-6', 'As capturas em inglês são de antes da troca'],
+      ['passo-8', 'O createsuperuser em parte traduzido'],
     ],
   },
   {

@@ -34,6 +34,44 @@
 │   └── wsgi.py
 └── manage.py</code></pre>
       </div>
+
+      <h4 class="substep"><span>1</span> Idioma e fuso horário</h4>
+      <p>O projeto nasce em inglês e no horário de Londres (<code>UTC</code>). No <code>settings.py</code>, perto do fim do arquivo, troque:</p>
+
+      <div class="terminal" data-title="app/settings.py">
+        <pre><code><span class="hl">LANGUAGE_CODE = <span class="str">'pt-br'</span></span>
+
+<span class="hl">TIME_ZONE = <span class="str">'America/Campo_Grande'</span>  <span class="cm"># troque pela sua região, ex.: 'America/Sao_Paulo'</span></span>
+
+USE_I18N = <span class="kw">True</span>
+
+USE_TZ = <span class="kw">True</span></code></pre>
+      </div>
+
+      <dl class="files">
+        <dt><code>LANGUAGE_CODE</code></dt>
+        <dd>Idioma das telas prontas do Django: admin, login, mensagens de erro dos formulários. Com <code>'pt-br'</code>, aparece "Salvar" em vez de "Save".</dd>
+
+        <dt><code>TIME_ZONE</code></dt>
+        <dd>Fuso horário usado para mostrar datas e horas. <code>'America/Campo_Grande'</code> é o horário de Mato Grosso do Sul. Em São Paulo, Rio ou Brasília, use <code>'America/Sao_Paulo'</code>.</dd>
+
+        <dt><code>USE_I18N</code></dt>
+        <dd>Liga as traduções. Já vem <code>True</code>, deixe assim.</dd>
+
+        <dt><code>USE_TZ</code></dt>
+        <dd>Já vem <code>True</code>, deixe assim. O banco guarda as datas em UTC e o Django converte para o <code>TIME_ZONE</code> na hora de mostrar.</dd>
+      </dl>
+
+      <aside class="note">
+        <p class="note__title">Atenção à escrita</p>
+        <p>É <code>'pt-br'</code>, em minúsculas e com hífen. O fuso tem a primeira letra maiúscula e <code>_</code> no lugar do espaço: <code>'America/Campo_Grande'</code>. Um nome errado faz o servidor não subir.</p>
+      </aside>
+
+      <aside class="note">
+        <p class="note__title">Documentação</p>
+        <p><a href="https://docs.djangoproject.com/pt-br/stable/ref/settings/#language-code" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/ref/settings/#language-code</a></p>
+        <p><a href="https://docs.djangoproject.com/pt-br/stable/topics/i18n/timezones/" target="_blank" rel="noopener">docs.djangoproject.com/pt-br/stable/topics/i18n/timezones</a></p>
+      </aside>
     </div>
   </details>
 
@@ -62,6 +100,11 @@
         <img src="imagens/django_incial_admin.png" alt="Tela de login do Django administration">
         <figcaption>Painel administrativo em <code>/admin</code></figcaption>
       </figure>
+
+      <aside class="note note--tip">
+        <p class="note__title">Imagens em inglês</p>
+        <p>As capturas acima são de antes do <code>LANGUAGE_CODE = 'pt-br'</code> do passo anterior. No seu navegador, os textos aparecem em português.</p>
+      </aside>
 
       <aside class="note note--tip">
         <p class="note__title">Banco de dados</p>
@@ -119,6 +162,11 @@ Superuser created successfully.</code></pre>
         <li><strong>Email:</strong> precisa ter formato de e-mail, com <code>@</code> e terminando em <code>.com</code> ou <code>.br</code>.</li>
         <li><strong>Password:</strong> senha e confirmação.</li>
       </ol>
+
+      <aside class="note note--tip">
+        <p class="note__title">Parte em português</p>
+        <p>Com o <code>LANGUAGE_CODE = 'pt-br'</code> do <a href="#passo-5">passo 5</a>, algumas linhas aparecem traduzidas, como <em>Usuário</em> no lugar de <em>Username</em> e os avisos de senha fraca. Outras, como <em>Password</em>, continuam em inglês. O funcionamento é o mesmo.</p>
+      </aside>
 
       <aside class="note">
         <p class="note__title">A senha não aparece</p>

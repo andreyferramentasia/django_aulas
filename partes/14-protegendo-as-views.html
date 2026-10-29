@@ -46,27 +46,8 @@
         </table>
       </div>
 
-      <h4 class="substep"><span>1</span> Configurar os redirecionamentos de login</h4>
-      <p>No fim do <code>settings.py</code>:</p>
-
-      <div class="terminal" data-title="app/settings.py">
-        <pre><code><span class="hl">LOGIN_URL = <span class="str">"accounts:login"</span></span>
-<span class="hl">LOGIN_REDIRECT_URL = <span class="str">"<span class="input">courses</span>:course_list"</span></span>  <span class="cm"># troque courses pelo nome do seu app</span>
-<span class="hl">LOGOUT_REDIRECT_URL = <span class="str">"accounts:login"</span></span></code></pre>
-      </div>
-
-      <dl class="files">
-        <dt><code>LOGIN_URL</code></dt>
-        <dd>Para onde vai quem tenta abrir uma página protegida sem estar logado.</dd>
-
-        <dt><code>LOGIN_REDIRECT_URL</code></dt>
-        <dd>Para onde o usuário vai depois de fazer login.</dd>
-
-        <dt><code>LOGOUT_REDIRECT_URL</code></dt>
-        <dd>Para onde o usuário vai depois de sair.</dd>
-      </dl>
-
-      <h4 class="substep"><span>2</span> Atualizar as views</h4>
+      <h4 class="substep"><span>1</span> Atualizar as views</h4>
+      <p>Quem não está logado vai para o <code>LOGIN_URL</code>, configurado no <code>settings.py</code> no <a href="#passo-32">passo 33</a>. Por isso as views só precisam dos mixins e da permissão:</p>
 
       <div class="terminal" data-title="courses/views.py">
         <pre><code><span class="hl"><span class="kw">from</span> django.contrib.auth.mixins <span class="kw">import</span> LoginRequiredMixin, PermissionRequiredMixin</span>
@@ -77,31 +58,26 @@
 
 
 <span class="kw">class</span> <span class="cls">CourseListView</span>(<span class="hl">LoginRequiredMixin, PermissionRequiredMixin, </span>ListView):
-<span class="hl">    login_url = reverse_lazy(<span class="str">"accounts:login"</span>)</span>
 <span class="hl">    permission_required = <span class="str">"<span class="input">courses</span>.view_course"</span></span>
     ...
 
 
 <span class="kw">class</span> <span class="cls">CourseDetailView</span>(<span class="hl">LoginRequiredMixin, PermissionRequiredMixin, </span>DetailView):
-<span class="hl">    login_url = reverse_lazy(<span class="str">"accounts:login"</span>)</span>
 <span class="hl">    permission_required = <span class="str">"<span class="input">courses</span>.view_course"</span></span>
     ...
 
 
 <span class="kw">class</span> <span class="cls">CourseCreateView</span>(<span class="hl">LoginRequiredMixin, PermissionRequiredMixin, </span>CreateView):
-<span class="hl">    login_url = reverse_lazy(<span class="str">"accounts:login"</span>)</span>
 <span class="hl">    permission_required = <span class="str">"<span class="input">courses</span>.add_course"</span></span>
     ...
 
 
 <span class="kw">class</span> <span class="cls">CourseUpdateView</span>(<span class="hl">LoginRequiredMixin, PermissionRequiredMixin, </span>UpdateView):
-<span class="hl">    login_url = reverse_lazy(<span class="str">"accounts:login"</span>)</span>
 <span class="hl">    permission_required = <span class="str">"<span class="input">courses</span>.change_course"</span></span>
     ...
 
 
 <span class="kw">class</span> <span class="cls">CourseDeleteView</span>(<span class="hl">LoginRequiredMixin, PermissionRequiredMixin, </span>DeleteView):
-<span class="hl">    login_url = reverse_lazy(<span class="str">"accounts:login"</span>)</span>
 <span class="hl">    permission_required = <span class="str">"<span class="input">courses</span>.delete_course"</span></span>
     ...</code></pre>
       </div>
@@ -110,8 +86,11 @@
         <dt>Ordem das classes</dt>
         <dd>Os mixins vêm <strong>antes</strong> da view genérica (<code>CreateView</code>, <code>UpdateView</code>...). Senão a página abre antes da verificação.</dd>
 
-        <dt><code>login_url</code></dt>
-        <dd>Para onde vai quem não está logado. O <code>reverse_lazy</code> transforma o nome da rota <code>"accounts:login"</code> no endereço da página de login. Na view, ele vale só para ela e tem prioridade sobre o <code>LOGIN_URL</code> do <code>settings.py</code>.</dd>
+        <dt>Sem <code>login_url</code> nas views</dt>
+        <dd>O <code>LoginRequiredMixin</code> usa o <code>LOGIN_URL</code> do <code>settings.py</code>. Não repita o destino em cada view: escrito na view, ele passa por cima do settings.</dd>
+
+        <dt><code>reverse_lazy</code> continua</dt>
+        <dd>O import fica, porque o <code>success_url</code> das views de criar, editar e excluir (dentro do <code>...</code>) ainda usa.</dd>
 
         <dt><code>permission_required</code></dt>
         <dd>A permissão exigida, no formato <code>app.acao_model</code>. O Django cria quatro para cada model, sozinho, no <code>migrate</code>: <code>add_course</code>, <code>change_course</code>, <code>delete_course</code> e <code>view_course</code>.</dd>
@@ -123,10 +102,10 @@
         <dd>O <code>LoginRequiredMixin</code> vem primeiro: quem não está logado vai para o login. Depois o <code>PermissionRequiredMixin</code> confere a permissão de quem já entrou.</dd>
       </dl>
 
-      <h4 class="substep"><span>3</span> Dar permissão a um usuário</h4>
+      <h4 class="substep"><span>2</span> Dar permissão a um usuário</h4>
       <p>No admin (<code>/admin</code>), abra <strong>Usuários</strong>, escolha o usuário e, em <strong>Permissões do usuário</strong>, adicione por exemplo <em>Can view course</em> e <em>Can add course</em>. Para vários usuários de uma vez, crie um <strong>Grupo</strong> com as permissões e coloque os usuários nele.</p>
 
-      <h4 class="substep"><span>4</span> Botão Sair e botões por permissão</h4>
+      <h4 class="substep"><span>3</span> Botão Sair e botões por permissão</h4>
       <p>No <code>course_list.html</code>, logo abaixo do <code>&lt;h1&gt;</code>, entra o botão Sair. E os botões do CRUD só aparecem para quem tem a permissão, o que evita botão que leva a um 403. O template recebe as permissões em <code>{{ perms }}</code>:</p>
 
       <div class="terminal" data-title="courses/templates/courses/course_list.html">

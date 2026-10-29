@@ -94,11 +94,10 @@
 <span class="hl"><span class="kw">class</span> <span class="cls">UserLoginView</span>(LoginView):</span>
     template_name = <span class="str">"accounts/user_login.html"</span>
     redirect_authenticated_user = <span class="kw">True</span>
-    next_page = <span class="str">"<span class="input">courses</span>:course_list"</span>  <span class="cm"># troque courses pelo nome do seu app</span>
 
 
 <span class="hl"><span class="kw">class</span> <span class="cls">UserLogoutView</span>(LogoutView):</span>
-    next_page = <span class="str">"accounts:login"</span>
+    <span class="kw">pass</span>  <span class="cm"># o destino vem do LOGOUT_REDIRECT_URL, no settings.py</span>
 
 
 <span class="hl"><span class="kw">class</span> <span class="cls">UserCreateView</span>(CreateView):</span>
@@ -112,22 +111,44 @@
         <dd>Mostra o formulário de usuário e senha, confere no banco e faz o login.</dd>
 
         <dt><code>redirect_authenticated_user</code></dt>
-        <dd>Quem já está logado e abre a página de login vai direto para o <code>next_page</code>.</dd>
-
-        <dt><code>next_page</code></dt>
-        <dd>Para onde ir depois de entrar (a lista de cursos) ou depois de sair (a tela de login).</dd>
+        <dd>Quem já está logado e abre a página de login vai direto para o <code>LOGIN_REDIRECT_URL</code>, configurado logo abaixo.</dd>
 
         <dt><code>LogoutView</code></dt>
-        <dd>Faz o logout. Não tem template: sai e redireciona.</dd>
+        <dd>Faz o logout. Não tem template: sai e redireciona. A classe fica vazia (<code>pass</code>) porque o destino vem do <code>settings.py</code>.</dd>
 
         <dt><code>form_class</code></dt>
         <dd>O formulário da página de cadastro, o <code>CustomUserCreationForm</code> do passo anterior.</dd>
 
-        <dt><code>CreateView</code></dt>
-        <dd>A mesma do passo 25, agora criando um usuário em vez de um curso.</dd>
+        <dt><code>CreateView</code> e <code>success_url</code></dt>
+        <dd>A mesma do passo 25, agora criando um usuário em vez de um curso. O <code>success_url</code> fica na view porque é da <code>CreateView</code>: para onde ir depois de criar a conta. O <code>settings.py</code> só tem os destinos de login e logout.</dd>
       </dl>
 
-      <h4 class="substep"><span>2</span> As rotas do accounts</h4>
+      <h4 class="substep"><span>2</span> Para onde ir no login e no logout</h4>
+      <p>Os destinos ficam num lugar só, no fim do <code>settings.py</code>, e valem para o projeto inteiro:</p>
+
+      <div class="terminal" data-title="app/settings.py">
+        <pre><code><span class="hl">LOGIN_URL = <span class="str">"accounts:login"</span></span>
+<span class="hl">LOGIN_REDIRECT_URL = <span class="str">"<span class="input">courses</span>:course_list"</span></span>  <span class="cm"># troque courses pelo nome do seu app</span>
+<span class="hl">LOGOUT_REDIRECT_URL = <span class="str">"accounts:login"</span></span></code></pre>
+      </div>
+
+      <dl class="files">
+        <dt><code>LOGIN_URL</code></dt>
+        <dd>A página de login. É para lá que vai quem tenta abrir uma página protegida sem estar logado, como veremos na parte <strong>Protegendo as Views</strong>.</dd>
+
+        <dt><code>LOGIN_REDIRECT_URL</code></dt>
+        <dd>Para onde o usuário vai depois de entrar: a lista de cursos.</dd>
+
+        <dt><code>LOGOUT_REDIRECT_URL</code></dt>
+        <dd>Para onde o usuário vai depois de sair: a tela de login.</dd>
+      </dl>
+
+      <aside class="note note--tip">
+        <p class="note__title">Por que no settings.py e não na view?</p>
+        <p>Dá para escrever o destino na própria view (<code>next_page</code>, <code>login_url</code>), mas aí a view passa por cima do <code>settings.py</code>, e mudar só o settings deixa de funcionar. Com tudo no settings, o destino muda num lugar só.</p>
+      </aside>
+
+      <h4 class="substep"><span>3</span> As rotas do accounts</h4>
 
       <div class="terminal" data-title="accounts/urls.py">
         <pre><code><span class="kw">from</span> django.urls <span class="kw">import</span> path
@@ -142,7 +163,7 @@ urlpatterns = [
 ]</code></pre>
       </div>
 
-      <h4 class="substep"><span>3</span> Incluir no projeto</h4>
+      <h4 class="substep"><span>4</span> Incluir no projeto</h4>
 
       <div class="terminal" data-title="app/urls.py">
         <pre><code><span class="kw">from</span> django.conf <span class="kw">import</span> settings
